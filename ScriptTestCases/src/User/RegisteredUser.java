@@ -29,6 +29,15 @@ public class RegisteredUser {
 		chips = 0;
 	}
 
+	public RegisteredUser(String name, String password) {
+		this.name = name;
+		this.password = password;
+		blockList = null;
+		followList = null;
+		recipesList = null;
+		chips = 0;
+	}
+
 	public int getId() {
 		return id;
 	}

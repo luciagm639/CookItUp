@@ -8,7 +8,15 @@ public class RegisteredUserList {
 	List<RegisteredUser> registeredUserList = new ArrayList<RegisteredUser>();
 	
 	RegisteredUser findUser(String name) {
-		registeredUserList.get(0);
+		for (RegisteredUser user : registeredUserList) {
+			if (user.name.equals(name)) {
+				return user;
+			}
+		}
 		return null;
+	}
+
+	public void addToList(RegisteredUser user) {
+		registeredUserList.add(user);		
 	}
 }
