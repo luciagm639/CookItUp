@@ -7,6 +7,8 @@ import Recipe.RecipePhoto;
 
 public class RegisteredUserInterface {
 	private RegisteredUser reg;
+	
+	
 	public RegisteredUserInterface (RegisteredUser ru) {
 		this.reg=ru;
 	}
@@ -18,5 +20,15 @@ public class RegisteredUserInterface {
 	public void uploadPhoto(Image ph, Recipe r) {
 		RecipePhoto photo = new RecipePhoto(ph,reg);
 		r.addRecipePhoto (photo);
+		reg.obtainChips(2);
 	}
+	public void createRecipe(String title) {
+		
+	}
+	
+	public void addStep (int time, String desc, int order, Recipe recipe) {
+		recipe.checkOwner(reg);
+	}
+	
+	
 }

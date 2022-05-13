@@ -230,4 +230,13 @@ public class RegisteredUser {
 			}
 		}
 	}
+
+	public void obtainChips(int i) {
+		if (i == 1) {
+			chips += 20;
+		}else {
+			chips += 10;
+		}
+		
+	}
 }

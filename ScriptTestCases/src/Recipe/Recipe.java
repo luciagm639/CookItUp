@@ -89,4 +89,13 @@ public class Recipe {
 	public void addRecipePhoto(RecipePhoto photo) {
 		photosList.add(photo);
 	}
+
+	public boolean checkOwner(RegisteredUser reg) {
+		if (user.equals(reg)) {
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 }
