@@ -98,8 +98,8 @@ class RegisteredUserTest {
 		question = new Question(us0, "A que temperatura esta el horno");
 
 		// Photo's Creation
-		photo = new RecipePhoto(image, us0, 1);
-		photo1 = new RecipePhoto(image1, us0, 2);
+		photo = new RecipePhoto(image, us0);
+		photo1 = new RecipePhoto(image1, us0);
 
 		// Ingredients Creation
 		ingredient = new Ingredients("Patata");

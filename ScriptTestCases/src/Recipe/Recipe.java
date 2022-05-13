@@ -85,4 +85,8 @@ public class Recipe {
 	public void setStepsList(List<Step> stepsList) {
 		this.stepsList = stepsList;
 	}
+
+	public void addRecipePhoto(RecipePhoto photo) {
+		photosList.add(photo);
+	}
 }
