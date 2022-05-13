@@ -36,6 +36,10 @@ public class RegisteredUser {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
 
 	public List<RegisteredUser> listaBloqueados(RegisteredUser user) {
 		return user.blockList;
