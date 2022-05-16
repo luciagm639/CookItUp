@@ -49,10 +49,10 @@ class RegisteredUserTest {
 	List<RecipePhoto> photosList = null;
 
 	// Ingredients Null
-	Ingredients ingredient = null;
-	Ingredients ingredient1 = null;
+	Ingredient ingredient = null;
+	Ingredient ingredient1 = null;
 
-	List<Ingredients> ingredientsList = null;
+	List<Ingredient> ingredientsList = null;
 
 	// Steps Null
 	Step step = null;
@@ -98,12 +98,12 @@ class RegisteredUserTest {
 		question = new Question(us0, "A que temperatura esta el horno");
 
 		// Photo's Creation
-		photo = new RecipePhoto(image, us0, 1);
-		photo1 = new RecipePhoto(image1, us0, 2);
+		photo = new RecipePhoto(image, us0);
+		photo1 = new RecipePhoto(image1, us0);
 
 		// Ingredients Creation
-		ingredient = new Ingredients("Patata");
-		ingredient1 = new Ingredients("huevo");
+		ingredient = new Ingredient("Patata");
+		ingredient1 = new Ingredient("huevo");
 
 		// Step Creation
 		step = new Step(5, "Dejar que el huevo se ponga a temperatura ambiente durante 5 minutos");
@@ -139,7 +139,7 @@ class RegisteredUserTest {
 		photosList.add(photo1);
 
 		// Ingredient's List Creation
-		ingredientsList = new ArrayList<Ingredients>();
+		ingredientsList = new ArrayList<Ingredient>();
 		ingredientsList.add(ingredient);
 
 		// Step's List Creation

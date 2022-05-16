@@ -9,4 +9,8 @@ public class Step {
 		this.time = time;
 		this.description = description;
 	}
+	
+	public String toString() {
+		return time + " min: " + description;
+	}
 }

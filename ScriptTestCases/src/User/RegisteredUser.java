@@ -3,7 +3,7 @@ package User;
 import java.util.ArrayList;
 import java.util.List;
 
-import Recipe.Ingredients;
+import Recipe.Ingredient;
 import Recipe.Recipe;
 import Recipe.RecipePhoto;
 import Recipe.Step;
@@ -157,10 +157,10 @@ public class RegisteredUser {
 		}
 	}
 
-	public void addIngredient(Ingredients ingredient, Recipe recipe) {
+	public void addIngredient(Ingredient ingredient, Recipe recipe) {
 		if (this.recipesList.contains(recipe)) {
 			if (recipe.getIngredientsList() == null) {
-				List<Ingredients> newList = new ArrayList<>();
+				List<Ingredient> newList = new ArrayList<>();
 				newList.add(ingredient);
 				recipe.setIngredientsList(newList);
 			} else {
@@ -175,7 +175,7 @@ public class RegisteredUser {
 		}
 	}
 
-	public void deleteIngredient(Ingredients ingredient1, Recipe recipe) {
+	public void deleteIngredient(Ingredient ingredient1, Recipe recipe) {
 		if (this.recipesList == null || !this.recipesList.contains(recipe)) {
 			throw new RuntimeException("ERROR: The user cannot delete an ingredient whose recipe not previously done");
 		} else {
@@ -238,5 +238,9 @@ public class RegisteredUser {
 				throw new RuntimeException("ERROR: The user cannot delete a step not previously in recipe");
 			}
 		}
+	}
+
+	public String getName() {
+		return name;
 	}
 }

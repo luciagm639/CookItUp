@@ -7,11 +7,15 @@ import User.RegisteredUser;
 
 public class RegisteredUserList {
 	
-	List<RegisteredUser> registeredUserList = new ArrayList<RegisteredUser>();
+	private List<RegisteredUser> registeredUserList;
 	
-	RegisteredUser findUser(String name) {
+	public RegisteredUserList() {
+		registeredUserList = new ArrayList<RegisteredUser>();
+	}
+	
+	public RegisteredUser findUser(String name) {
 		for (RegisteredUser user : registeredUserList) {
-			if (user.name.equals(name)) {
+			if (user.getName().equals(name)) {
 				return user;
 			}
 		}
@@ -20,5 +24,10 @@ public class RegisteredUserList {
 
 	public void addToList(RegisteredUser user) {
 		registeredUserList.add(user);		
+	}
+
+	public void remove(RegisteredUser user) {
+		registeredUserList.remove(user);
+		
 	}
 }
