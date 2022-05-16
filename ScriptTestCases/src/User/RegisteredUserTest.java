@@ -309,4 +309,24 @@ class RegisteredUserTest {
 		us0.deleteStep(recipe, step1);
 		assertTrue(recipe.getStepsList().contains(step1) == false);
 	}
+	
+	@Test
+	void usuarioReportaUsuarioYSeAgragaALaListaDeReportsDeLosUsuarios() {
+		us0.reportUser(us1, report);
+		assertTrue(us1.getReportsList().contains(report));
+	}
+	
+	/*
+	@Test
+	void usuarioReportaPreguntaYSeAgragaALaListaDeReportsDeLasPreguntas() {
+		us0.reportQuestion(question, report);
+		assertTrue(question.getReportsList().contains(report));
+	}
+	
+	@Test
+	void usuarioReportaMensageYSeAgragaALaListaDeReportsDeLosMessages() {
+		us0.reportComment(comment, report);
+		assertTrue(comment.getReportsList().contains(report));
+	}
+	*/
 }

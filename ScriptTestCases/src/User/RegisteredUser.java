@@ -17,25 +17,33 @@ public class RegisteredUser {
 	List<RegisteredUser> blockList = new ArrayList<RegisteredUser>();
 	List<RegisteredUser> followList = new ArrayList<RegisteredUser>();
 	List<Recipe> recipesList = new ArrayList<Recipe>();
+	List<Report> reportsList = new ArrayList<>();
 	double chips;
-	
+	boolean status;
+  
 	public RegisteredUser(String name, int id, String password) {
 		this.name = name;
 		this.id = id;
 		this.password = password;
-		blockList = null;
-		followList = null;
-		recipesList = null;
 		chips = 0;
 	}
-
-	public RegisteredUser(String name, String password) {
+  
+  public RegisteredUser(String name, String password) {
 		this.name = name;
 		this.password = password;
-		blockList = null;
-		followList = null;
-		recipesList = null;
 		chips = 0;
+	}
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public List<Report> getReportsList() {
+		return reportsList;
+	}
+
+	public void setReportsList(List<Report> reportsList) {
+		this.reportsList = reportsList;
 	}
 
 	public int getId() {
@@ -242,5 +250,71 @@ public class RegisteredUser {
 
 	public String getName() {
 		return name;
+  }
+  
+	public void obtainChips(int i) {
+		if (i == 1) {
+			chips += 20;
+		}else {
+			chips += 10;
+		}
 	}
+		
+	public void reportUser(RegisteredUser us1, Report report) {
+		if (us1.getReportsList() == null) {
+			List<Report> newList = new ArrayList<>();
+			newList.add(report);
+			us1.setReportsList(newList);
+		} else {
+			int i, cnt = 0;
+			for (i = 0; i < us1.getReportsList().size(); i++) {
+				if (us1.getReportsList().get(i).getReporting() == report.reporting)
+					cnt++;
+			}		
+			if (cnt > 0) {
+				throw new RuntimeException("ERROR: The user cannot report a recipe already been reported");
+			} else {
+				us1.getReportsList().add(report);
+			}
+		}
+	}
+	/*
+	public void reportQuestion(Question question, Report report) {
+		if (question.getReportsList() == null) {
+			List<Report> newList = new ArrayList<>();
+			newList.add(report);
+			question.setReportsList(newList);
+		} else {
+			int i, cnt = 0;
+			for (i = 0; i < question.getReportsList().size(); i++) {
+				if (question.getReportsList().get(i).getReporting() == report.reporting)
+					cnt++;
+			}		
+			if (cnt > 0) {
+				throw new RuntimeException("ERROR: The user cannot report a recipe already been reported");
+			} else {
+				question.getReportsList().add(report);
+			}
+		}
+	}
+
+	public void reportComment(Comment comment, Report report) {
+		if (comment.getReportsList() == null) {
+			List<Report> newList = new ArrayList<>();
+			newList.add(report);
+			comment.setReportsList(newList);
+		} else {
+			int i, cnt = 0;
+			for (i = 0; i < comment.getReportsList().size(); i++) {
+				if (comment.getReportsList().get(i).getReporting() == report.reporting)
+					cnt++;
+			}		
+			if (cnt > 0) {
+				throw new RuntimeException("ERROR: The user cannot report a recipe already been reported");
+			} else {
+				comment.getReportsList().add(report);
+			}
+		}	
+	}
+	*/
 }

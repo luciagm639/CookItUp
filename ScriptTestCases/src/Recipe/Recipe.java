@@ -11,11 +11,11 @@ public class Recipe {
 	RegisteredUser user;
 	String name;
 	int priority;
-	List<Comment> commentsList = new ArrayList<Comment>();
-	List<Question> questionsList = new ArrayList<Question>();
+	List<Comment> commentsList;
+	List<Question> questionsList;
 	List<Ingredient> ingredientsList;
-	List<RecipePhoto> photosList = new ArrayList<RecipePhoto>();
-	List<Report> reportsList = new ArrayList<Report>();
+	List<RecipePhoto> photosList;
+	List<Report> reportsList;
 	List<Step> stepsList;
 
 	public List<Report> getReportsList() {
@@ -28,11 +28,11 @@ public class Recipe {
 
 	public Recipe(String name, int priority, RegisteredUser user) {
 		this.name = name;
-		this.commentsList = null;
+		this.commentsList = new ArrayList<Comment>();
 		this.ingredientsList = new ArrayList<Ingredient>();
-		this.questionsList = null;
-		this.photosList = null;
-		this.reportsList = null;
+		this.questionsList = new ArrayList<Question>();
+		this.photosList = new ArrayList<RecipePhoto>();
+		this.reportsList = new ArrayList<Report>();
 		this.stepsList = new ArrayList<Step>();
 		this.priority = priority;
 		this.user = user;
@@ -73,6 +73,7 @@ public class Recipe {
 	public void setQuestionsList(List<Question> questionsList) {
 		this.questionsList = questionsList;
 	}
+
 
 	public void setIngredientsList(List<Ingredient> ingredientsList) {
 		this.ingredientsList = ingredientsList;
@@ -120,5 +121,13 @@ public class Recipe {
 
 	public void addStep(Step step) {
 		stepsList.add(step);
+	}
+
+	public boolean checkOwner(RegisteredUser reg) {
+		if (user.equals(reg)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }
