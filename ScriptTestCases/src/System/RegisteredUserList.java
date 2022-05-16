@@ -30,4 +30,13 @@ public class RegisteredUserList {
 		registeredUserList.remove(user);
 		
 	}
+
+	public RegisteredUser getUser(int id) {
+		for (RegisteredUser user : registeredUserList) {
+			if (user.getId() == id) {
+				return user;
+			}
+		}
+		return null;
+	}
 }

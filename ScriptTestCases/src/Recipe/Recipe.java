@@ -37,13 +37,13 @@ public class Recipe {
 		this.priority = priority;
 		this.user = user;
 	}
+	
+	public Recipe(String name, RegisteredUser user) {
+		this(name, 0, user);
+	}
 
 	public RegisteredUser getUser() {
 		return user;
-	}
-
-	public void setUser(RegisteredUser user) {
-		this.user = user;
 	}
 
 	public List<RecipePhoto> getPhotosList() {
@@ -122,12 +122,12 @@ public class Recipe {
 	public void addStep(Step step) {
 		stepsList.add(step);
 	}
+	
+	public void addStep(Step step, int order) {
+		stepsList.add(order, step);
+	}
 
 	public boolean checkOwner(RegisteredUser reg) {
-		if (user.equals(reg)) {
-			return true;
-		}else {
-			return false;
-		}
+		return user.equals(reg);
 	}
 }

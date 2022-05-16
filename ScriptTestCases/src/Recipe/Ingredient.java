@@ -12,4 +12,14 @@ public class Ingredient {
 	public String toString() {
 		return name;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof Ingredient) && (((Ingredient) o).name.equals(name));
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

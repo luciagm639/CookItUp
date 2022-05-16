@@ -33,6 +33,21 @@ public class RegisteredUser {
 		this.password = password;
 		chips = 0;
 	}
+  
+  @Override
+  public boolean equals(Object o) {
+	return (o instanceof RegisteredUser) && (((RegisteredUser) o).id == id);
+  }
+  
+  @Override
+  public int hashCode() {
+	  return id;
+  }
+  
+  @Override
+  public String toString() {
+	  return name;
+  }
 	
 	public Boolean getStatus() {
 		return status;

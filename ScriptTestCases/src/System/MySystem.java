@@ -1,7 +1,9 @@
 package System;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import Recipe.Ingredient;
 import Recipe.Recipe;
@@ -15,14 +17,14 @@ public class MySystem {
 	
 	private RecipeList recipesList;
 	private RegisteredUserList userList;
-	private List<Ingredient> ingredientsList;
+	private Set<Ingredient> ingredientsList;
 	private List<Report> reportsList;
 	
 	public MySystem() {
 		//deberia acceder a los datos
 		recipesList = new RecipeList();
 		userList = new RegisteredUserList();
-		ingredientsList = new ArrayList<>();
+		ingredientsList = new HashSet<>();
 		reportsList = new ArrayList<>();
 		
 		fillSystemTesting();
@@ -43,9 +45,17 @@ public class MySystem {
 	public String showRecipes(List<Recipe> recipes) {
 		return RecipeList.toString(recipes);
 	}
+	//TODO
+	public Recipe findRecipe(String name) {
+		return null;
+	}
 	
 	public void addUser(RegisteredUser user) {
 		userList.addToList(user);
+	}
+	
+	public RegisteredUser getUser(int id) {
+		return userList.getUser(id);
 	}
 	
 	public void removeUser(RegisteredUser user) {
@@ -58,6 +68,10 @@ public class MySystem {
 	
 	public void addIngredient(Ingredient ing) {
 		ingredientsList.add(ing);
+	}
+	
+	public boolean containsIngredient(Ingredient ing) {
+		return ingredientsList.contains(ing);
 	}
 	
 	public void removeIngredient(Ingredient ing) {
