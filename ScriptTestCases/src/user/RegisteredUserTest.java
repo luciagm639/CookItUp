@@ -223,10 +223,8 @@ class RegisteredUserTest {
 	@Test
 	void usuarioCreaUnaRecetaYSeAnadeAListaDeRecetas() {
 		us0interface.createRecipe(recipe1.getName());
-		boolean bool0 = system.hasRecipe(recipe1);
-		Exception exception = assertThrows(RuntimeException.class, () -> us0.addRecipe(recipe1));
-		boolean bool1 = ("ERROR: The user cannot add a recipe already done").equals(exception.getMessage());
-		assertTrue(bool0 && bool1);
+		boolean bool0 = system.hasRecipe(recipe1) && us0.getRecipesList().contains(recipe1);
+		assertTrue(bool0);
 	}
 	
 	@Test

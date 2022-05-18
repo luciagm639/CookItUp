@@ -1,19 +1,19 @@
 package user;
 
 import java.awt.Image;
+import java.util.List;
 
 import recipe.*;
 import report.*;
 import system.MySystem;
 
-public class RegisteredUserInterface {
+public class RegisteredUserInterface extends UserInterface {
 	
 	private RegisteredUser reg;
-	private MySystem system;
 	
 	public RegisteredUserInterface (RegisteredUser ru, MySystem system) {
+		super(system);
 		this.reg = ru;
-		this.system = system;
 	}
 	
 	public UserInterface logOut() {
@@ -29,6 +29,8 @@ public class RegisteredUserInterface {
 	}
 	
 	public Recipe createRecipe(String title) {
+		if (system.findRecipe(title) != null)
+			return null;
 		Recipe r = new Recipe(title, reg);
 		system.addRecipe(r);
 		reg.addRecipe(r);
@@ -39,8 +41,6 @@ public class RegisteredUserInterface {
 		if (recipe.checkOwner(reg)) {
 			system.removeRecipe(recipe);
 			reg.deleteRecipe(recipe);
-		} else {
-			throw new RuntimeException("ERROR: The user cannot delete a recipe not previously created");
 		}
 	}
 	
@@ -109,7 +109,19 @@ public class RegisteredUserInterface {
 	}
 	
 	//TODO
-	public void deleteOwnAccount() {	
-		
+	public UserInterface deleteOwnAccount() {	
+		return new UserInterface(system);
+	}
+
+	public String showProfile() {
+		return reg.showProfile();
+	}
+	
+	public String showUserRecipes() {
+		return system.showRecipes(reg.getRecipesList());
+	}
+	
+	public List<Recipe> getUserRecipes() {
+		return reg.getRecipesList();
 	}
 }

@@ -27,12 +27,6 @@ public class RegisteredUser {
 		this.password = password;
 		setChips(0);
 	}
-  
-	  public RegisteredUser(String name, String password) {
-			this.name = name;
-			this.password = password;
-			setChips(0);
-		}
 	  
 	@Override
 	public boolean equals(Object o) {
@@ -96,6 +90,10 @@ public class RegisteredUser {
 
 	public boolean getStatus() {
 		return status;
+	}
+	
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	
 	/*Block list*/

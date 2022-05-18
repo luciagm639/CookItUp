@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import administrator.Administrator;
 import recipe.Comment;
 import recipe.Ingredient;
 import recipe.Question;
@@ -19,12 +20,15 @@ public class MySystem {
 	private RegisteredUserList userList;
 	private Set<Ingredient> ingredientsList;
 	private List<Report> reportsList;
+	private Set<Administrator> administratorList;
+	private RegisteredUserList blockedList;
 	
 	public MySystem() {
 		recipesList = new RecipeList();
 		userList = new RegisteredUserList();
 		ingredientsList = new HashSet<>();
 		reportsList = new ArrayList<>();
+		administratorList = new HashSet<>();
 
 		//deberia acceder a los datos
 		fillSystemTesting();
@@ -35,6 +39,7 @@ public class MySystem {
 		userList = new RegisteredUserList();
 		ingredientsList = new HashSet<>();
 		reportsList = new ArrayList<>();
+		administratorList = new HashSet<>();
 	}
 	
 	/*Recipes*/
@@ -62,6 +67,10 @@ public class MySystem {
 		return recipesList.contains(recipe);
 	}
 	
+	public RecipeList getRecipes() {
+		return recipesList;
+	}
+	
 	/*Users*/
 	public void addUser(RegisteredUser user) {
 		userList.add(user);
@@ -77,6 +86,10 @@ public class MySystem {
 	
 	public RegisteredUser findUser(String name) {
 		return userList.findUser(name);
+	}
+	
+	public RegisteredUserList getUserList() {
+		return userList;
 	}
 	
 	/*Ingredients*/
@@ -97,11 +110,37 @@ public class MySystem {
 		reportsList.remove(report);
 	}
 	
+	/*Administrators*/
+	public void addAdmin(Administrator adm2) {
+		administratorList.add(adm2);
+	}
+	
+	public void removeAdmin(Administrator adm2) {
+		administratorList.remove(adm2);
+	}
+	
+	public Set<Administrator> getAdminList() {
+		return administratorList;
+	}
+	
+	/*Blocked*/
+	public void addBlockedUser(RegisteredUser us0) {
+		blockedList.add(us0);
+	}
+
+	public void removeBlockedUser(RegisteredUser us0) {
+		blockedList.remove(us0);
+	}
+	
+	public RegisteredUserList getBlockedUserList() {
+		return blockedList;
+	}
+	
 	public void fillSystemTesting() {
 		
 		//Registered Users
 		RegisteredUser us0 = new RegisteredUser("Alfonso", 0, "password");
-		RegisteredUser us1 = new RegisteredUser("Javi", 1, "password");
+		RegisteredUser us1 = new RegisteredUser("Inbal", 1, "password");
 		RegisteredUser us2 = new RegisteredUser("Jordan", 2, "password");
 		RegisteredUser us3 = new RegisteredUser("Jorge", 3, "password");
 		
@@ -146,5 +185,9 @@ public class MySystem {
 		Report report = new Report(us0, "justification");
 		Report report1 = new Report(us1, "justification1");
 		*/
+	}
+
+	public int nextUserId() {
+		return userList.nextId();
 	}
 }

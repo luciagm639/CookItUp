@@ -1,16 +1,18 @@
 package system;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import user.RegisteredUser;
 
 public class RegisteredUserList {
 	
-	private List<RegisteredUser> registeredUserList;
+	private Set<RegisteredUser> registeredUserList;
 	
 	public RegisteredUserList() {
-		registeredUserList = new ArrayList<RegisteredUser>();
+		registeredUserList = new HashSet<RegisteredUser>();
 	}
 
 	public void add(RegisteredUser user) {
@@ -38,5 +40,14 @@ public class RegisteredUserList {
 			}
 		}
 		return null;
+	}
+	
+	public boolean contains(RegisteredUser us) {
+		return registeredUserList.contains(us);
+	}
+	
+	//TODO
+	public int nextId() {
+		return registeredUserList.size();
 	}
 }

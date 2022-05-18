@@ -9,7 +9,7 @@ import java.util.Scanner;
 import recipe.Ingredient;
 import system.MySystem;
 
-public class mainProgram {
+public class prevMain {
 
 	public static void main(String[] args) {
 		MySystem Mysystem = new MySystem();

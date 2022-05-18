@@ -10,6 +10,10 @@ public class UserInterface {
 	
 	MySystem system;
 	
+	public UserInterface() {
+		this.system = new MySystem();
+	}
+	
 	public UserInterface(MySystem system) {
 		this.system = system;
 	}
@@ -29,8 +33,8 @@ public class UserInterface {
 	public RegisteredUserInterface registerNewAccount(String name, String password) {
 		RegisteredUser user = system.findUser(name);
 		if (user == null) {
-			if (validatePassword(name)) {
-				user = new RegisteredUser(name, password);
+			if (validatePassword(password)) {
+				user = new RegisteredUser(name, system.nextUserId(), password);
 				system.addUser(user);
 				System.out.println("You have successfully created a new account");
 				return new RegisteredUserInterface(user, system);
@@ -48,5 +52,13 @@ public class UserInterface {
 	public boolean validatePassword(String name) {
 		//8 caracteres minimo
 		return name.length() >= 8;
+	}
+	
+	public String showAllRecipes() {
+		return system.showRecipes(system.getAllRecipes());
+	}
+	
+	public List<Recipe> getAllRecipes() {
+		return system.getAllRecipes();
 	}
 }
