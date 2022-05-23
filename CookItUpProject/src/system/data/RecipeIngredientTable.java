@@ -3,7 +3,6 @@ package system.data;
 import recipe.Ingredient;
 import recipe.Recipe;
 import system.MySystem;
-import system.Tuple;
 
 public class RecipeIngredientTable extends Table<Recipe, Ingredient> {
 	

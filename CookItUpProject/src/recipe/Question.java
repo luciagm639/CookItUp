@@ -1,13 +1,17 @@
 package recipe;
 
+import system.data.Data;
 import user.RegisteredUser;
 
-public class Question extends Message<Question> {
-	
+public class Question extends Data<Question> {
+
+	private RegisteredUser author;
+	private String text;
 	Recipe recipe;
 	
 	public Question(RegisteredUser author, String text, Recipe recipe) {
-		super(author, text);
+		this.author = author;
+		this.text = text;
 		this.recipe = recipe;
 	}
 	
@@ -22,6 +26,18 @@ public class Question extends Message<Question> {
 		return getText().hashCode();
 	}
 	*/
+	
+	public RegisteredUser getAuthor() {
+		return author;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setAuthor(RegisteredUser defaultUser) {
+		author = defaultUser;
+	}
 	
 	@Override
 	public String toString() {

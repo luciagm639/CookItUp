@@ -3,6 +3,8 @@ package user;
 import java.util.ArrayList;
 import java.util.List;
 
+import administrator.Administrator;
+import administrator.AdministratorInterface;
 import recipe.Recipe;
 import system.MySystem;
 
@@ -33,6 +35,20 @@ public class UserInterface {
 		return us0interface;
 	}
 	
+	public AdministratorInterface logInAdmin(String name, String password) {
+		Administrator adm = system.findAdmin(name);
+		AdministratorInterface i = null;
+		if (adm == null) {
+			System.out.println("Name was not found");
+		} else {
+			if (adm.getPasword().equals(password)) {
+				System.out.println("You logged in as an admin");
+				i = new AdministratorInterface(adm, system);
+			}
+		}
+		return i;
+	}
+	
 	public RegisteredUserInterface registerNewAccount(String name, String password) {
 		RegisteredUser user = system.findUser(name);
 		if (user == null) {
@@ -48,6 +64,26 @@ public class UserInterface {
 		}
 		else {
 			System.out.println("The requested user name is already in use");
+		}
+		return null;
+	}
+	
+	//TODO añadir seguridad, por ejemplo una contraseña para crear un administrador
+	public AdministratorInterface registerNewAdminAccount(String name, String password) {
+		Administrator adm = system.findAdmin(name);
+		if (adm == null) {
+			if (validatePassword(password)) {
+				adm = new Administrator(name, password);
+				system.addAdmin(adm);
+				System.out.println("You have successfully created a new administrator account");
+				return new AdministratorInterface(adm, system);
+			}
+			else {
+				System.out.println("Password is not safe enough");
+			}
+		}
+		else {
+			System.out.println("The requested administrator name is already in use");
 		}
 		return null;
 	}

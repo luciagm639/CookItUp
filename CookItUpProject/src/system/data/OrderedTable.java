@@ -1,14 +1,13 @@
 package system.data;
 
-import java.util.HashSet;
+import java.util.TreeSet;
 
 import system.MySystem;
-
-public abstract class Table<F extends Data<F>, S extends Data<S>> extends HashSet<Tuple<F, S>>{
+public abstract class OrderedTable<F extends Data<F>, S extends Data<S>> extends TreeSet<Triple<F, S>>{
 	
 	private final String fileName;
 	
-	public Table(String fileName) {
+	public OrderedTable(String fileName) {
 		this.fileName = fileName;
 	}
 	
@@ -18,10 +17,11 @@ public abstract class Table<F extends Data<F>, S extends Data<S>> extends HashSe
 	
 	public abstract void readData(MySystem system, String text);
 	
-	public String writeData(F first, S second) {
+	public String writeData(F first, S second, int cardinal) {
 		MyStringJoiner sj = new MyStringJoiner();
 		sj.add(first.getId());
 		sj.add(second.getId());
+		sj.add(cardinal);
 		
 		return sj.toString();
 	}

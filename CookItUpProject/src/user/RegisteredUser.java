@@ -3,7 +3,8 @@ package user;
 import java.util.ArrayList;
 import java.util.List;
 
-import recipe.Message;
+import recipe.Comment;
+import recipe.Question;
 import recipe.Recipe;
 import report.Report;
 import system.data.Data;
@@ -14,9 +15,10 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	private String password;
 	private List<RegisteredUser> blockList = new ArrayList<RegisteredUser>();
 	private List<RegisteredUser> followList = new ArrayList<RegisteredUser>();
-	private List<Recipe> recipesList = new ArrayList<Recipe>();//could be accessed through the system
-	private List<Report> reportsList = new ArrayList<>();//could be accessed through the system
-	private List<Message> messagesList = new ArrayList<>();
+	private List<Recipe> recipesList = new ArrayList<Recipe>();
+	private List<Report> reportsList = new ArrayList<>();
+	private List<Comment> commentsList = new ArrayList<>();
+	private List<Question> questionsList = new ArrayList<>();
 	private int chips;
 	private boolean status;
   
@@ -166,13 +168,7 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		this.chips = chips;
 	}
 	
-	public void addMessage(Message m) {
-		messagesList.add(m);
-	}
-
-	public List<Message> getMessageList() {
-		return messagesList;
-	}
+	//TODO add and get for comment and question
 	
 	//Por ahora no vamos a usar las fotos
 	/*

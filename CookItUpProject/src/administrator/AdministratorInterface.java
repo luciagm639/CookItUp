@@ -1,6 +1,5 @@
 package administrator;
 
-import recipe.Message;
 import recipe.Recipe;
 import system.MySystem;
 import user.RegisteredUser;
@@ -35,9 +34,12 @@ public class AdministratorInterface {
 		for (Recipe r :us1.getRecipesList()) {
 			r.setUser(system.getDefaultUser());
 		}
+		//TODO change comment and questions user
+		/*
 		for (Message m : us1.getMessageList()) {
 			m.setAuthor(system.getDefaultUser());
 		}
+		*/
 		system.removeUser(us1);
 	}
 	

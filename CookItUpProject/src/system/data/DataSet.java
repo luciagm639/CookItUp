@@ -58,7 +58,7 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 			e.setId(this);
 		}
 		else if (get(e.getId()) != null) {
-			e.setId(this);
+			return false;//NO SE PUEDEN AÑADIR ELEMENTOS CON IDS IGUALES
 		}
 		return super.add(e);
 	}

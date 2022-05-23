@@ -14,4 +14,23 @@ public class ReportUser extends Report {
 	public RegisteredUser getReportedUser() {
 		return reportedUser;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("User " + getReporting() + " has reported ");
+		sb.append("the user " + reportedUser + ".\n");
+		sb.append("Justification: " + getJustification() + "\n");
+		
+		return sb.toString();
+	}
+	
+	public String toStringExtended() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this);
+		sb.append("Reported user's profile: \n");
+		sb.append(getReportedUser().showProfile());
+		
+		return sb.toString();
+	}
 }

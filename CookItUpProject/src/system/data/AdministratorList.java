@@ -28,4 +28,13 @@ public final class AdministratorList extends DataSet<Administrator> {
 		
 		return sj.toString();
 	}
+
+	public Administrator find(String name) {
+		for (Administrator adm : this) {
+			if (adm.getName().equals(name)) {
+				return adm;
+			}
+		}
+		return null;
+	}
 }

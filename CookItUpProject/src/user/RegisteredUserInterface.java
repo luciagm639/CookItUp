@@ -103,8 +103,13 @@ public class RegisteredUserInterface extends UserInterface {
 		system.addReport(report);
 	}
 	
-	public <M extends Message<M>> void reportMessage(String justification, Message<M> message) {
-		Report report = new ReportMessage<M>(reg, justification, message);
+	public void reportComment(String justification, Comment comment) {
+		Report report = new ReportComment(reg, justification, comment);
+		system.addReport(report);
+	}
+	
+	public void reportQuestion(String justification, Question question) {
+		Report report = new ReportQuestion(reg, justification, question);
 		system.addReport(report);
 	}
 	

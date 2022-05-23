@@ -1,4 +1,4 @@
-package system;
+package system.data;
 
 public class Tuple<F, S> {
 	

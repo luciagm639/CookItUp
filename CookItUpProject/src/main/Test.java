@@ -1,5 +1,6 @@
 package main;
 
+import administrator.AdministratorInterface;
 import recipe.Recipe;
 import system.MySystem;
 import user.RegisteredUser;
@@ -10,14 +11,15 @@ public class Test extends MySystem {
 	
 	public static void main(String[] args) {
 		Test system = new Test();
-		system.fillSystemTesting();
-		//system.open();
+		//system.fillSystemTesting();
+		System.out.println(system.getAllRecipes().get(0).toStringExtended());
 		
 		system.close();
 	}
 	
 	public void fillSystemTesting() {
 		
+		close();
 		//Create new accounts
 		UserInterface ui = new UserInterface(this);
 		addUser(new RegisteredUser("[deleted]", 0, null, 0, false));
@@ -43,7 +45,10 @@ public class Test extends MySystem {
 		
 		ius1.reportRecipe("Todos saben hacer un huevo frito", recipe2);
 		ius3.reportUser("Me cae mal", ius2.getUser());
-		ius4.reportMessage("Es una tonteria", getComment(1));
+		ius4.reportComment("Es una tonteria", getComment(1));
+		
+		AdministratorInterface iadm = ui.registerNewAdminAccount("Administrator", "AdminPassword");
+		
 	}
 	
 }

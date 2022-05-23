@@ -1,26 +1,26 @@
 package report;
 
-import recipe.Recipe;
+import recipe.Question;
 import user.RegisteredUser;
 
-public class ReportRecipe extends Report {
+public class ReportQuestion extends Report {
 	
-	private Recipe reportedRecipe;
+	private Question reportedQuestion;
 	
-	public ReportRecipe(RegisteredUser reporting, String justification, Recipe reportedRecipe) {
+	public ReportQuestion(RegisteredUser reporting, String justification, Question reportedQuestion) {
 		super(reporting, justification);
-		this.reportedRecipe = reportedRecipe;
+		this.reportedQuestion = reportedQuestion;
 	}
 
-	public Recipe getReportedRecipe() {
-		return reportedRecipe;
+	public Question getReportedQuestion() {
+		return reportedQuestion;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("User " + getReporting() + " has reported ");
-		sb.append("the recipe " + reportedRecipe + ".\n");
+		sb.append("the question " + reportedQuestion + ".\n");
 		sb.append("Justification: " + getJustification() + "\n");
 		
 		return sb.toString();
@@ -30,7 +30,7 @@ public class ReportRecipe extends Report {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this);
 		sb.append("Reported recipe: \n");
-		sb.append(reportedRecipe.toString());
+		sb.append(reportedQuestion.toString());
 		
 		return sb.toString();
 	}

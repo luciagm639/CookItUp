@@ -1,15 +1,9 @@
 package system.data;
 
-import java.util.HashSet;
-
 import recipe.Comment;
-import recipe.Message;
 import recipe.Question;
 import recipe.Recipe;
-import report.Report;
-import report.ReportMessage;
-import report.ReportRecipe;
-import report.ReportUser;
+import report.*;
 import system.MySystem;
 import user.RegisteredUser;
 
@@ -37,11 +31,11 @@ public class ReportsList extends DataSet<Report> {
 			switch(type) {
 			case COMMENT:
 				Comment comment = system.getComment(ReportedId);
-				r = new ReportMessage<Comment>(reporting, justification, comment);
+				r = new ReportComment(reporting, justification, comment);
 				break;
 			case QUESTION:
 				Question question = system.getQuestion(ReportedId);
-				r = new ReportMessage<Question>(reporting, justification, question);
+				r = new ReportQuestion(reporting, justification, question);
 				break;
 			case RECIPE:
 				Recipe recipe = system.getRecipe(ReportedId);
@@ -73,23 +67,15 @@ public class ReportsList extends DataSet<Report> {
 			sj.add(USER);
 			sj.add(((ReportUser) r).getReportedUser().getId());
 		}
-		//TODO
-		else if (r instanceof ReportMessage) {				
-			ReportMessage rm = (ReportMessage) r;
-			if (rm.getReportedMessage() instanceof Comment) {
-				sj.add(COMMENT);
-				sj.add(((Comment) rm.getReportedMessage()).getId());
-			}
-			else if (rm.getReportedMessage() instanceof Question) {
-				sj.add(QUESTION);
-				sj.add(((Question) rm.getReportedMessage()).getId());
-			}
+		else if (r instanceof ReportComment) {
+			sj.add(COMMENT);
+			sj.add(((ReportComment) r).getReportedComment().getId());
+		}
+		else if (r instanceof ReportQuestion) {
+			sj.add(QUESTION);
+			sj.add(((ReportQuestion) r).getReportedQuestion().getId());
 		}
 			
 		return sj.toString();
-	}
-	
-	private static <M extends Message<M>> boolean isReportComment(Report r) {
-		return ((ReportMessage<M>) r).getReportedMessage() instanceof Comment;
 	}
 }

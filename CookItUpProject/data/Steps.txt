@@ -1,0 +1,2 @@
+1	10	Batir los huevos
+2	30	Cortar la patata
