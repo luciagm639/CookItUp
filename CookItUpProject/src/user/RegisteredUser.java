@@ -78,12 +78,12 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		return recipesList;
 	}
 	
-	public void addRecipe(Recipe recipe) {
-		recipesList.add(recipe);	
+	public boolean addRecipe(Recipe recipe) {
+		return recipesList.add(recipe);	
 	}
 	
-	public void deleteRecipe(Recipe recipe) {
-		recipesList.remove(recipe);
+	public boolean deleteRecipe(Recipe recipe) {
+		return recipesList.remove(recipe);
 	}
 
 	public List<Report> getReportsList() {
@@ -99,17 +99,17 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	}
 	
 	/*Block list*/
-	public void block(RegisteredUser user) {
+	public boolean block(RegisteredUser user) {
 		if (this.blockList.contains(user)) {
 			throw new RuntimeException("ERROR: The user cannot block another user already blocked");
 		} else {
-			this.blockList.add(user);
+			return this.blockList.add(user);
 		}
 	}
 	
-	public void unblock(RegisteredUser user) {
+	public boolean unblock(RegisteredUser user) {
 		if (this.blockList.contains(user)) {
-			this.blockList.remove(user);
+			return this.blockList.remove(user);
 		} else {
 			throw new RuntimeException("ERROR: The user cannot unblock another user not previously blocked");
 		}
@@ -120,17 +120,17 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	}
 	
 	/*Follow list*/
-	public void follow(RegisteredUser user) {
+	public boolean follow(RegisteredUser user) {
 		if (this.followList.contains(user)) {
 			throw new RuntimeException("ERROR: The user cannot follow another user already followed");
 		} else {
-			this.followList.add(user);
+			return this.followList.add(user);
 		}
 	}
 	
-	public void unfollow(RegisteredUser user) {
+	public boolean unfollow(RegisteredUser user) {
 		if (this.followList.contains(user)) {
-			this.followList.remove(user);
+			return this.followList.remove(user);
 		} else {
 			throw new RuntimeException("ERROR: The user cannot unfollow a user not previously followed");
 		}
@@ -170,24 +170,21 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	
 	/*Messages*/
 	
-	public void addComment(Comment m) {
-		commentsList.add(m);
+	public boolean addComment(Comment m) {
+		return commentsList.add(m);
 	}
 
 	public List<Comment> getCommentList() {
 		return commentsList;
 	}
 	
-	public void addQuestion(Question m) {
-		questionsList.add(m);
+	public boolean addQuestion(Question m) {
+		return questionsList.add(m);
 	}
 
 	public List<Question> getQuestionList() {
 		return questionsList;
 	}
-	
-	
-	//TODO add and get for comment and question
 	
 	//Por ahora no vamos a usar las fotos
 	/*

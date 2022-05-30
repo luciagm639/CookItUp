@@ -135,28 +135,28 @@ public class RegisteredUserInterface extends UserInterface {
 		return reg.getRecipesList();
 	}
 	
-	public void block(RegisteredUser us2) {
-		reg.block(us2);
+	public boolean block(RegisteredUser us2) {
+		return reg.block(us2);
 	}
 
 	public boolean isBlocked(RegisteredUser us2) {
 		return reg.isBlocked(us2);
 	}
 
-	public void unblock(RegisteredUser us1) {
-		reg.unblock(us1);
+	public boolean unblock(RegisteredUser us1) {
+		return reg.unblock(us1);
 	}
 
-	public void follow(RegisteredUser us2) {
-		reg.follow(us2);
+	public boolean follow(RegisteredUser us2) {
+		return reg.follow(us2);
 	}
 
 	public boolean isFollowed(RegisteredUser us2) {
 		return reg.isFollowed(us2);
 	}
 
-	public void unfollow(RegisteredUser us1) {
-		reg.unfollow(us1);
+	public boolean unfollow(RegisteredUser us1) {
+		return reg.unfollow(us1);
 	}
 
 	public int spendChips(int i) {

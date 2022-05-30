@@ -176,25 +176,28 @@ class RegisteredUserInterfaceTest {
 	void usuarioBloqueaUsuarioLoAnadeAListaDeUsuariosBloqueados() {
 		us0interface.block(us2);
 		assertTrue(us0interface.isBlocked(us2));
+		assertFalse(us0interface.block(us2));
 	}
 	
 	@Test
 	void usuarioDesbloqueaUsuarioLoQuitaDeListaDeUsuariosBloqueados() {
 		us0interface.unblock(us1);
-		assertFalse(us0interface.isBlocked(us1));
+		assertFalse(us0interface.unblock(us1));
 	}
 
 	@Test
 	void usuarioFollowUsuarioLoAnadeListaDeUsuariosSeguidos() {
 		us0interface.follow(us2);
 		assertTrue(us0interface.isFollowed(us2));
+		assertFalse(us0interface.follow(us2));
 	}
 
 	@Test
 	void usuarioUnfollowUsuarioLoQuitaListaDeUsuariosSeguidos() {
 		us0interface.unfollow(us1);
 		assertFalse(us0interface.isFollowed(us1));
-	}
+		assertFalse(us0interface.unfollow(us1));
+		}
 
 	@Test
 	void deletearMiPropiaCuentaDeUsuario() {
@@ -203,8 +206,9 @@ class RegisteredUserInterfaceTest {
 
 	@Test
 	void usuarioCreaUnaRecetaYSeAnadeAListaDeRecetas() {
-		us0interface.createRecipe(recipe1.getName());
+		Recipe rec = us0interface.createRecipe(recipe1.getName());
 		assertTrue(system.hasRecipe(recipe1) && us0.getRecipesList().contains(recipe1));
+		assertNull(us0interface.createRecipe(recipe1.getName()));
 	}
 	
 	@Test
