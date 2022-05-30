@@ -99,9 +99,9 @@ class RegisteredUserInterfaceTest {
 		system.addRecipe(recipe2);
 		
 		// Messages
-		comment = new Comment(us0, "Esta bueno pero le pondria mas tiempo de coccion", recipe0);
+		comment = new Comment(us0, "Esta bueno pero le pondria mas tiempo de coccion", recipe2);
 		
-		question = new Question(us0, "¿De qué tamaño son los huevos que usas?", recipe0);
+		question = new Question(us0, "¿De qué tamaño son los huevos que usas?", recipe2);
 		
 		// Photos
 		
@@ -207,7 +207,7 @@ class RegisteredUserInterfaceTest {
 	@Test
 	void usuarioCreaUnaRecetaYSeAnadeAListaDeRecetas() {
 		Recipe rec = us0interface.createRecipe(recipe1.getName());
-		assertTrue(system.hasRecipe(recipe1) && us0.getRecipesList().contains(recipe1));
+		assertTrue(system.hasRecipe(rec) && us0.getRecipesList().contains(rec));
 		assertNull(us0interface.createRecipe(recipe1.getName()));
 	}
 	
@@ -226,6 +226,7 @@ class RegisteredUserInterfaceTest {
 	void usuarioPreguntaUnaQuestionSobreUnaRecetaYSeAnadeAListaDePreguntasDeLaReceta() {
 		us0interface.askQuestion(question.getText(), recipe2);
 		assertTrue(recipe2.getQuestionsList().contains(question));
+		assertFalse (us0interface.askQuestion(question.getText(), recipe2));
 	}
 
 	@Test

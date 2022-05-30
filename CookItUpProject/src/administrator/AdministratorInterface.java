@@ -27,7 +27,7 @@ public class AdministratorInterface {
 		
 	}
 	
-	public void deleteAnyAccount(RegisteredUser us1) {
+	public boolean deleteAnyAccount(RegisteredUser us1) {
 		for (Recipe r :us1.getRecipesList()) {
 			r.setUser(system.getDefaultUser());
 		}
@@ -37,15 +37,15 @@ public class AdministratorInterface {
 		for (Question m : us1.getQuestionList()) {
 			m.setAuthor(system.getDefaultUser());
 		}
-		system.removeUser(us1);
+		return system.removeUser(us1);
 	}
 	
-	public void deleteRecipe(Recipe rec2) {
-		system.removeRecipe(rec2);
+	public boolean deleteRecipe(Recipe rec2) {
+		return system.removeRecipe(rec2);
 	}
 	
-	public void deleteAdminAccount(Administrator adm2) {
-		system.removeAdmin(adm2);
+	public boolean deleteAdminAccount(Administrator adm2) {
+		return system.removeAdmin(adm2);
 	}
 
 

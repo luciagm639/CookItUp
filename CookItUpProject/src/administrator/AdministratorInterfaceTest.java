@@ -56,7 +56,6 @@ class AdministratorInterfaceTest {
 	static void setUpBeforeClass() throws Exception {
 		admin1 = new Administrator("admin1", "passwordAdmin1");
 		admin1Int = new AdministratorInterface (admin1,system);
-		system.fillSystemTesting();
 		system.addAdmin(admin1);
 	}
 

@@ -46,10 +46,11 @@ public class RecipeList extends DataSet<Recipe> {
 	}
 	
 	/*Question*/
-	public void setQuestion(Question q) {
+	public boolean setQuestion(Question q) {
 		if (contains(q.getRecipe())) {
-			q.getRecipe().addQuestion(q);
+			return q.getRecipe().addQuestion(q);
 		}
+		return false;
 	}
 
 	/*Data Saver*/	

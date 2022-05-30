@@ -86,10 +86,10 @@ public class RegisteredUserInterface extends UserInterface {
 		return success;
 	}
 	
-	public void askQuestion(String textQuestion, Recipe recipe) {
+	public boolean askQuestion(String textQuestion, Recipe recipe) {
 		Question question = new Question(reg, textQuestion, recipe);
-		system.addQuestion(question);
 		reg.obtainChips(RegisteredUser.QUESTION_OR_COMMENT);
+		return system.addQuestion(question);
 	}
 	
 	public void makeComment(String textComment, Recipe recipe) {
@@ -118,9 +118,17 @@ public class RegisteredUserInterface extends UserInterface {
 		system.addReport(report);
 	}
 	
-	//TODO
-	public UserInterface deleteOwnAccount() {	
-		return new UserInterface(system);
+	public void deleteOwnAccount() {
+		for (Recipe r :this.reg.getRecipesList()) {
+			r.setUser(system.getDefaultUser());
+		}
+		for (Comment m : this.reg.getCommentList()) {
+			m.setAuthor(system.getDefaultUser());
+		}
+		for (Question m : this.reg.getQuestionList()) {
+			m.setAuthor(system.getDefaultUser());
+		}
+		system.removeUser(this.reg);
 	}
 
 	public String showProfile() {

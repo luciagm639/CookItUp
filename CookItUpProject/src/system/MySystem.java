@@ -19,7 +19,7 @@ import system.data.*;
 import user.RegisteredUser;
 
 public class MySystem {
-	
+
 	private RecipeList recipesList;
 	private RegisteredUserList userList;
 	private IngredientsList ingredientsList;
@@ -28,24 +28,21 @@ public class MySystem {
 	private StepsList stepsList;
 	private CommentsList commentsList;
 	private QuestionsList questionsList;
-	
-	//TODO delete this
-	private RegisteredUserList blockedList;
-	
+
 	public MySystem() {
 		recipesList = new RecipeList();
 		userList = new RegisteredUserList();
 		ingredientsList = new IngredientsList();
 		reportsList = new ReportsList();
 		administratorList = new AdministratorList();
-		
+
 		stepsList = new StepsList();
 		commentsList = new CommentsList();
 		questionsList = new QuestionsList();
-		
+
 		open();
 	}
-	
+
 	public void empty() {
 		recipesList = new RecipeList();
 		userList = new RegisteredUserList();
@@ -53,34 +50,33 @@ public class MySystem {
 		reportsList = new ReportsList();
 		administratorList = new AdministratorList();
 	}
-	
-	/*Recipes*/
+
+	/* Recipes */
 	public void addRecipe(Recipe recipe) {
 		recipesList.add(recipe);
 		recipe.getUser().addRecipe(recipe);
 	}
-	
-	public void removeRecipe(Recipe recipe) {
-		recipesList.remove(recipe);
-		recipe.getUser().deleteRecipe(recipe);
+
+	public boolean removeRecipe(Recipe recipe) {
+		return (recipesList.remove(recipe) && recipe.getUser().deleteRecipe(recipe));
 	}
-	
+
 	public List<Recipe> getAllRecipes() {
 		return recipesList.toList();
 	}
-	
+
 	public String showRecipes(List<Recipe> recipes) {
 		return RecipeList.toString(recipes);
 	}
-	
+
 	public Recipe findRecipe(String name) {
 		return recipesList.find(name);
 	}
-	
+
 	public boolean hasRecipe(Recipe recipe) {
 		return recipesList.contains(recipe);
 	}
-	
+
 	public RecipeList getRecipes() {
 		return recipesList;
 	}
@@ -88,24 +84,24 @@ public class MySystem {
 	public Recipe getRecipe(int id) {
 		return recipesList.get(id);
 	}
-	
-	/*Users*/
+
+	/* Users */
 	public void addUser(RegisteredUser user) {
 		userList.add(user);
 	}
-	
+
 	public RegisteredUser getUser(int id) {
 		return userList.get(id);
 	}
-	
-	public void removeUser(RegisteredUser user) {
-		userList.remove(user);
+
+	public boolean removeUser(RegisteredUser user) {
+		return userList.remove(user);
 	}
-	
+
 	public RegisteredUser findUser(String name) {
 		return userList.findUser(name);
 	}
-	
+
 	public RegisteredUserList getUserList() {
 		return userList;
 	}
@@ -113,12 +109,12 @@ public class MySystem {
 	public RegisteredUser getDefaultUser() {
 		return userList.get(0);
 	}
-	
-	/*Ingredients*/
+
+	/* Ingredients */
 	public Ingredient addIngredient(Ingredient ing) {
 		return ingredientsList.addAndGet(ing);
 	}
-	
+
 	public void removeIngredient(Ingredient ing) {
 		ingredientsList.remove(ing);
 	}
@@ -130,47 +126,52 @@ public class MySystem {
 	public Ingredient getIngredient(int id) {
 		return ingredientsList.get(id);
 	}
-	
-	/*Reports*/
+
+	/* Reports */
 	public void addReport(Report report) {
 		reportsList.add(report);
 	}
-	
+
 	public void removeReport(Report report) {
 		reportsList.remove(report);
 	}
-	
-	/*Administrators*/
+
+	/* Administrators */
 	public void addAdmin(Administrator adm2) {
 		administratorList.add(adm2);
 	}
-	
-	public void removeAdmin(Administrator adm2) {
-		administratorList.remove(adm2);
+
+	public boolean removeAdmin(Administrator adm2) {
+		return administratorList.remove(adm2);
 	}
-	
+
 	public Set<Administrator> getAdminList() {
 		return administratorList;
 	}
-	
+
 	public Administrator findAdmin(String name) {
 		return administratorList.find(name);
 	}
-	
-	/*Blocked*/
+
+	/* Blocked */
 	public void addBlockedUser(RegisteredUser us0) {
-		blockedList.add(us0);
+		us0.setStatus(true);
 	}
 
 	public void removeBlockedUser(RegisteredUser us0) {
-		blockedList.remove(us0);
+		us0.setStatus(false);
 	}
-	
+
 	public RegisteredUserList getBlockedUserList() {
-		return blockedList;
+		RegisteredUserList blockedUsers = new RegisteredUserList();
+		for (RegisteredUser reg : userList) {
+			if (reg.getStatus())
+				blockedUsers.add(reg);
+		}
+		return blockedUsers;
 	}
-	
-	/*Comment*/
+
+	/* Comment */
 	public Comment getComment(int id) {
 		return commentsList.get(id);
 	}
@@ -178,74 +179,70 @@ public class MySystem {
 	public void addComment(Comment c) {
 		commentsList.add(c);
 		recipesList.setComment(c);
-		//c.getAuthor().addMessage(c);
-		//TODO add to user list
+		c.getAuthor().addComment(c);
 	}
-	
-	/*Question*/
+
+	/* Question */
 	public Question getQuestion(int id) {
 		return questionsList.get(id);
 	}
 
-	public void addQuestion(Question q) {
-		questionsList.add(q);
-		recipesList.setQuestion(q);
-		//q.getAuthor().addMessage(q);
-		//TODO add to user list
+	public boolean addQuestion(Question q) {
+		return (questionsList.add(q) && q.getAuthor().addQuestion(q) && recipesList.setQuestion(q));
 	}
-	
-	/*Step*/	
+
+	/* Step */
 	public void addStep(Step step, Recipe recipe) {
 		Step s = stepsList.addAndGet(step);
 		recipe.addStep(s);
 	}
-	
+
 	public void addStep(Step step, Recipe recipe, int order) {
 		Step s = stepsList.addAndGet(step);
 		recipe.addStep(s, order);
 	}
-	
+
 	public Step getStep(int id) {
 		return stepsList.get(id);
 	}
-	
-	/*Save data*/
+
+	/* Save data */
 	public void open() {
 		readData(userList);
 		readData(recipesList);
 		readData(ingredientsList);
 		readData(administratorList);
-		
+
 		readData(stepsList);
 		readData(commentsList);
 		readData(questionsList);
-		//...
+		// ...
 		readData(reportsList);
-		
+
 		readData(new RecipeIngredientTable());
 		readData(new RecipeStepTable());
 	}
-	
+
 	public void close() {
 		writeData(userList);
 		writeData(recipesList);
 		writeData(ingredientsList);
 		writeData(administratorList);
-		
+
 		writeData(stepsList);
 		writeData(commentsList);
 		writeData(questionsList);
-		//...
+		// ...
 		writeData(reportsList);
-		
+
 		writeData(new RecipeIngredientTable(this));
 		writeData(new RecipeStepTable(this));
-		
+
 		empty();
 	}
-	
+
 	private <E extends Data<E>> void readData(DataSet<E> ds) {
-		try(Scanner sc = new Scanner(new File(ds.getFileName()))) {
+		try (Scanner sc = new Scanner(new File(ds.getFileName()))) {
 			while (sc.hasNext()) {
 				ds.readData(this, sc.nextLine());
 			}
@@ -253,9 +250,9 @@ public class MySystem {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private <E extends Data<E>> void writeData(DataSet<E> ds) {
-		try(FileWriter fw = new FileWriter(new File(ds.getFileName()))) {
+		try (FileWriter fw = new FileWriter(new File(ds.getFileName()))) {
 			for (E element : ds) {
 				fw.write(ds.writeData(element));
 			}
@@ -263,10 +260,9 @@ public class MySystem {
 			e.printStackTrace();
 		}
 	}
-	
-	private <F extends Data<F>, S extends Data<S>>
-	void readData(Table<F, S> t) {
-		try(Scanner sc = new Scanner(new File(t.getFileName()))) {
+
+	private <F extends Data<F>, S extends Data<S>> void readData(Table<F, S> t) {
+		try (Scanner sc = new Scanner(new File(t.getFileName()))) {
 			while (sc.hasNext()) {
 				t.readData(this, sc.nextLine());
 			}
@@ -274,10 +270,9 @@ public class MySystem {
 			e.printStackTrace();
 		}
 	}
-	
-	private <F extends Data<F>, S extends Data<S>>
-	void writeData(Table<F, S> t) {
-		try(FileWriter fw = new FileWriter(new File(t.getFileName()))) {
+
+	private <F extends Data<F>, S extends Data<S>> void writeData(Table<F, S> t) {
+		try (FileWriter fw = new FileWriter(new File(t.getFileName()))) {
 			for (Tuple<F, S> tuple : t) {
 				fw.write(t.writeData(tuple.getFirst(), tuple.getSecond()));
 			}
@@ -285,10 +280,9 @@ public class MySystem {
 			e.printStackTrace();
 		}
 	}
-	
-	private <F extends Data<F>, S extends Data<S>>
-	void readData(OrderedTable<F, S> t) {
-		try(Scanner sc = new Scanner(new File(t.getFileName()))) {
+
+	private <F extends Data<F>, S extends Data<S>> void readData(OrderedTable<F, S> t) {
+		try (Scanner sc = new Scanner(new File(t.getFileName()))) {
 			while (sc.hasNext()) {
 				t.readData(this, sc.nextLine());
 			}
@@ -296,10 +290,9 @@ public class MySystem {
 			e.printStackTrace();
 		}
 	}
-	
-	private <F extends Data<F>, S extends Data<S>>
-	void writeData(OrderedTable<F, S> t) {
-		try(FileWriter fw = new FileWriter(new File(t.getFileName()))) {
+
+	private <F extends Data<F>, S extends Data<S>> void writeData(OrderedTable<F, S> t) {
+		try (FileWriter fw = new FileWriter(new File(t.getFileName()))) {
 			for (Triple<F, S> triple : t) {
 				fw.write(t.writeData(triple.getFirst(), triple.getSecond(), triple.getCardinal()));
 			}

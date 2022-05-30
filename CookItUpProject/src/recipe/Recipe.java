@@ -141,8 +141,8 @@ public class Recipe extends Data<Recipe> {
 		commentsList.add(comment);		
 	}
 
-	public void addQuestion(Question question) {
-		questionsList.add(question);
+	public boolean addQuestion(Question question) {
+		return questionsList.add(question);
 	}
 
 	public void addIngredient(Ingredient ingredient) {

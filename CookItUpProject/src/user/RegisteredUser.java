@@ -73,6 +73,8 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		return followList;
 	}
 	
+	
+	
 	/*Recipes*/
 	public List<Recipe> getRecipesList() {
 		return recipesList;
@@ -101,7 +103,8 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	/*Block list*/
 	public boolean block(RegisteredUser user) {
 		if (this.blockList.contains(user)) {
-			throw new RuntimeException("ERROR: The user cannot block another user already blocked");
+			System.err.println("ERROR: The user cannot block another user already blocked");
+			return false;
 		} else {
 			return this.blockList.add(user);
 		}
@@ -111,7 +114,8 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		if (this.blockList.contains(user)) {
 			return this.blockList.remove(user);
 		} else {
-			throw new RuntimeException("ERROR: The user cannot unblock another user not previously blocked");
+			System.err.println("ERROR: The user cannot unblock another user not previously blocked");
+			return false;
 		}
 	}
 	
@@ -122,7 +126,8 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	/*Follow list*/
 	public boolean follow(RegisteredUser user) {
 		if (this.followList.contains(user)) {
-			throw new RuntimeException("ERROR: The user cannot follow another user already followed");
+			System.err.println("ERROR: The user cannot follow another user already followed");
+			return false;
 		} else {
 			return this.followList.add(user);
 		}
@@ -132,7 +137,8 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		if (this.followList.contains(user)) {
 			return this.followList.remove(user);
 		} else {
-			throw new RuntimeException("ERROR: The user cannot unfollow a user not previously followed");
+			System.err.println("ERROR: The user cannot unfollow a user not previously followed");
+			return false;
 		}
 	}
 	
@@ -156,7 +162,8 @@ public class RegisteredUser extends Data<RegisteredUser> {
 			this.setChips(this.getChips() - amount);
 			return this.getChips();
 		} else {
-			throw new RuntimeException("ERROR: The user cannot spend more chips that it has");
+			System.err.println("ERROR: The user cannot spend more chips that it has");
+			return this.getChips();
 		}
 	}
 
