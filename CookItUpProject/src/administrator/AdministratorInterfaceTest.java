@@ -15,6 +15,7 @@ import system.MySystem;
 import system.data.RecipeList;
 import system.data.RegisteredUserList;
 import user.RegisteredUser;
+import user.RegisteredUserInterface;
 
 class AdministratorInterfaceTest {
 	
@@ -35,7 +36,7 @@ class AdministratorInterfaceTest {
 	private RegisteredUser us1 = null;
 	
 	//Initialize the RegisteredUser:
-	//private RegisteredUserInterface us1Int = null;
+	private RegisteredUserInterface us1Int = null;
 	
 	//Initialize a RegisteredUser who does not exist in the List:
 	private RegisteredUser us2 = null;
@@ -50,13 +51,16 @@ class AdministratorInterfaceTest {
 	//Initialize a user who is already blocked:
 	private RegisteredUser blockedUser = null;
 	
-	
+	//Initialize the name and strings
+	private String name = null;
+	private String password = null;
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		admin1 = new Administrator("admin1", "passwordAdmin1");
 		admin1Int = new AdministratorInterface (admin1,system);
 		system.addAdmin(admin1);
+		
 	}
 
 	@AfterAll
@@ -73,7 +77,7 @@ class AdministratorInterfaceTest {
 		us2 = new RegisteredUser ("us2", "passwordUs2");
 		system.addUser(us1);
 		
-		//us1Int = new RegisteredUserInterface(us1, system);
+		us1Int = new RegisteredUserInterface(us1, system);
 		
 		rec1 = new Recipe("rec1", 1, us1);
 		rec2 = new Recipe("rec2", 1, us1);
@@ -86,6 +90,9 @@ class AdministratorInterfaceTest {
 		
 		blockedUser = new RegisteredUser ("blockedUser", "passwordBlockedUser");
 		admin1Int.blockAccount(blockedUser);
+		
+		name = "pepe";
+		password = "contraseña";
 	}
 
 	@AfterEach

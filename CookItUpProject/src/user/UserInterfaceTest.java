@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import administrator.Administrator;
+import administrator.AdministratorInterface;
 import recipe.*;
 import system.MySystem;
 
@@ -21,7 +23,7 @@ class UserInterfaceTest {
 	MySystem system = null;
 	
 	// Users Null
-	RegisteredUser us0 = null;
+	RegisteredUser regUser = null;
 		
 	UserInterface us0interface = null;
 	
@@ -48,18 +50,19 @@ class UserInterfaceTest {
 		system.empty();
 
 		// Users' Creation
-		us0 = new RegisteredUser("Alfonso", "password");
+		regUser = new RegisteredUser("Alfonso", "password");
+		system.addUser(regUser);
 	
 		us0interface = new UserInterface(system);	
 		
 		//Register and Login
-		name = "Juan";
-		password = "123456789";
+		name = "Alfonso";
+		password = "password";
 		
 		// Recipes
-		recipe0 = new Recipe("Tortilla de papa", 1, us0);
+		recipe0 = new Recipe("Tortilla de papa", 1, regUser);
 		
-		us0.addRecipe(recipe0);
+		regUser.addRecipe(recipe0);
 		system.addRecipe(recipe0);
 		
 	}
@@ -71,7 +74,7 @@ class UserInterfaceTest {
 		system = null;
 		
 		// Users Null
-		us0 = null;
+		regUser = null;
 		
 		us0interface = null;
 		
@@ -111,4 +114,57 @@ class UserInterfaceTest {
 	void comprobarpassword() {
 		assertTrue(us0interface.validatePassword(password));
 	}
+	
+	@Test
+	void adminSeRegistra() {
+		AdministratorInterface adminterface = us0interface.registerNewAdminAccount(name, password);
+		Administrator adm = system.findAdmin(name);
+		assertTrue(adminterface.getAdministrator().equals(adm) &&
+				adm.getName().equals(name) &&
+				adm.getPasword().equals(password));
+	}
+	
+	@Test
+	void adminIntentaRegistarsePeroElNombreYaEsDeOtro() {
+		//we create an admin
+		us0interface.registerNewAdminAccount(name, password);
+		
+		AdministratorInterface adminterface = us0interface.registerNewAdminAccount(name, password);
+		assertTrue(adminterface == null);
+	}
+	
+	@Test
+	void adminIntentaRegistrarsePeroContraseñaPocoSegura() {
+		AdministratorInterface adminterface = us0interface.registerNewAdminAccount(name, "");
+		assertTrue(adminterface == null);
+	}
+	
+	@Test
+	void adminLogea() {
+		//we create an admin
+		us0interface.registerNewAdminAccount(name, password);
+		
+		AdministratorInterface adminterface = us0interface.logInAdmin(name, password);
+		Administrator adm = adminterface.getAdministrator();
+		assertTrue(system.findAdmin(name).equals(adm) &&
+				adm.getName().equals(name) &&
+				adm.getPasword().equals(password) &&
+				adm.getId() == system.findAdmin(name).getId());
+	}
+	
+	@Test
+	void adminIntentaLogearPeroNoExisteLaCuenta() {
+		AdministratorInterface adminterface = us0interface.logInAdmin(name, password);
+		assertNull(adminterface);
+	}
+	
+	@Test
+	void adminIntentaLogearPeroContraseñaIncorrecta() {
+		us0interface.registerNewAdminAccount(name, password);
+		
+		AdministratorInterface adminterface = us0interface.logInAdmin(name, "");
+		assertTrue(adminterface == null);
+		
+	}
+	
 }

@@ -30,6 +30,8 @@ public class UserInterface {
 			if (user.getPassword().equals(password)) {
 				System.out.println("You logged in");
 				us0interface = new RegisteredUserInterface(user, system);
+			}else {
+				System.out.println("Incorrect password");
 			}
 		}
 		return us0interface;
