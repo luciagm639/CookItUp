@@ -15,7 +15,6 @@ import system.MySystem;
 import system.data.RecipeList;
 import system.data.RegisteredUserList;
 import user.RegisteredUser;
-import user.RegisteredUserInterface;
 
 class AdministratorInterfaceTest {
 	
@@ -36,7 +35,7 @@ class AdministratorInterfaceTest {
 	private RegisteredUser us1 = null;
 	
 	//Initialize the RegisteredUser:
-	private RegisteredUserInterface us1Int = null;
+	//private RegisteredUserInterface us1Int = null;
 	
 	//Initialize a RegisteredUser who does not exist in the List:
 	private RegisteredUser us2 = null;
@@ -57,6 +56,7 @@ class AdministratorInterfaceTest {
 	static void setUpBeforeClass() throws Exception {
 		admin1 = new Administrator("admin1", "passwordAdmin1");
 		admin1Int = new AdministratorInterface (admin1,system);
+		system.fillSystemTesting();
 		system.addAdmin(admin1);
 	}
 
@@ -74,7 +74,7 @@ class AdministratorInterfaceTest {
 		us2 = new RegisteredUser ("us2", "passwordUs2");
 		system.addUser(us1);
 		
-		us1Int = new RegisteredUserInterface(us1, system);
+		//us1Int = new RegisteredUserInterface(us1, system);
 		
 		rec1 = new Recipe("rec1", 1, us1);
 		rec2 = new Recipe("rec2", 1, us1);
@@ -110,7 +110,7 @@ class AdministratorInterfaceTest {
 	
 	@Test	
 	void unUsuarioBloqueadoTieneElStatusBloqueado() {
-		admin1Int.blockAccount(us1);		
+		admin1Int.blockAccount(us1);
 		assertEquals(us1.getStatus(), true);	
 	}
 	
@@ -162,10 +162,8 @@ class AdministratorInterfaceTest {
 	void unaRecetaDeUnEliminadoSeQuedaEnElSistema() {
 		List <Recipe> recipes = us1.getRecipesList();
 		admin1Int.deleteAnyAccount(us1);
-		for(Recipe r:system.getAllRecipes()) {
-			if(recipes.contains(r)){
-				assertEquals(r.getUser(), system.getDefaultUser());
-			}
+		for(Recipe r:recipes) {
+			assertTrue(system.getRecipes().contains(r));
 		}
 	}
 	
@@ -174,6 +172,12 @@ class AdministratorInterfaceTest {
 		RecipeList aux = system.getRecipes();
 		admin1Int.deleteRecipe(rec2);
 		assertEquals(system.getRecipes(), aux);
+	}
+	
+	@Test
+	void alEliminarUnaRecetaSeEliminaDeLaLista() {
+		admin1Int.deleteRecipe(rec1);
+		assertFalse(system.getRecipes().contains(rec1));
 	}
 	
 	@Test

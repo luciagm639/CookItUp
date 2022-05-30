@@ -168,6 +168,25 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		this.chips = chips;
 	}
 	
+	/*Messages*/
+	
+	public void addComment(Comment m) {
+		commentsList.add(m);
+	}
+
+	public List<Comment> getCommentList() {
+		return commentsList;
+	}
+	
+	public void addQuestion(Question m) {
+		questionsList.add(m);
+	}
+
+	public List<Question> getQuestionList() {
+		return questionsList;
+	}
+	
+	
 	//TODO add and get for comment and question
 	
 	//Por ahora no vamos a usar las fotos
