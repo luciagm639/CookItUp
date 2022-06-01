@@ -31,4 +31,8 @@ public abstract class Table<F extends Data<F>, S extends Data<S>> extends HashSe
 	public String[] split(String text) {
 		return text.split("\t");
 	}
+	
+	public void add(F first, S second) {
+		add(new Tuple<F, S>(first, second));
+	}
 }

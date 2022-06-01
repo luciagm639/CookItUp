@@ -28,8 +28,19 @@ public class Review extends Data<Review> {
 	public boolean isLike() {
 		return like;
 	}
+
+	public void setLike(boolean like) {
+		this.like = like;
+	}
 	
 	public Recipe getRecipe() {
 		return recipe;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof Review) &&
+				(((Review) o).author.equals(author)) &&
+				(((Review) o).recipe.equals(recipe));
 	}
 }

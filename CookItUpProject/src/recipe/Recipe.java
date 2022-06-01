@@ -137,8 +137,8 @@ public class Recipe extends Data<Recipe> {
 		photosList.add(photo);
 	}
 
-	public void addComment(Comment comment) {
-		commentsList.add(comment);		
+	public boolean addComment(Comment comment) {
+		return commentsList.add(comment);		
 	}
 
 	public boolean addQuestion(Question question) {

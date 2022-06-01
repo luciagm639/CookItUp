@@ -15,7 +15,6 @@ public class Question extends Data<Question> {
 		this.recipe = recipe;
 	}
 	
-	
 	@Override
 	public boolean equals(Object o) {
 		return (o instanceof Question) && (((Question) o).getText().equalsIgnoreCase(getText())) && (((Question) o).getRecipe().equals(getRecipe()));
@@ -25,7 +24,6 @@ public class Question extends Data<Question> {
 	public int hashCode() {
 		return getText().hashCode();
 	}
-	
 	
 	public RegisteredUser getAuthor() {
 		return author;

@@ -21,5 +21,10 @@ class MyStringSplitter {
 		pos++;
 		return res;
 	}
-
+  
+	public boolean nextBoolean() {
+		boolean res = Boolean.parseBoolean(strings[pos]);
+		pos++;
+		return res;
+	}
 }

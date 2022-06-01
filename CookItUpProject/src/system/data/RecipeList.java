@@ -39,10 +39,11 @@ public class RecipeList extends DataSet<Recipe> {
 	}
 	
 	/*Comment*/
-	public void setComment(Comment c) {
+	public boolean setComment(Comment c) {
 		if (contains(c.getRecipe())) {
-			c.getRecipe().addComment(c);
+			return c.getRecipe().addComment(c);
 		}
+		return false;
 	}
 	
 	/*Question*/

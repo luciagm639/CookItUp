@@ -11,6 +11,11 @@ public class AdministratorInterface {
 	private final Administrator adm;
 	private MySystem system;
 	
+	public AdministratorInterface (Administrator adm) {
+		this.adm = adm;
+		this.system = new MySystem();
+	}
+	
 	public AdministratorInterface (Administrator adm, MySystem system) {
 		this.adm = adm;
 		this.system = system;
@@ -19,12 +24,10 @@ public class AdministratorInterface {
 	
 	public void blockAccount(RegisteredUser us0) {
 		system.addBlockedUser(us0);
-		
 	}
 	
 	public void unblockAccount(RegisteredUser us0) {
-		system.removeBlockedUser(us0);
-		
+		system.removeBlockedUser(us0);		
 	}
 	
 	public boolean deleteAnyAccount(RegisteredUser us1) {
@@ -53,5 +56,8 @@ public class AdministratorInterface {
 		return adm;
 	}
 	
-	
+	public void close() {
+		system.close();
+	}
 }
+

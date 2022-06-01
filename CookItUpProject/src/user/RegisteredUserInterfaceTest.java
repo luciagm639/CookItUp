@@ -101,7 +101,7 @@ class RegisteredUserInterfaceTest {
 		// Messages
 		comment = new Comment(us0, "Esta bueno pero le pondria mas tiempo de coccion", recipe2);
 		
-		question = new Question(us0, "¿De qué tamaño son los huevos que usas?", recipe2);
+		question = new Question(us0, "Â¿De quÃ© tamaÃ±o son los huevos que usas?", recipe2);
 		
 		// Photos
 		

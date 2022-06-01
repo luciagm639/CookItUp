@@ -6,7 +6,6 @@ import system.MySystem;
 
 public class RecipeIngredientTable extends Table<Recipe, Ingredient> {
 	
-	
 	public RecipeIngredientTable() {
 		super("RecipeIngredientTable.txt");
 	}

@@ -134,7 +134,7 @@ class UserInterfaceTest {
 	}
 	
 	@Test
-	void adminIntentaRegistrarsePeroContraseñaPocoSegura() {
+	void adminIntentaRegistrarsePeroClavePocoSegura() {
 		AdministratorInterface adminterface = us0interface.registerNewAdminAccount(name, "");
 		assertTrue(adminterface == null);
 	}
@@ -159,12 +159,11 @@ class UserInterfaceTest {
 	}
 	
 	@Test
-	void adminIntentaLogearPeroContraseñaIncorrecta() {
+	void adminIntentaLogearPeroClaveIncorrecta() {
 		us0interface.registerNewAdminAccount(name, password);
 		
 		AdministratorInterface adminterface = us0interface.logInAdmin(name, "");
 		assertTrue(adminterface == null);
 		
 	}
-	
 }

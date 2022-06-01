@@ -17,4 +17,9 @@ public class Tuple<F, S> {
 	public S getSecond() {
 		return second;
 	}
+	
+	@Override
+	public String toString() {
+		return "("+first+", "+second+")";
+	}
 }

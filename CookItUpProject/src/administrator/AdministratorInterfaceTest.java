@@ -51,7 +51,6 @@ class AdministratorInterfaceTest {
 	//Initialize a user who is already blocked:
 	private RegisteredUser blockedUser = null;
 	
-	//Initialize the name and strings
 	private String name = null;
 	private String password = null;
 	
@@ -60,7 +59,6 @@ class AdministratorInterfaceTest {
 		admin1 = new Administrator("admin1", "passwordAdmin1");
 		admin1Int = new AdministratorInterface (admin1,system);
 		system.addAdmin(admin1);
-		
 	}
 
 	@AfterAll
@@ -92,7 +90,7 @@ class AdministratorInterfaceTest {
 		admin1Int.blockAccount(blockedUser);
 		
 		name = "pepe";
-		password = "contraseña";
+		password = "contraseÃ±a";
 	}
 
 	@AfterEach
@@ -185,8 +183,7 @@ class AdministratorInterfaceTest {
 		admin1Int.deleteRecipe(rec1);
 		assertFalse(system.getRecipes().contains(rec1));
 	}
-	
-	@Test
+  
 	void AlEliminarUnAdministradorEsteSeBorraDeLaListaDeAdministradores() {
 		admin1Int.deleteAdminAccount(admin2);		
 		assertFalse(system.getAdminList().contains(admin2));

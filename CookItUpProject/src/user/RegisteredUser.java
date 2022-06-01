@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import recipe.Comment;
+import recipe.Ingredient;
 import recipe.Question;
 import recipe.Recipe;
 import report.Report;
@@ -19,6 +20,7 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	private List<Report> reportsList = new ArrayList<>();
 	private List<Comment> commentsList = new ArrayList<>();
 	private List<Question> questionsList = new ArrayList<>();
+	private List<Ingredient> fridge = new ArrayList<>();
 	private int chips;
 	private boolean status;
   
@@ -72,14 +74,12 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	public List<RegisteredUser> getFollowList() {
 		return followList;
 	}
-	
-	
-	
+
 	/*Recipes*/
 	public List<Recipe> getRecipesList() {
 		return recipesList;
 	}
-	
+
 	public boolean addRecipe(Recipe recipe) {
 		return recipesList.add(recipe);	
 	}
@@ -174,23 +174,32 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	public void setChips(int chips) {
 		this.chips = chips;
 	}
-	
-	/*Messages*/
-	
-	public boolean addComment(Comment m) {
-		return commentsList.add(m);
+  
+	/*Fridge*/
+	public List<Ingredient> getFridge() {
+		return fridge;
 	}
-
+	
+	public void addIngredientToFridge(Ingredient i) {
+		fridge.add(i);
+	}
+	
+	/*Questions*/
+	public List<Question> getQuestionList() {
+		return questionsList;
+	}
+	
+	public boolean addQuestion(Question q) {
+		return questionsList.add(q);
+	}
+	
+	/*Comments*/
 	public List<Comment> getCommentList() {
 		return commentsList;
 	}
 	
-	public boolean addQuestion(Question m) {
-		return questionsList.add(m);
-	}
-
-	public List<Question> getQuestionList() {
-		return questionsList;
+	public boolean addComment(Comment c) {
+		return commentsList.add(c);
 	}
 	
 	//Por ahora no vamos a usar las fotos

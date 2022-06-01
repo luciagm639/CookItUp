@@ -70,7 +70,7 @@ public class UserInterface {
 		return null;
 	}
 	
-	//TODO añadir seguridad, por ejemplo una contraseña para crear un administrador
+	//TODO aÃ±adir seguridad, por ejemplo una contraseÃ±a para crear un administrador
 	public AdministratorInterface registerNewAdminAccount(String name, String password) {
 		Administrator adm = system.findAdmin(name);
 		if (adm == null) {
@@ -103,6 +103,7 @@ public class UserInterface {
 		return system.getAllRecipes();
 	}
 	
+	/*No entiendo esta funcion*/
 	public boolean isReg(UserInterface us4, String name, String password) {
 		RegisteredUser user = system.findUser(name);
 		if (user != null) {
@@ -111,5 +112,9 @@ public class UserInterface {
 			}
 		}
 		return false;
+	}
+	
+	public void close() {
+		system.close();
 	}
 }
