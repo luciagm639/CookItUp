@@ -6,6 +6,7 @@ import java.util.List;
 import recipe.*;
 import report.*;
 import system.MySystem;
+import system.data.IngredientsList;
 
 public class RegisteredUserInterface extends UserInterface {
 	
@@ -84,6 +85,22 @@ public class RegisteredUserInterface extends UserInterface {
 			success = true;
 		}
 		return success;
+	}
+	
+	//TODO test
+	public void addIngredientToFridge(String name) {
+		Ingredient i = system.addIngredient(new Ingredient(name));
+		reg.addIngredientToFridge(i);
+	}
+	
+	//TODO test
+	public void removeIngredientFromFridge(Ingredient i) {
+		reg.deleteIngredientFromFridge(i);
+	}
+	
+	//TODO
+	public List<Recipe> recipesWithIngredientsFromFridge() {
+		return system.filter(reg.getFridge(), null, null, null);
 	}
 	
 	public boolean askQuestion(String textQuestion, Recipe recipe) {

@@ -1,7 +1,9 @@
 package user;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import recipe.Comment;
 import recipe.Ingredient;
@@ -20,7 +22,7 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	private List<Report> reportsList = new ArrayList<>();
 	private List<Comment> commentsList = new ArrayList<>();
 	private List<Question> questionsList = new ArrayList<>();
-	private List<Ingredient> fridge = new ArrayList<>();
+	private Set<Ingredient> fridge = new HashSet<>();
 	private int chips;
 	private boolean status;
   
@@ -176,12 +178,16 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	}
   
 	/*Fridge*/
-	public List<Ingredient> getFridge() {
+	public Set<Ingredient> getFridge() {
 		return fridge;
 	}
 	
-	public void addIngredientToFridge(Ingredient i) {
-		fridge.add(i);
+	public boolean addIngredientToFridge(Ingredient i) {
+		return fridge.add(i);
+	}
+	
+	public boolean deleteIngredientFromFridge(Ingredient i) {
+		return fridge.remove(i);
 	}
 	
 	/*Questions*/

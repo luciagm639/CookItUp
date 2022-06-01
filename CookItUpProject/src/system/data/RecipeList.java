@@ -1,8 +1,12 @@
 package system.data;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import recipe.Comment;
+import recipe.Ingredient;
 import recipe.Question;
 import recipe.Recipe;
 import system.MySystem;
@@ -78,5 +82,58 @@ public class RecipeList extends DataSet<Recipe> {
 		sj.add(recipe.getUser().getId());
 		
 		return sj.toString();
+	}
+
+	public List<Recipe> fridgeFilter(Collection<Recipe> recipes, Set<Ingredient> fridge) {
+		List<Recipe> list = new LinkedList<>();
+		for (Recipe r : recipes) {
+			if (fridgeContidion(r, fridge))
+				list.add(r);
+		}
+		return list;
+	}
+	
+	public List<Recipe> followerFilter(Collection<Recipe> recipes, Collection<RegisteredUser> following) {
+		List<Recipe> list = new LinkedList<>();
+		for (Recipe r : recipes) {
+			if (followerCondition(r, following))
+				list.add(r);
+		}
+		return list;
+	}
+	
+	public List<Recipe> blockedFilter(Collection<Recipe> recipes, Collection<RegisteredUser> blocked) {
+		List<Recipe> list = new LinkedList<>();
+		for (Recipe r : recipes) {
+			if (blockedCondition(r, blocked))
+				list.add(r);
+		}
+		return list;
+	}
+	
+	public List<Recipe> nameFilter(Collection<Recipe> recipes, String name) {
+		List<Recipe> list = new LinkedList<>();
+		for (Recipe r : recipes) {
+			if (nameCondition(r, name))
+				list.add(r);
+		}
+		return list;
+	}
+	
+	private boolean fridgeContidion(Recipe r, Collection<Ingredient> fridge) {
+		return fridge.containsAll(r.getIngredientsList());
+	}
+	
+	private boolean followerCondition(Recipe r, Collection<RegisteredUser> following) {
+		return following.contains(r.getUser());
+	}
+	
+	private boolean blockedCondition(Recipe r, Collection<RegisteredUser> blocked) {
+		return !blocked.contains(r.getUser());
+	}
+	
+	//title contains name
+	private boolean nameCondition(Recipe r, String name) {
+		return r.getName().toLowerCase().contains(name.toLowerCase());
 	}
 }

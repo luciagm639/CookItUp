@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -229,6 +230,7 @@ public class MySystem {
 		readData(new RecipeStepTable());
 		readData(new BlockedTable());
 		readData(new FollowTable());
+		readData(new Fridge());
 	}
 	
 	public void close() {
@@ -248,6 +250,7 @@ public class MySystem {
 		writeData(new RecipeStepTable(this));
 		writeData(new BlockedTable(this));
 		writeData(new FollowTable(this));
+		writeData(new Fridge(this));
 		
 		empty();
 	}
@@ -313,5 +316,18 @@ public class MySystem {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public List<Recipe> filter(Set<Ingredient> fridge, Collection<RegisteredUser> following, Collection<RegisteredUser> blocked, String name) {
+		List<Recipe> recipes = recipesList.toList();
+		if (fridge != null)
+			recipes = recipesList.fridgeFilter(recipes, fridge);
+		if (following != null)
+			recipes = recipesList.followerFilter(recipes, following);
+		if (blocked != null)
+			recipes = recipesList.blockedFilter(recipes, blocked);
+		if (name != null)
+			recipes = recipesList.nameFilter(recipes, name);
+		return recipes;
 	}
 }
