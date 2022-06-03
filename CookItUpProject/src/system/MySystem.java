@@ -17,6 +17,7 @@ import recipe.Recipe;
 import recipe.Review;
 import recipe.Step;
 import report.Report;
+import report.ReportUser;
 import system.data.*;
 import user.RegisteredUser;
 
@@ -31,9 +32,6 @@ public class MySystem {
 	private CommentsList commentList;
 	private QuestionsList questionList;
 	private ReviewList reviewList;
-	
-	//TODO delete this
-	private RegisteredUserList blockedList;
 	
 	public MySystem() {
 		empty();		
@@ -52,7 +50,9 @@ public class MySystem {
 		reviewList = new ReviewList();
 	}
 	
-	/*Recipes*/
+	/**
+	 * Recipes
+	 */
 	public void addRecipe(Recipe recipe) {
 		recipesList.add(recipe);
 		recipe.getUser().addRecipe(recipe);
@@ -86,7 +86,9 @@ public class MySystem {
 		return recipesList.get(id);
 	}
 
-	/* Users */
+	/**
+	 *  Users
+	 */
 	public void addUser(RegisteredUser user) {
 		userList.add(user);
 	}
@@ -96,7 +98,40 @@ public class MySystem {
 	}
 
 	public boolean removeUser(RegisteredUser user) {
-		return userList.remove(user);
+		boolean success = false;
+		//Set recipes to default
+		for (Recipe r :user.getRecipesList()) {
+			r.setUser(getDefaultUser());
+		}
+		//Set comments to default
+		for (Comment m : user.getCommentList()) {
+			m.setAuthor(getDefaultUser());
+		}
+		//Set questions to default
+		for (Question m : user.getQuestionList()) {
+			m.setAuthor(getDefaultUser());
+		}
+		
+		//Remove from list
+		success = userList.remove(user);
+		
+		//Remove from follow and block lists
+		for (RegisteredUser r : userList) {
+			r.getFollowList().remove(user);
+			r.getBlockList().remove(user);
+		}
+		
+		//Remove own reports and reports to user
+		for (Report r : reportsList) {
+			if (r.getReporting().equals(user)) {
+				reportsList.remove(r);
+			}
+			else if (r instanceof ReportUser && ((ReportUser) r).getReportedUser().equals(user)) {
+				reportsList.remove(r);
+			}
+		}
+			
+		return success;
 	}
 
 	public RegisteredUser findUser(String name) {
@@ -111,7 +146,9 @@ public class MySystem {
 		return userList.get(0);
 	}
 	
-	/*Ingredients*/
+	/**
+	 * Ingredients
+	 */
 	public Ingredient addIngredient(Ingredient ing) {
 		return ingredientsList.addAndGet(ing);
 	}
@@ -128,7 +165,13 @@ public class MySystem {
 		return ingredientsList.get(id);
 	}
 
-	/* Reports */
+	/** 
+	 * Reports
+	 */
+	public Set<Report> getReports() {
+		return reportsList;
+	}
+	
 	public void addReport(Report report) {
 		reportsList.add(report);
 	}
@@ -137,7 +180,9 @@ public class MySystem {
 		reportsList.remove(report);
 	}
 
-	/* Administrators */
+	/**
+	 * Administrators 
+	 */
 	public void addAdmin(Administrator adm2) {
 		administratorList.add(adm2);
 	}
@@ -153,8 +198,68 @@ public class MySystem {
 	public Administrator findAdmin(String name) {
 		return administratorList.find(name);
 	}
+	
+	/** 
+	 * Step 
+	 */
+	public void addStep(Step step, Recipe recipe) {
+		Step s = stepsList.addAndGet(step);
+		recipe.addStep(s);
+	}
 
-	/* Blocked */
+	public void addStep(Step step, Recipe recipe, int order) {
+		Step s = stepsList.addAndGet(step);
+		recipe.addStep(s, order);
+	}
+	
+	public void replaceStep(Step step, Recipe recipe, int order) {
+		Step s = stepsList.addAndGet(step);
+		recipe.deleteStep(order);
+		recipe.addStep(s, order);
+	}
+	
+	public Step getStep(int id) {
+		return stepsList.get(id);
+	}
+
+	//TODO add function to delete comment and question
+	/** 
+	 * Comment
+	 */
+	public Comment getComment(int id) {
+		return commentList.get(id);
+	}
+
+	public boolean addComment(Comment c) {
+		return (commentList.add(c) && c.getAuthor().addComment(c) && recipesList.setComment(c));
+	}
+	
+	/**
+	 * Question
+	 */
+	public Question getQuestion(int id) {
+		return questionList.get(id);
+	}
+
+	public boolean addQuestion(Question q) {
+		return (questionList.add(q) && q.getAuthor().addQuestion(q) && recipesList.setQuestion(q));
+	}
+	
+	/** 
+	 * Review
+	 */
+	public boolean addReview(Review r) {
+		return r.getRecipe().addReview(r) && reviewList.add(r);
+	}
+	
+	public boolean deleteReview(Review r) {
+		return r.getRecipe().deleteReview(r) && reviewList.remove(r);
+	}
+	
+	//TODO
+	/** 
+	 * Blocked 
+	 */
 	public void addBlockedUser(RegisteredUser us0) {
 		us0.setStatus(true);
 	}
@@ -171,59 +276,19 @@ public class MySystem {
 		}
 		return blockedUsers;
 	}
-
-	/* Comment */
-	public Comment getComment(int id) {
-		return commentList.get(id);
-	}
-
-	public boolean addComment(Comment c) {
-		return (commentList.add(c) && c.getAuthor().addComment(c) && recipesList.setComment(c));
-	}
-	
-	/*Question*/
-	public Question getQuestion(int id) {
-		return questionList.get(id);
-	}
-
-	public boolean addQuestion(Question q) {
-		return (questionList.add(q) && q.getAuthor().addQuestion(q) && recipesList.setQuestion(q));
-	}
-
-	/* Step */
-	public void addStep(Step step, Recipe recipe) {
-		Step s = stepsList.addAndGet(step);
-		recipe.addStep(s);
-	}
-
-	public void addStep(Step step, Recipe recipe, int order) {
-		Step s = stepsList.addAndGet(step);
-		recipe.addStep(s, order);
-	}
-	
-	public Step getStep(int id) {
-		return stepsList.get(id);
-	}
-	
-	/*Review*/
-	public void addReview(Review r) {
 		
-	}
-	
-	
-	
-	/*Save data*/
+	/**
+	 * Save data
+	 */
 	public void open() {
 		readData(userList);
 		readData(recipesList);
 		readData(ingredientsList);
 		readData(administratorList);
-		
 		readData(stepsList);
 		readData(commentList);
 		readData(questionList);
 		readData(reviewList);
-		//...
 		readData(reportsList);
 		
 		readData(new RecipeIngredientTable());
@@ -239,11 +304,12 @@ public class MySystem {
 		writeData(ingredientsList);
 		writeData(administratorList);
 		
+		stepsList.deleteUnused(this);
+		
 		writeData(stepsList);
 		writeData(commentList);
 		writeData(questionList);
 		writeData(reviewList);
-		//...
 		writeData(reportsList);
 		
 		writeData(new RecipeIngredientTable(this));
@@ -318,6 +384,7 @@ public class MySystem {
 		}
 	}
 	
+	//TODO order this
 	public List<Recipe> filter(Set<Ingredient> fridge, Collection<RegisteredUser> following, Collection<RegisteredUser> blocked, String name) {
 		List<Recipe> recipes = recipesList.toList();
 		if (fridge != null)

@@ -2,10 +2,12 @@ package user;
 
 import java.awt.Image;
 import java.util.List;
+import java.util.Set;
 
 import recipe.*;
 import report.*;
 import system.MySystem;
+import system.data.Fridge;
 import system.data.IngredientsList;
 
 public class RegisteredUserInterface extends UserInterface {
@@ -58,6 +60,17 @@ public class RegisteredUserInterface extends UserInterface {
 		return success;
 	}
 	
+	public boolean replaceStep(int time, String desc, int order, Recipe recipe) {
+		boolean success = false;
+		if (recipe.checkOwner(reg)) {
+			if (order >= 0) {
+				system.replaceStep(new Step(time, desc), recipe, order);
+				success = true;
+			}
+		}
+		return success;
+	}
+	
 	public boolean deleteStep(int index, Recipe recipe) {
 		boolean success = false;
 		if (recipe.checkOwner(reg)) {
@@ -98,9 +111,17 @@ public class RegisteredUserInterface extends UserInterface {
 		reg.deleteIngredientFromFridge(i);
 	}
 	
-	//TODO
-	public List<Recipe> recipesWithIngredientsFromFridge() {
-		return system.filter(reg.getFridge(), null, null, null);
+	//TODO test
+	public List<Recipe> lookForRecipe(boolean useFridge, String name, boolean onlyFollowing) {
+		Set<Ingredient> fridge = null;
+		List<RegisteredUser> following = null;
+		List<RegisteredUser> blocked = reg.getBlockList();
+		if (useFridge)
+			fridge = reg.getFridge();
+		if (onlyFollowing)
+			following = reg.getFollowList();
+		return system.filter(fridge, following, blocked, name);
+			
 	}
 	
 	public boolean askQuestion(String textQuestion, Recipe recipe) {

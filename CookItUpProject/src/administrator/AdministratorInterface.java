@@ -1,8 +1,13 @@
 package administrator;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
 import recipe.Comment;
 import recipe.Question;
 import recipe.Recipe;
+import report.*;
 import system.MySystem;
 import user.RegisteredUser;
 
@@ -21,7 +26,6 @@ public class AdministratorInterface {
 		this.system = system;
 	}
 	
-	
 	public void blockAccount(RegisteredUser us0) {
 		system.addBlockedUser(us0);
 	}
@@ -31,15 +35,6 @@ public class AdministratorInterface {
 	}
 	
 	public boolean deleteAnyAccount(RegisteredUser us1) {
-		for (Recipe r :us1.getRecipesList()) {
-			r.setUser(system.getDefaultUser());
-		}
-		for (Comment m : us1.getCommentList()) {
-			m.setAuthor(system.getDefaultUser());
-		}
-		for (Question m : us1.getQuestionList()) {
-			m.setAuthor(system.getDefaultUser());
-		}
 		return system.removeUser(us1);
 	}
 	
@@ -49,15 +44,61 @@ public class AdministratorInterface {
 	
 	public boolean deleteAdminAccount(Administrator adm2) {
 		return system.removeAdmin(adm2);
-	}
-
-
+	}	
+	
 	public Administrator getAdministrator() {
 		return adm;
 	}
 	
 	public void close() {
 		system.close();
+	}
+	
+	/**
+	 * Reports
+	 */
+	public List<ReportComment> getCommentReports() {
+		Set<Report> set = system.getReports();
+		List<ReportComment> list = new LinkedList<>();
+		for (Report r : set) {
+			if (r instanceof ReportComment) {
+				list.add((ReportComment) r);
+			}
+		}
+		return list;
+	}
+	
+	public List<ReportQuestion> getQuestionReports() {
+		Set<Report> set = system.getReports();
+		List<ReportQuestion> list = new LinkedList<>();
+		for (Report r : set) {
+			if (r instanceof ReportQuestion) {
+				list.add((ReportQuestion) r);
+			}
+		}
+		return list;
+	}
+	
+	public List<ReportRecipe> getRecipeReports() {
+		Set<Report> set = system.getReports();
+		List<ReportRecipe> list = new LinkedList<>();
+		for (Report r : set) {
+			if (r instanceof ReportRecipe) {
+				list.add((ReportRecipe) r);
+			}
+		}
+		return list;
+	}
+	
+	public List<ReportUser> getUserReports() {
+		Set<Report> set = system.getReports();
+		List<ReportUser> list = new LinkedList<>();
+		for (Report r : set) {
+			if (r instanceof ReportUser) {
+				list.add((ReportUser) r);
+			}
+		}
+		return list;
 	}
 }
 

@@ -1,3 +1,13 @@
 1	Patata
 2	Huevo
-3	pollo
+3	Pollo
+4	Fresa
+5	Harina
+6	Sal
+7	Orégano
+8	Zanahoria
+9	Pimiento
+10	Pavo
+11	Cebolla
+12	Jamón
+13	Queso

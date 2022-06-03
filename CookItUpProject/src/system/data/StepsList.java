@@ -1,5 +1,9 @@
 package system.data;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import recipe.Recipe;
 import recipe.Step;
 import system.MySystem;
 
@@ -31,5 +35,13 @@ public class StepsList extends DataSet<Step> {
 		sj.add(step.getDescription());
 		
 		return sj.toString();
+	}
+
+	public void deleteUnused(MySystem system) {
+		Set<Step> stepsUsed = new HashSet<Step>();
+		for (Recipe r : system.getAllRecipes()) {
+			stepsUsed.addAll(r.getStepsList());
+		}
+		this.retainAll(stepsUsed);
 	}
 }

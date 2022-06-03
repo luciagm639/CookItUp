@@ -18,6 +18,7 @@ public class Recipe extends Data<Recipe> {
 	private Set<Ingredient> ingredientsList;
 	private Set<RecipePhoto> photosList;
 	private List<Step> stepsList;
+	private Set<Review> reviewList;
 
 
 	public Recipe(String name, int priority, RegisteredUser user) {
@@ -30,6 +31,7 @@ public class Recipe extends Data<Recipe> {
 		this.questionsList = new HashSet<Question>();
 		this.photosList = new HashSet<RecipePhoto>();
 		this.stepsList = new ArrayList<Step>();
+		this.reviewList = new HashSet<Review>();
 	}
 	
 	public Recipe(String name, RegisteredUser user) {
@@ -51,6 +53,7 @@ public class Recipe extends Data<Recipe> {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name+"\n");
 		sb.append("Author: " + user + "\n");
+		sb.append("Number of likes: " + getNumberofLikes() + ", Number of dislikes: " + getNumberofDislikes() + "\n");
 		sb.append("Ingredients:\n");
 		for (Ingredient i : ingredientsList) {
 			sb.append("\t"+i+"\n");
@@ -171,5 +174,32 @@ public class Recipe extends Data<Recipe> {
 
 	public boolean checkOwner(RegisteredUser reg) {
 		return user.equals(reg);
+	}
+	
+	/*Reviews*/
+	public boolean addReview(Review r) {
+		return reviewList.add(r);
+	}
+	
+	public boolean deleteReview(Review r) {
+		return reviewList.remove(r);
+	}
+	
+	public int getNumberofLikes() {
+		int cont = 0;
+		for (Review r : reviewList) {
+			if (r.isLike())
+				cont++;
+		}
+		return cont;
+	}
+	
+	public int getNumberofDislikes() {
+		int cont = 0;
+		for (Review r : reviewList) {
+			if (!r.isLike())
+				cont++;
+		}
+		return cont;
 	}
 }

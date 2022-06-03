@@ -7,7 +7,7 @@ import menu.Option;
 import user.RegisteredUserInterface;
 
 public class QuestionOption implements Option {
-	String text = "Adk a question";
+	String text = "Ask a question";
 	int RecipeNumber = 0;
 	public QuestionOption(int RecipeNumber) {
 		this.RecipeNumber = RecipeNumber;
