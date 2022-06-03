@@ -1,7 +1,6 @@
 package menu.menuOwnRecipe;
 
 import java.util.Scanner;
-
 import menu.Menu;
 import menu.Option;
 import user.RegisteredUserInterface;
@@ -15,8 +14,12 @@ public class AddStepOption implements Option{
 	}
 	@Override
 	public void exucuteOption(RegisteredUserInterface regInterface, Scanner lector, Menu prevMenu) {
-		// TODO Auto-generated method stub
-		
+		String text;
+		System.out.println("Write a small description");
+		text = lector.nextLine();
+		System.out.println("Write its time in this step");
+	    int valor = Integer.parseInt(lector.nextLine());
+		regInterface.addStep(valor, text, regInterface.getUserRecipes().get(RecipeNumber-1).getStepsList().size(), regInterface.getUserRecipes().get(RecipeNumber-1));
 	}
 
 	@Override

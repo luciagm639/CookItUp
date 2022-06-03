@@ -5,6 +5,7 @@ import java.util.Scanner;
 import menu.ExitOption;
 import menu.Menu;
 import menu.PrincipalMenu.CreateRecipeOption;
+import menu.PrincipalMenu.SearchRecipe;
 import menu.PrincipalMenu.ShowAllRecipesOption;
 import menu.PrincipalMenu.ShowProfileOption;
 import user.RegisteredUserInterface;
@@ -20,6 +21,7 @@ public class NewMain {
 		MenuRegisteredUser.addOption(new ShowAllRecipesOption(1));
 		MenuRegisteredUser.addOption(new ShowProfileOption());
 		MenuRegisteredUser.addOption(new CreateRecipeOption());
+		MenuRegisteredUser.addOption(new SearchRecipe());
 		MenuRegisteredUser.addOption(new ExitOption());
 		MenuUnRegisteredUser.addOption(new ShowAllRecipesOption(0));
 		MenuUnRegisteredUser.addOption(new ExitOption());
