@@ -1,28 +1,29 @@
-package menu.RecipeExtensionMenu;
+package menu.InitialMenu.RegisteredUser.Recipes;
 
 import java.util.Scanner;
 
+import menu.Interface;
 import menu.Menu;
 import menu.Option;
+import recipe.Recipe;
 import user.RegisteredUserInterface;
 
 public class LikeOption implements Option {
 	String text = "Like";
-	int RecipeNumber = 0;
+	Recipe recipe;
 	
-	public LikeOption(int RecipeNumber) {
-		this.RecipeNumber = RecipeNumber;
+	public LikeOption(Recipe r) {
+		this.recipe = r;
 	}
 	
 	@Override
-	public void exucuteOption(RegisteredUserInterface regInterface, Scanner lector, Menu prevMenu) {
+	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
 		System.err.println("Need to be implemented, this is a beta");
 		
 	}
 
 	@Override
 	public String getText() {
-		// TODO Auto-generated method stub
 		return text;
 	}
 

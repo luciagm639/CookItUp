@@ -1,2 +1,8 @@
 1	10	Batir los huevos
 2	30	Cortar la patata
+3	5	echar aceite al pan y restregar el ajo sobre el
+4	20	meter al horno
+7	15	cocer los macarrones
+8	0	echarles tomate y la carne picada
+9	18	meter la pizza al horno a 200 grados
+10	1	juntar la leche con los cereales

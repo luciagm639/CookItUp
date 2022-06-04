@@ -1,7 +1,8 @@
-package menu.PrincipalMenu;
+package menu.InitialMenu.RegisteredUser;
 
 import java.util.Scanner;
 
+import menu.Interface;
 import menu.Menu;
 import menu.Option;
 import recipe.Recipe;
@@ -11,7 +12,8 @@ public class CreateRecipeOption implements Option {
 	String texto = "Create recipe";
 	
 	@Override
-	public void exucuteOption(RegisteredUserInterface regInterface, Scanner lector, Menu prevMenu) {
+	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
+		RegisteredUserInterface regInterface = Interface.toRegisteredUserInterface(inter);
 		int cont = 0;
 		System.out.println("Escriba el nombre de la receta");
 		String cadena = lector.nextLine();
@@ -26,7 +28,7 @@ public class CreateRecipeOption implements Option {
 		System.out.println("Now write down the ingredients , write 0 to finish this step");
 		cadena = lector.nextLine();
 		
-		while(!cadena.equals("0")) {//HASTA AQUI
+		while(!cadena.equals("0")) {
 			regInterface.addIngredient(cadena, recipe);
 			cadena = lector.nextLine();
 		}
@@ -72,7 +74,6 @@ public class CreateRecipeOption implements Option {
 
 	@Override
 	public String getText() {
-		// TODO Auto-generated method stub
 		return texto;
 	}
 	

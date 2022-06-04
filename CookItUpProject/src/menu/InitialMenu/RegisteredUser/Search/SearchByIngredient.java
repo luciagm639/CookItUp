@@ -1,7 +1,8 @@
-package menu.SearchMenu;
+package menu.InitialMenu.RegisteredUser.Search;
 
 import java.util.Scanner;
 
+import menu.Interface;
 import menu.Menu;
 import menu.Option;
 import user.RegisteredUserInterface;
@@ -9,7 +10,8 @@ import user.RegisteredUserInterface;
 public class SearchByIngredient implements Option {
 
 	@Override
-	public void exucuteOption(RegisteredUserInterface regInterface, Scanner lector, Menu prevMenu) {
+	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
+		RegisteredUserInterface regInterface = Interface.toRegisteredUserInterface(inter);
 		int i = 0;
 		int pagina = -1;
 		System.err.println("To finish");

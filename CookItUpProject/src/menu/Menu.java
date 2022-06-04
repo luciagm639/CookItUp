@@ -3,18 +3,26 @@ package menu;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import user.RegisteredUserInterface;
 
 public class Menu {
 	private String titulo;
-	private List<Option> optionList = new ArrayList<Option>();;
-	RegisteredUserInterface regInterface;
-	public Menu(String titulo, RegisteredUserInterface regInterface) {
+	private List<Option> optionList = new ArrayList<Option>();
+	private Option prevOption;
+	Interface menuInterface;
+	public Menu(String titulo, Interface menuInterface) {
 		this.titulo = titulo;
-		this.regInterface = regInterface;
+		this.menuInterface = menuInterface;
+	}
+	
+	public Menu(String titulo, Interface menuInterface, Option prevOption) {
+		this.titulo = titulo;
+		this.menuInterface = menuInterface;
+		this.prevOption = prevOption;
 	}
 	
 	public void drawMenu() {
+		if (prevOption != null)
+			System.out.println(prevOption);
 		System.out.println("-------------------");
 		System.out.println(titulo);
 		for(int i = 0; i < optionList.size(); i++) {
@@ -32,7 +40,7 @@ public class Menu {
 		Scanner in = new Scanner(System.in);
 		try {
 			int valor = Integer.parseInt(in.nextLine());
-			optionList.get(valor -1).exucuteOption(regInterface, in, this);
+			optionList.get(valor -1).executeOption(menuInterface, in, this);
 			drawMenu();
 		}
 		catch(Exception e ) {

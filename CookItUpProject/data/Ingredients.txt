@@ -1,13 +1,16 @@
 1	Patata
 2	Huevo
-3	Pollo
-4	Fresa
-5	Harina
-6	Sal
-7	Orégano
-8	Zanahoria
-9	Pimiento
-10	Pavo
-11	Cebolla
-12	Jamón
-13	Queso
+3	pollo
+4	pan
+5	aceite
+6	ajo
+7	macarrones
+8	agua
+9	sal
+10	carne picada
+11	ir al mercadona y meterla al horno a 200 grados
+12	sad
+13	tomate
+14	pizza del mercadona
+15	cereales
+16	leche

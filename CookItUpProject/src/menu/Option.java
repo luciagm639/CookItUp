@@ -6,6 +6,6 @@ import user.RegisteredUserInterface;
 
 public interface Option {
 	public  String text = "";
-	public void exucuteOption(RegisteredUserInterface regInterface, Scanner lector, Menu prevMenu);
+	public void executeOption(Interface menuInterface, Scanner lector, Menu prevMenu);
 	public String getText();
 }

@@ -13,13 +13,12 @@ public class GoBack implements Option {
 	}
 
 	@Override
-	public void exucuteOption(RegisteredUserInterface regInterface, Scanner lector, Menu prevMenu) {
+	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
 		previousMenu.drawMenu();
 	}
 
 	@Override
 	public String getText() {
-		// TODO Auto-generated method stub
 		return text;
 	}
 

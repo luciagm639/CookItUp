@@ -5,10 +5,11 @@ import java.util.List;
 
 import administrator.Administrator;
 import administrator.AdministratorInterface;
+import menu.Interface;
 import recipe.Recipe;
 import system.MySystem;
 
-public class UserInterface {
+public class UserInterface implements Interface {
 	
 	MySystem system;
 	
