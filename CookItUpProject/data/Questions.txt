@@ -1,2 +1,6 @@
 1	1	1	¿De qué tamaño son los huevos que usas?
 2	5	4	po
+3	5	1	How do I chop the potatoes?
+4	3	5	That does not have any merit
+5	5	7	What video do we have to see?
+6	5	8	4

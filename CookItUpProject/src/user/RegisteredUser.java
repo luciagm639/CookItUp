@@ -52,6 +52,17 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	public String toString() {
 	  return name;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return (o instanceof RegisteredUser) &&
+				(((RegisteredUser) o).name.equalsIgnoreCase(name));
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.toLowerCase().hashCode();
+	}
 	  
 	public String showProfile() {
 		StringBuilder sb = new StringBuilder();

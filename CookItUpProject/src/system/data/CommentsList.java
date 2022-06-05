@@ -22,6 +22,7 @@ public final class CommentsList extends DataSet<Comment> {
 		
 		Comment c = new Comment(author, comment, recipe);
 		add(c, id);
+		recipe.addComment(c);
 		system.addComment(c);
 	}
 

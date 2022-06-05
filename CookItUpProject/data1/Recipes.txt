@@ -4,6 +4,5 @@
 4	macarrones con tomate	0	5
 5	pizza del mercadona	0	5
 6	cereales con leche	0	5
-7	San Jacobo	0	3
-8	Bocadillo  de cerdo	0	5
-9	Huevo frito con patatas y chorizo	0	5
+7	g	0	5
+8	a	0	5

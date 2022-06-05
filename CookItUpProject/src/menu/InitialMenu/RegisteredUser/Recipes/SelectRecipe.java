@@ -28,7 +28,8 @@ public class SelectRecipe extends Select<Recipe> {
 		RecipeMenu.addOption(new DislikeOption(r));
 		RecipeMenu.addOption(new CommentOption(r));
 		RecipeMenu.addOption(new QuestionOption(r));
-		//TODO add more
+		RecipeMenu.addOption(new ViewCommentsOption(r));
+		RecipeMenu.addOption(new ViewQuestionsOption(r));
 		RecipeMenu.addOption(new GoBack(prevMenu));
 		RecipeMenu.drawMenu();
 	}

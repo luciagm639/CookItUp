@@ -2,16 +2,14 @@
 2	30	Cortar la patata
 3	5	echar aceite al pan y restregar el ajo sobre el
 4	20	meter al horno
-5	20	busca un video en youTube
-6	2	Cortar tomate
+5	1	1
+6	2	2
 7	15	cocer los macarrones
 8	0	echarles tomate y la carne picada
 9	18	meter la pizza al horno a 200 grados
 10	1	juntar la leche con los cereales
-11	15	preparar la carne
-13	15	preparar el bacon
-14	2	construir el bocata
-15	5	freir los huevos
-16	5	freir las patatas
-17	1	añadir el ajo, las patatas, el chorizo y los huevos
-18	15	Pochar la cebolla
+11	3	3
+12	1	1
+13	2	2
+14	3	3
+15	10	pap

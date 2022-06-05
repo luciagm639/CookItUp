@@ -9,12 +9,6 @@ public class Review extends Data<Review> {
 	private boolean like;
 	private Recipe recipe;
 	
-	//TODO DELETE
-	public Review(RegisteredUser author, boolean like) {
-		this.author = author;
-		this.like = like;	
-	}
-	
 	public Review(RegisteredUser author, boolean like, Recipe recipe) {
 		this.author = author;
 		this.like = like;
@@ -42,5 +36,17 @@ public class Review extends Data<Review> {
 		return (o instanceof Review) &&
 				(((Review) o).author.equals(author)) &&
 				(((Review) o).recipe.equals(recipe));
+	}
+	
+	@Override
+	public int hashCode() {
+		return author.hashCode() + recipe.hashCode();
+	}
+	
+	public String toString() {
+		if (like)
+			return "User "+author+" has liked the recipe "+recipe.getName();
+		else
+			return "User "+author+" has disliked the recipe "+recipe.getName();
 	}
 }

@@ -212,4 +212,8 @@ public class RegisteredUserInterface extends UserInterface {
 	public RegisteredUser getUser() {
 		return reg;
 	}
+
+	public void upLoadReview(Review review) {
+		system.addReview(review);
+	}
 }

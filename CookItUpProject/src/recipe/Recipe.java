@@ -48,8 +48,40 @@ public class Recipe extends Data<Recipe> {
 		return name.toLowerCase().hashCode();
 	}
 	
+	//Limitamos el numero de ingredientes y pasos a mostrar a 5
 	@Override
 	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(name+"\n");
+		sb.append("Author: " + user + "\n");
+		sb.append("Number of likes: " + getNumberofLikes() + ", Number of dislikes: " + getNumberofDislikes() + "\n");
+		
+		sb.append("Ingredients:\n");
+		int cont = 0;
+		for (Ingredient i : ingredientsList) {
+			if (cont == 5) {
+				sb.append("\t...\n");
+				break;
+			}
+			sb.append("\t"+i+"\n");
+			cont++;
+		}
+		
+		sb.append("Steps:\n");
+		cont = 0;
+		for(int i = 0; i < stepsList.size(); i++) {
+			if (cont == 5) {
+				sb.append("...\n");
+				break;
+			}
+			sb.append((i+1)+". "+stepsList.get(i)+"\n");
+			cont++;
+		}
+		return sb.toString();
+	}
+
+	//Limitamos el numero de comentarios y preguntas a 2
+	public String toStringExtended() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name+"\n");
 		sb.append("Author: " + user + "\n");
@@ -62,20 +94,25 @@ public class Recipe extends Data<Recipe> {
 		for(int i = 0; i < stepsList.size(); i++) {
 			sb.append((i+1)+". "+stepsList.get(i)+"\n");
 		}
-		return sb.toString();
-	}
-
-	//With comments and questions
-	public String toStringExtended() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this);
 		sb.append("Questions: \n");
+		int cont = 0;
 		for (Question q : questionsList) {
-			sb.append("- " + q + "\n");
+			if (cont == 2) {
+				sb.append("...\n");
+				break;
+			}
+			sb.append("- " + q);
+			cont++;
 		}
 		sb.append("Comments: \n");
+		cont = 0;
 		for (Comment c : commentsList) {
-			sb.append("- " + c + "\n");
+			if (cont == 2) {
+				sb.append("...\n");
+				break;
+			}
+			sb.append("- " + c);
+			cont++;
 		}
 		return sb.toString();
 	}
@@ -177,6 +214,10 @@ public class Recipe extends Data<Recipe> {
 	}
 	
 	/*Reviews*/
+	public Set<Review> getReviews() {
+		return reviewList;
+	}
+	
 	public boolean addReview(Review r) {
 		return reviewList.add(r);
 	}

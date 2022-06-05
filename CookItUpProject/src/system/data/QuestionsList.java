@@ -23,6 +23,7 @@ public final class QuestionsList extends DataSet<Question> {
 		Question c = new Question(author, question, recipe);
 		add(c, id);
 		system.addQuestion(c);
+		recipe.addQuestion(c);
 	}
 
 	@Override

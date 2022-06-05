@@ -20,6 +20,7 @@ public class ReviewList extends DataSet<Review> {
 		boolean like = sp.nextBoolean();
 		Review r = new Review(author, like, recipe);
 		add(r, id);
+		recipe.addReview(r);
 	}
 
 	@Override

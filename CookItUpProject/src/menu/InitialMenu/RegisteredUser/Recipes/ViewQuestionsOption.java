@@ -1,9 +1,8 @@
-package menu.InitialMenu.RegisteredUser;
+package menu.InitialMenu.RegisteredUser.Recipes;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 import menu.Interface;
 import menu.Menu;
@@ -14,30 +13,33 @@ import user.RegisteredUserInterface;
 
 import recipe.*;
 
-public class ShowAllRecipesOption extends Show5<Recipe> {
+public class ViewQuestionsOption extends Show5<Question> {
 	
-	public ShowAllRecipesOption() {
-		super("See all recipes");
+	Recipe r;
+	
+	public ViewQuestionsOption(Recipe r) {
+		super("See the questions");
+		this.r = r;
 	}
 	
-	protected ShowAllRecipesOption(ShowAllRecipesOption s, boolean isPrev) {
+	protected ViewQuestionsOption(ViewQuestionsOption s, boolean isPrev) {
 		super(s, isPrev);
+		this.r = s.r;
 	}
 
 	@Override
 	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
 		RegisteredUserInterface regInterface = Interface.toRegisteredUserInterface(inter);
-		setList(regInterface.lookForRecipe(false, null, false));
-		setPrevMenu(prevMenu);
+		setList(r.getQuestionsList());
+		setPrevMenu(prevMenu);		
 		
-		ShowAllRecipesOption prevPage = null;
+		ViewQuestionsOption prevPage = null;
 		if (hasPrevPage())
-			prevPage = new ShowAllRecipesOption(this, true);
-		ShowAllRecipesOption nextPage = null;
+			prevPage = new ViewQuestionsOption(this, true);
+		ViewQuestionsOption nextPage = null;
 		if (hasNextPage())
-			nextPage = new ShowAllRecipesOption(this, false);
+			nextPage = new ViewQuestionsOption(this, false);
 		List<Option> options = new LinkedList<>();
-		options.add(new SelectRecipe(this));
 		execute(regInterface, lector, 0, prevPage, nextPage, options);
 	}
 }

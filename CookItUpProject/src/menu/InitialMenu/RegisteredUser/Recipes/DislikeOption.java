@@ -6,6 +6,7 @@ import menu.Interface;
 import menu.Menu;
 import menu.Option;
 import recipe.Recipe;
+import recipe.Review;
 import user.RegisteredUserInterface;
 
 public class DislikeOption implements Option {
@@ -18,7 +19,9 @@ public class DislikeOption implements Option {
 	
 	@Override
 	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
-		System.err.println("Need to be implemented, this is a beta");
+		RegisteredUserInterface regInterface = Interface.toRegisteredUserInterface(inter);
+		Review review = new Review(regInterface.getUser(),false,recipe);
+		regInterface.upLoadReview(review);
 
 	}
 

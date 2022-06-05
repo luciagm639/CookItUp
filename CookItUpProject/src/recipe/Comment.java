@@ -43,7 +43,7 @@ public class Comment extends Data<Comment> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(getAuthor() + ": " + getText());
+		sb.append(getAuthor() + ": " + getText()+"\n");
 		return sb.toString();
 	}
 

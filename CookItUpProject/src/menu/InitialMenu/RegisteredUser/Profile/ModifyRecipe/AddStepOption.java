@@ -19,7 +19,7 @@ public class AddStepOption implements Option {
 	@Override
 	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
 		RegisteredUserInterface regInterface = Interface.toRegisteredUserInterface(inter);
-		System.out.println("In which position do you want to add the step? (-1 for last step)");
+		System.out.println("In which position do you want to add the step? (0 for last step)");
 		int stepPos = Integer.parseInt(lector.nextLine());
 		
 		System.out.println("Write a small description");

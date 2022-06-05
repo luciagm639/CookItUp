@@ -40,7 +40,7 @@ public class Question extends Data<Question> {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(getAuthor() + ": " + getText());
+		sb.append(getAuthor() + ": " + getText()+"\n");
 		return sb.toString();
 	}
 

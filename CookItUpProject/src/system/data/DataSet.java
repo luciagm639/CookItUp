@@ -54,23 +54,34 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 	
 	@Override
 	public boolean add(E e) {
+		if (contains(e))
+			return false;
 		if (e.getId() == -1) {
 			e.setId(this);
 		}
 		else if (get(e.getId()) != null) {
 			return false;//NO SE PUEDEN AÑADIR ELEMENTOS CON IDS IGUALES
 		}
+		
 		return super.add(e);
 	}
 	
 	public boolean add(E e, int id) {
-		if (get(e.getId()) == null) {
+		if (contains(e))
+			return false;
+		if (get(id) == null) {
 			e.setId(this, id);
 		}
 		else {
 			System.err.println("Duplicate ids for " + e.getClass());
 		}
 		return super.add(e);
+	}
+	
+	public boolean contains(E e) {
+		for (E element : this)
+			if (element.equals(e)) return true;
+		return false;
 	}
 	
 	public String[] split(String text) {

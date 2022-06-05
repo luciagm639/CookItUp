@@ -1,7 +1,9 @@
 package menu;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import user.RegisteredUserInterface;
 
@@ -29,6 +31,10 @@ public abstract class Show5<E> implements Option {
 	
 	public void setList(List<E> list) {
 		this.pageList.setList(list);
+	}
+	
+	public void setList(Set<E> list) {
+		this.pageList.setList(new LinkedList<>(list));
 	}
 
 	protected Show5(Show5<E> s, boolean isPrev) {

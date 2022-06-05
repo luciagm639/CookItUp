@@ -14,15 +14,4 @@
 14	pizza del mercadona
 15	cereales
 16	leche
-17	pan rallado
-18	queso
-19	huevo
-20	jamon jork
-21	filete de ternera
-22	lechuga
-23	mayonesa
-24	tiras de carne de cerdo
-25	cebolla
-26	bacon
-27	patata
-28	chorizo
+17	a

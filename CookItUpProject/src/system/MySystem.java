@@ -249,7 +249,10 @@ public class MySystem {
 	 * Review
 	 */
 	public boolean addReview(Review r) {
-		return r.getRecipe().addReview(r) && reviewList.add(r);
+		Review r2 = reviewList.addAndGet(r);
+		if (r2.isLike() != r.isLike())
+			r2.setLike(r.isLike());
+		return true;
 	}
 	
 	public boolean deleteReview(Review r) {

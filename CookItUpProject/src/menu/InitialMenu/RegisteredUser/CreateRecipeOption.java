@@ -37,7 +37,7 @@ public class CreateRecipeOption implements Option {
 		cadena = lector.nextLine();
 		System.out.println("Write its time in this step");
 	    int valor = Integer.parseInt(lector.nextLine());
-		regInterface.addStep(valor, cadena, cont, recipe);
+		regInterface.addStep(valor, cadena, -1, recipe);
 
 		
 		do {
@@ -56,7 +56,7 @@ public class CreateRecipeOption implements Option {
 		
 			System.out.println("Write its time in this step");
 			valor = Integer.parseInt(lector.nextLine());
-			regInterface.addStep(valor, cadena, cont, recipe);
+			regInterface.addStep(valor, cadena, -1, recipe);
 			
 			do {
 				System.out.println("Add an other step Y/N");

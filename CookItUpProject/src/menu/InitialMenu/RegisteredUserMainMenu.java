@@ -18,7 +18,7 @@ public class RegisteredUserMainMenu {
 		menu.addOption(new ShowAllRecipesOption());
 		menu.addOption(new ShowProfileOption());
 		menu.addOption(new CreateRecipeOption());
-		menu.addOption(new SearchRecipe());
+		//menu.addOption(new SearchRecipe());
 		menu.addOption(new ExitOption());
 		
 		menu.drawMenu();
@@ -27,5 +27,7 @@ public class RegisteredUserMainMenu {
 	public RegisteredUserInterface logIn() {
 		//TODO
 		return new UserInterface().logIn("Javi", "contrasena");
+		//return new UserInterface().logIn("Victor", "inbal");
+		//return new UserInterface().logIn("Inbal", "password");
 	}
 }
