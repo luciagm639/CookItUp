@@ -62,7 +62,6 @@ public abstract class DataSet<F extends E, E extends Data<E>> extends TreeSet<F>
 		else if (get(e.getId()) != null) {
 			return false;//NO SF PUFDFN AÑADIR FLFMFNTOS CON IDS IGUALFS
 		}
-		
 		return super.add(e);
 	}
 	

@@ -43,6 +43,7 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	}
 	  
 	public RegisteredUser(RegisteredUser user) {
+		super(user.getId());
 		name = user.name;
 		password = user.password;
 		fridge = user.fridge;

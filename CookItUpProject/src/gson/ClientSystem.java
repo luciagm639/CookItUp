@@ -58,7 +58,6 @@ public class ClientSystem extends Thread {
 			System.err.println("Error: No se ha podido crear el socket");
 			System.exit(-1);
 		}
-
 	}
 
 	public String sendDatagram(String userInput) {
@@ -135,17 +134,6 @@ public class ClientSystem extends Thread {
 
 		System.out.println("FINISHED");
 	}
-	/*
-	 * public String createRecipe(String name, int idUser) { return
-	 * sendDatagran(ServerSystem.CREATE_RECIPE+"\t"+name+"\t"+idUser); }
-	 * 
-	 * public String deleteRecipe(int idRecipe, int idUser) { return
-	 * sendDatagran(ServerSystem.DELETE_RECIPE+"\t"+idRecipe+'\t'+idUser); }
-	 * 
-	 * public String getRecipes(int page, int idUser) { return
-	 * sendDatagran(ServerSystem.LIST_OF_RECIPES+"\t"+page+"\t"+"\t"+idUser+"\t"+
-	 * false+"\t"+false+"\t"+null); }
-	 */
 	
 	public RegisteredUser findUser(String name) {
         Message<String> message = new Message<String>(Function.FIND_USER, name);
@@ -159,11 +147,6 @@ public class ClientSystem extends Thread {
         String text = sendDatagram(message);
         Administrator admin = parser.fromJson(text, Administrator.class);
         return admin;
-    }
-
-    public void addUser(RegisteredUser user) {
-        Message<RegisteredUser> message = new Message<>(Function.ADD_USER, user);
-        sendDatagram(message);
     }
 
     public void addAdmin(Administrator adm) {
@@ -197,13 +180,6 @@ public int addRecipe(Recipe r) {
         boolean bool = parser.fromJson(text, Boolean.class);
         return bool;
     }
-
-	
-
-	public void close() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void addStep(Step step, Recipe recipe, int order) {
 		// TODO Auto-generated method stub
@@ -307,11 +283,6 @@ public int addRecipe(Recipe r) {
 		return null;
 	}
 
-	public void empty() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public boolean hasRecipe(Recipe rec) {
 		// TODO Auto-generated method stub
 		return false;
@@ -335,5 +306,30 @@ public int addRecipe(Recipe r) {
 	public List<Recipe> getUserRecipes(RegisteredUser reg) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	/**
+	 * Inbal's
+	 */
+
+	
+	/**
+	 * Tested
+	 */
+	public int addUser(RegisteredUser user) {
+        Message<RegisteredUser> message = new Message<>(Function.ADD_USER, user);
+        String text = sendDatagram(message);
+        return Integer.parseInt(text);
+    }
+
+	public void close() {
+		Message<String> message = new Message<>(Function.CLOSE, null);
+		sendDatagram(message);
+	}
+
+	public void empty() {
+		Message<String> message = new Message<>(Function.EMPTY, null);
+		String text = sendDatagram(message);
+		System.out.println(text);
 	}
 }

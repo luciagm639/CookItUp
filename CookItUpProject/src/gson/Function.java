@@ -10,5 +10,7 @@ public enum Function {
 	FIND_ADMIN,
 	ADD_USER,
 	GET_ALL_RECIPES,
-	SHOW_RECIPES
+	SHOW_RECIPES,
+	CLOSE,
+	EMPTY
 }

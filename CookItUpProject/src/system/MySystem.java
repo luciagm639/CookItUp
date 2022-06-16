@@ -338,8 +338,6 @@ public class MySystem {
 		writeData(new BlockedTable(this));
 		writeData(new FollowTable(this));
 		writeData(new Fridge(this));
-		
-		empty();
 	}
 	
 	private File openFile(String fileName) {

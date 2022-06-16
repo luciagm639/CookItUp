@@ -40,5 +40,15 @@ public class  Message<E> {
 	public E getElement() {
 		return element;
 	}
+	
+//	public static <F> Message<F> getMessage2(String text) {
+//		Type type = new TypeToken<Message<F>>() {}.getType();
+//		Gson gson = new Gson();
+//		return gson.fromJson(text, type);
+//	}
+//	
+//	public Type getType() {
+//		return new TypeToken<Message<E>>() {}.getType();
+//	}
 
 }

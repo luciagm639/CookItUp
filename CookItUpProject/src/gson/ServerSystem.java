@@ -20,100 +20,69 @@ import com.google.gson.JsonParser;
 
 import administrator.Administrator;
 
-public class ServerSystem extends MySystem {
+public class ServerSystem extends MySystem implements Runnable {
 	
 	public final static int RECIPES_PER_PAGE = 5;
 	private Gson parser;
-
-	public static void main(String[] args) {
-		int port = 10; // puerto del servidor
-
-		// SOCKET
-		DatagramSocket server = null;
-		ServerSystem system = new ServerSystem();
-		system.parser = new Gson();
-
-		// Crear e inicalizar el socket del servidor
-		try {
-			server = new DatagramSocket(port);
-		} catch (SocketException e) {
-			System.out.println(e.getMessage());
-			System.exit(-1);
+	private boolean running;
+	
+	public static void main(String[] args) throws InterruptedException {
+		Thread t = new Thread(new ServerSystem());
+		t.start();
+		t.join();
+		System.out.println("Server closed");
+	}
+	
+	private String executeFunction(Message<String> message) {
+		String line;
+		switch (message.getFunction()) {
+		case CREATE_RECIPE:
+            line = createRecipe(message.getElement());
+            break;
+        case DELETE_RECIPE:
+            line = deleteRecipe(message.getElement());
+            break;
+        case FIND_USER:
+            line = parser.toJson(findUser(fromJson(message.getElement())), RegisteredUser.class);
+            break;
+        case FIND_ADMIN:
+            line = parser.toJson(findAdmin(fromJson(message.getElement())), Administrator.class);
+            break;
+        case ADD_USER:
+            line = addUser(message.getElement());
+            break;
+        case ADD_ADMIN:
+            line = addAdmin(message.getElement());
+            break;
+        case GET_ALL_RECIPES:
+            line = getAllRecipes(message.getElement());
+            break;
+        case SHOW_RECIPES:
+            line = showRecipes(message.getElement());
+            break;
+        case CLOSE:
+        	line = save();
+        	break;
+        case EMPTY:
+        	line = clean();
+        	break;
+		default:
+			System.out.println("Not found");
+			line = "Funcion no encontrada";
 		}
+		return line;
+	}
 
-		// Funcion PRINCIPAL del servidor
-		while (true) {
-			/*
-			 * Crear e inicializar un datagrama VACIO para recibir la respuesta de maximo
-			 * 500 bytes
-			 */
-			System.out.println("ESTADO: esperando datagramas");
-			byte[] buffer = new byte[500];
-			DatagramPacket receivedDatagram = new DatagramPacket(buffer, buffer.length);
-
-			try {
-				// Recibir datagrama
-				server.receive(receivedDatagram);
-
-				// Obtener texto recibido
-				String line = new String(receivedDatagram.getData(), receivedDatagram.getOffset(),
-						receivedDatagram.getLength(), StandardCharsets.UTF_8);
-				
-				Message<String> message = Message.getMessage(line);
-				
-				/*
-				 * Mostrar por pantalla la direccion socket (IP y puerto) del cliente y su texto
-				 */
-				System.out.println("Direccion socket: " + receivedDatagram.getSocketAddress() + "\nTexto: " + line);
-
-				DatagramPacket datagram = null;
-				
-				switch (message.getFunction()) {
-				case CREATE_RECIPE:
-                    line = system.createRecipe(message.getElement());
-                    break;
-                case DELETE_RECIPE:
-                    line = system.deleteRecipe(message.getElement());
-                    break;
-                case FIND_USER:
-                    line = system.parser.toJson(system.findUser(fromJson(message.getElement())), RegisteredUser.class);
-                    break;
-                case FIND_ADMIN:
-                    line = system.parser.toJson(system.findAdmin(fromJson(message.getElement())), Administrator.class);
-                    break;
-                case ADD_USER:
-                    line = system.addUser(message.getElement());
-                    break;
-                case ADD_ADMIN:
-                    line = system.addAdmin(message.getElement());
-                    break;
-                case GET_ALL_RECIPES:
-                    line = system.getAllRecipes(message.getElement());
-                    break;
-                case SHOW_RECIPES:
-                    line = system.showRecipes(message.getElement());
-				default:
-					System.out.println("Not found");
-					line = "Funcion no encontrada";
-				}
-
-				byte[] data = line.getBytes(StandardCharsets.UTF_8);
-				datagram = new DatagramPacket(data, data.length, receivedDatagram.getSocketAddress());
-
-				System.out.println("ESTADO: enviando datagrama de respuesta");
-
-				// Enviar datagrama de respuesta
-				try {
-					server.send(datagram);
-				} catch (IOException e) {
-					System.out.println("ERROR: no se ha podido enviar el datagrama respuesta");
-				}
-			} catch (IOException e) {
-				System.out.println("ERROR: al recibir un datagrama");
-			}
-		} // Fin del bucle del servicio
-
-		// system.close();
+	private String save() {
+		System.out.println("saving data into files...");
+		close();
+		return "";
+	}
+	
+	private String clean() {
+		System.out.println("deleting everything...");
+		empty();
+		return "";
 	}
 
 	private String createRecipe(String text) {
@@ -174,8 +143,9 @@ public class ServerSystem extends MySystem {
         System.out.println("adding user...");
         Gson parser = new Gson();
         RegisteredUser u = parser.fromJson(text, RegisteredUser.class);
+        System.out.println(u);
         RegisteredUserExtended reg = new RegisteredUserExtended(u);
-        this.addUser(reg);
+        addUser(reg);
 
         return Integer.toString(reg.getId());
     }
@@ -201,58 +171,71 @@ public class ServerSystem extends MySystem {
 
         return line;
     }
-	
-	/*
-	// No se como vamos a pasar la receta
-	private String deleteRecipe(MyStringSplitter sp) {
-		String line = null;
-		System.out.println("deleting recipe...");
-		int idRecipe = sp.nextInt();
-		int idUser = sp.nextInt();
-		Recipe r = getRecipe(idRecipe);
-		if (r == null) {
-			line = "The recipe doesn't exist";
-		} else {
-			if (r.getUser().getId() == idUser) {
-				removeRecipe(r);
-				line = "You succesfully deleted your own recipe";
-			} else {
-				line = "You cannot delete a recipe that is not yours";
-			}
+    
+    public void exit() {
+    	running = false;
+    }
+
+	@Override
+	public void run() {
+		int port = 10; // puerto del servidor
+
+		// SOCKET
+		DatagramSocket server = null;
+		parser = new Gson();
+
+		// Crear e inicalizar el socket del servidor
+		try {
+			server = new DatagramSocket(port);
+		} catch (SocketException e) {
+			System.out.println(e.getMessage());
+			System.exit(-1);
 		}
+		running = true;
+		// Funcion PRINCIPAL del servidor
+		while (running) {
+			/*
+			 * Crear e inicializar un datagrama VACIO para recibir la respuesta de maximo
+			 * 500 bytes
+			 */
+			System.out.println("ESTADO: esperando datagramas");
+			byte[] buffer = new byte[500];
+			DatagramPacket receivedDatagram = new DatagramPacket(buffer, buffer.length);
 
-		return line;
-	}
+			try {
+				// Recibir datagrama
+				server.receive(receivedDatagram);
 
-	private String listOfRecipes(MyStringSplitter sp) {
-		String line = null;
-		System.out.println("sending the list of recipes...");
-
-		int page = sp.nextInt();
-		int idUser = sp.nextInt();
-		boolean useFridge = sp.nextBoolean();
-		boolean onlyFollowing = sp.nextBoolean();
-		String name = sp.nextOrNull();
-		
-		List<Recipe> list = this.filterRecipes(idUser, useFridge, onlyFollowing, name);
+				// Obtener texto recibido
+				String line = new String(receivedDatagram.getData(), receivedDatagram.getOffset(),
+						receivedDatagram.getLength(), StandardCharsets.UTF_8);
 				
-		//we return all of this
-		boolean prevPage;
-		boolean nextPage;
-		int numShown;
-		int[] idRecipes;
-		String recipes;
-		
-		//TODO complete this
-		
-		return line;
-	}
+				Message<String> message = Message.getMessage(line);
+				
+				/*
+				 * Mostrar por pantalla la direccion socket (IP y puerto) del cliente y su texto
+				 */
+				System.out.println("Direccion socket: " + receivedDatagram.getSocketAddress() + "\nTexto: " + line);
 
-	private String doSomethign(MyStringSplitter sp) {
-		String line = null;
-		System.out.println("doing something...");
-		
-		return line;
+				DatagramPacket datagram = null;
+				
+				line = executeFunction(message);
+
+				byte[] data = line.getBytes(StandardCharsets.UTF_8);
+				datagram = new DatagramPacket(data, data.length, receivedDatagram.getSocketAddress());
+
+				System.out.println("ESTADO: enviando datagrama de respuesta:\n\t"+line);
+
+				// Enviar datagrama de respuesta
+				try {
+					server.send(datagram);
+				} catch (IOException e) {
+					System.out.println("ERROR: no se ha podido enviar el datagrama respuesta");
+				}
+			} catch (IOException e) {
+				System.out.println("ERROR: al recibir un datagrama");
+			}
+		} // Fin del bucle del servicio
+		System.out.println("Exiting");
 	}
-	*/
 }

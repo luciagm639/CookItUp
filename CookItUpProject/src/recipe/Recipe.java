@@ -33,6 +33,7 @@ public class Recipe extends Data<Recipe> {
 	}
 	
 	public Recipe(RecipeExtended recipe) {
+		super(recipe.getId());
 		user = recipe.getUser();
 		if (user instanceof RegisteredUserExtended) {
 			user = ((RegisteredUserExtended) user).unextend();
