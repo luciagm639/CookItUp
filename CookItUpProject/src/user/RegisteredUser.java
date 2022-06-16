@@ -18,10 +18,6 @@ public class RegisteredUser extends Data<RegisteredUser> {
 	private String password;
 	private List<RegisteredUser> blockList = new ArrayList<RegisteredUser>();
 	private List<RegisteredUser> followList = new ArrayList<RegisteredUser>();
-	private List<Recipe> recipesList = new ArrayList<Recipe>();
-	private List<Report> reportsList = new ArrayList<>();
-	private List<Comment> commentsList = new ArrayList<>();
-	private List<Question> questionsList = new ArrayList<>();
 	private Set<Ingredient> fridge = new HashSet<>();
 	private int chips;
 	private boolean status;
@@ -88,22 +84,9 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		return followList;
 	}
 
-	/*Recipes*/
-	public List<Recipe> getRecipesList() {
-		return recipesList;
-	}
-
-	public boolean addRecipe(Recipe recipe) {
-		return recipesList.add(recipe);	
-	}
 	
-	public boolean deleteRecipe(Recipe recipe) {
-		return recipesList.remove(recipe);
-	}
 
-	public List<Report> getReportsList() {
-		return reportsList;
-	}
+	
 
 	public boolean getStatus() {
 		return status;
@@ -201,23 +184,7 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		return fridge.remove(i);
 	}
 	
-	/*Questions*/
-	public List<Question> getQuestionList() {
-		return questionsList;
-	}
 	
-	public boolean addQuestion(Question q) {
-		return questionsList.add(q);
-	}
-	
-	/*Comments*/
-	public List<Comment> getCommentList() {
-		return commentsList;
-	}
-	
-	public boolean addComment(Comment c) {
-		return commentsList.add(c);
-	}
 	
 	//Por ahora no vamos a usar las fotos
 	/*

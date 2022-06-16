@@ -34,6 +34,11 @@ public class ClientSystem extends Thread {
 		// direccion IP del servidor
 		// IPservidor = "172.16.135.66";
 		IPservidor = "10.10.52.87";
+		try {
+			IPservidor = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 
 		// puerto del servidor
 		puertoServidor = 10;
@@ -102,14 +107,9 @@ public class ClientSystem extends Thread {
 
 	@Override
 	public void run() {
-		try {
-			System.out.println(InetAddress.getLocalHost());
-			IPservidor = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 		
-		findUser("Javi");
+		UserInterface userInt = new UserInterface();
+        userInt.registerNewAdminAccount("Jordan", "123446789");
 
 //		MySystem system = new MySystem();
 //
@@ -160,9 +160,10 @@ public class ClientSystem extends Thread {
 	}
 
 	public void addAdmin(Administrator adm) {
-		// TODO Auto-generated method stub
-
-	}
+        Message<Administrator> message = new Message<>(Function.ADD_ADMIN, adm);
+        System.out.println(sendDatagram(message));
+        // TODO Auto-generated method stub
+    }
 
 	public List<Recipe> getAllRecipes() {
 		// TODO Auto-generated method stub

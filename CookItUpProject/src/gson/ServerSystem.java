@@ -17,6 +17,8 @@ import user.RegisteredUser;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
+import administrator.Administrator;
+
 public class ServerSystem extends MySystem {
 	
 	public final static int RECIPES_PER_PAGE = 5;
@@ -78,6 +80,9 @@ public class ServerSystem extends MySystem {
 						line = system.parser.toJson(system.findUser(fromJson(message.getElement())), RegisteredUser.class);
 					}
 					break;
+				case ADD_ADMIN:
+                    line = system.addAdmin(message.getElement());
+                    break;
 				default:
 					System.out.println("Not found");
 					line = "Funcion no encontrada";
@@ -139,6 +144,15 @@ public class ServerSystem extends MySystem {
 		}
 		return null;
 	}
+	
+	private String addAdmin(String text) {
+        System.out.println("adding admin...");
+
+        Gson parser = new Gson();
+        Administrator r = parser.fromJson(text, Administrator.class);
+        this.addAdmin(r);;
+        return Integer.toString(r.getId());
+    }
 	
 	/*
 	// No se como vamos a pasar la receta

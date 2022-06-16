@@ -5,5 +5,6 @@ public enum Function {
 	CREATE_RECIPE,
 	DELETE_RECIPE,
 	SAVE_DATA,
-	FIND_USER
+	FIND_USER,
+	ADD_ADMIN
 }
