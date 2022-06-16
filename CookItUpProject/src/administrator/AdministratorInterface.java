@@ -4,24 +4,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import gson.ClientSystem;
 import recipe.Comment;
 import recipe.Question;
 import recipe.Recipe;
 import report.*;
-import system.MySystem;
 import user.RegisteredUser;
 
 public class AdministratorInterface {
 	
 	private final Administrator adm;
-	private MySystem system;
+	private ClientSystem system;
 	
 	public AdministratorInterface (Administrator adm) {
 		this.adm = adm;
-		this.system = new MySystem();
+		this.system = new ClientSystem();
 	}
 	
-	public AdministratorInterface (Administrator adm, MySystem system) {
+	public AdministratorInterface (Administrator adm, ClientSystem system) {
 		this.adm = adm;
 		this.system = system;
 	}

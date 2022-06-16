@@ -16,6 +16,7 @@ import user.RegisteredUserInterface;
 public class ModifyRecipeOption extends Select<Recipe> {
 	
 	private Recipe r;
+	private RegisteredUserInterface regInterface;
 	
 	public ModifyRecipeOption(ShowOwnRecipesOption showOwnRecipesOption) {
 		super(showOwnRecipesOption, "Modify one of this recipes");
@@ -23,7 +24,7 @@ public class ModifyRecipeOption extends Select<Recipe> {
 
 	@Override
 	public void executeOption(Interface inter, Scanner lector, Menu prevMenu) {
-		RegisteredUserInterface regInterface = Interface.toRegisteredUserInterface(inter);
+		regInterface = Interface.toRegisteredUserInterface(inter);
 		r = select(lector);
 
 		Menu menuOwnRecipe = new Menu("What would you like to do with recipe", regInterface, this);
@@ -40,7 +41,7 @@ public class ModifyRecipeOption extends Select<Recipe> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("You have selected this recipe:\n");
-		sb.append(r.toStringExtended());
+		sb.append(regInterface.getUpdated(r));
 		return sb.toString();
 	}
 }

@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 
 import administrator.Administrator;
 import administrator.AdministratorInterface;
+import gson.ClientSystem;
 import recipe.*;
-import system.MySystem;
 
 class UserInterfaceTest {
 
 	//System Null
-	MySystem system = null;
+	ClientSystem system = null;
 	
 	// Users Null
 	RegisteredUser regUser = null;
@@ -46,7 +46,7 @@ class UserInterfaceTest {
 	void setUp() throws Exception {
 		
 		// System set up
-		system = new MySystem();
+		system = new ClientSystem();
 		system.empty();
 
 		// Users' Creation

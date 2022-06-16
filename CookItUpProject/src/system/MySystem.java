@@ -53,7 +53,7 @@ public class MySystem {
 	/**
 	 * Recipes
 	 */
-	public void addRecipe(Recipe recipe) {
+	public void addRecipe(RecipeExtended recipe) {
 		recipesList.add(recipe);
 		recipe.getUser().addRecipe(recipe);
 	}
@@ -62,7 +62,7 @@ public class MySystem {
 		return (recipesList.remove(recipe) && recipe.getUser().deleteRecipe(recipe));
 	}
 
-	public List<Recipe> getAllRecipes() {
+	public List<RecipeExtended> getAllRecipes() {
 		return recipesList.toList();
 	}
 
@@ -82,14 +82,14 @@ public class MySystem {
 		return recipesList;
 	}
 
-	public Recipe getRecipe(int id) {
+	public RecipeExtended getRecipe(int id) {
 		return recipesList.get(id);
 	}
 
 	/**
 	 *  Users
 	 */
-	public void addUser(RegisteredUser user) {
+	public void addUser(RegisteredUserExtended user) {
 		userList.add(user);
 	}
 
@@ -226,6 +226,10 @@ public class MySystem {
 	/** 
 	 * Comment
 	 */
+	public Set<Comment> getComments() {
+		return commentList;
+	}
+	
 	public Comment getComment(int id) {
 		return commentList.get(id);
 	}
@@ -237,6 +241,10 @@ public class MySystem {
 	/**
 	 * Question
 	 */
+	public Set<Question> getQuestions() {
+		return questionList;
+	}
+	
 	public Question getQuestion(int id) {
 		return questionList.get(id);
 	}
@@ -256,9 +264,18 @@ public class MySystem {
 	}
 	
 	public boolean deleteReview(Review r) {
-		return r.getRecipe().deleteReview(r) && reviewList.remove(r);
+		return toExtended(r.getRecipe()).deleteReview(r) && reviewList.remove(r);
 	}
 	
+	//TODO order these two
+	private RecipeExtended toExtended(Recipe recipe) {
+		return recipesList.get(recipe.getId());
+	}
+	
+	private RegisteredUserExtended toExtended(RegisteredUser user) {
+		return userList.get(user.getId());
+	}
+
 	//TODO
 	/** 
 	 * Blocked 
@@ -273,7 +290,7 @@ public class MySystem {
 
 	public RegisteredUserList getBlockedUserList() {
 		RegisteredUserList blockedUsers = new RegisteredUserList();
-		for (RegisteredUser reg : userList) {
+		for (RegisteredUserExtended reg : userList) {
 			if (reg.getStatus())
 				blockedUsers.add(reg);
 		}
@@ -324,8 +341,12 @@ public class MySystem {
 		empty();
 	}
 	
-	private <E extends Data<E>> void readData(DataSet<E> ds) {
-		try(Scanner sc = new Scanner(new File(ds.getFileName()))) {
+	private File openFile(String fileName) {
+		return new File("data/"+fileName);
+	}
+	
+	private <F extends E, E extends Data<E>> void readData(DataSet<F, E> ds) {
+		try(Scanner sc = new Scanner(openFile(ds.getFileName()))) {
 			while (sc.hasNext()) {
 				ds.readData(this, sc.nextLine());
 			}
@@ -334,9 +355,9 @@ public class MySystem {
 		}
 	}
 	
-	private <E extends Data<E>> void writeData(DataSet<E> ds) {
-		try(FileWriter fw = new FileWriter(new File(ds.getFileName()))) {
-			for (E element : ds) {
+	private <F extends E, E extends Data<E>> void writeData(DataSet<F, E> ds) {
+		try(FileWriter fw = new FileWriter(openFile(ds.getFileName()))) {
+			for (F element : ds) {
 				fw.write(ds.writeData(element));
 			}
 		} catch (IOException e) {
@@ -346,7 +367,7 @@ public class MySystem {
 	
 	private <F extends Data<F>, S extends Data<S>>
 	void readData(Table<F, S> t) {
-		try(Scanner sc = new Scanner(new File(t.getFileName()))) {
+		try(Scanner sc = new Scanner(openFile(t.getFileName()))) {
 			while (sc.hasNext()) {
 				t.readData(this, sc.nextLine());
 			}
@@ -356,7 +377,7 @@ public class MySystem {
 	}
 
 	private <F extends Data<F>, S extends Data<S>> void writeData(Table<F, S> t) {
-		try (FileWriter fw = new FileWriter(new File(t.getFileName()))) {
+		try (FileWriter fw = new FileWriter(openFile(t.getFileName()))) {
 			for (Tuple<F, S> tuple : t) {
 				fw.write(t.writeData(tuple.getFirst(), tuple.getSecond()));
 			}
@@ -367,7 +388,7 @@ public class MySystem {
 	
 	private <F extends Data<F>, S extends Data<S>>
 	void readData(OrderedTable<F, S> t) {
-		try(Scanner sc = new Scanner(new File(t.getFileName()))) {
+		try(Scanner sc = new Scanner(openFile(t.getFileName()))) {
 			while (sc.hasNext()) {
 				t.readData(this, sc.nextLine());
 			}
@@ -378,7 +399,7 @@ public class MySystem {
 	
 	private <F extends Data<F>, S extends Data<S>>
 	void writeData(OrderedTable<F, S> t) {
-		try(FileWriter fw = new FileWriter(new File(t.getFileName()))) {
+		try(FileWriter fw = new FileWriter(openFile(t.getFileName()))) {
 			for (Triple<F, S> triple : t) {
 				fw.write(t.writeData(triple.getFirst(), triple.getSecond(), triple.getCardinal()));
 			}
@@ -388,8 +409,8 @@ public class MySystem {
 	}
 	
 	//TODO order this
-	public List<Recipe> filter(Set<Ingredient> fridge, Collection<RegisteredUser> following, Collection<RegisteredUser> blocked, String name) {
-		List<Recipe> recipes = recipesList.toList();
+	public List<RecipeExtended> filter(Set<Ingredient> fridge, Collection<RegisteredUser> following, Collection<RegisteredUser> blocked, String name) {
+		List<RecipeExtended> recipes = recipesList.toList();
 		if (fridge != null)
 			recipes = recipesList.fridgeFilter(recipes, fridge);
 		if (following != null)

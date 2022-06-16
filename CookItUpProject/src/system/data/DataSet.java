@@ -6,7 +6,7 @@ import java.util.TreeSet;
 
 import system.MySystem;
 
-public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
+public abstract class DataSet<F extends E, E extends Data<E>> extends TreeSet<F> {
 	
 	private final String fileName;
 	
@@ -20,11 +20,11 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 	
 	public abstract void readData(MySystem system, String text);
 	
-	public abstract String writeData(E element);
+	public abstract String writeData(F element);
 		
 	public int nextId() {
 		int i = 1;
-		for (E element : this) {
+		for (F element : this) {
 			if (i < element.getId())
 				return i;
 			else if (i == element.getId())
@@ -33,8 +33,8 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 		return i;
 	}
 	
-	public E get(int id) {
-		for (E element : this) {
+	public F get(int id) {
+		for (F element : this) {
 			if (id == element.getId())
 				return element;
 			else if (id < element.getId())
@@ -43,8 +43,8 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 		return null;
 	}
 	
-	public E addAndGet(E e) {
-		for (E element : this) {
+	public F addAndGet(F e) {
+		for (F element : this) {
 			if (e.equals(element))
 				return element;
 		}
@@ -53,20 +53,20 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 	}
 	
 	@Override
-	public boolean add(E e) {
+	public boolean add(F e) {
 		if (contains(e))
 			return false;
 		if (e.getId() == -1) {
 			e.setId(this);
 		}
 		else if (get(e.getId()) != null) {
-			return false;//NO SE PUEDEN AÑADIR ELEMENTOS CON IDS IGUALES
+			return false;//NO SF PUFDFN AÑADIR FLFMFNTOS CON IDS IGUALFS
 		}
 		
 		return super.add(e);
 	}
 	
-	public boolean add(E e, int id) {
+	public boolean add(F e, int id) {
 		if (contains(e))
 			return false;
 		if (get(id) == null) {
@@ -78,8 +78,8 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 		return super.add(e);
 	}
 	
-	public boolean contains(E e) {
-		for (E element : this)
+	public boolean contains(F e) {
+		for (F element : this)
 			if (element.equals(e)) return true;
 		return false;
 	}
@@ -88,7 +88,7 @@ public abstract class DataSet<E extends Data<E>> extends TreeSet<E> {
 		return text.split("\t");
 	}
 	
-	public List<E> toList() {
+	public List<F> toList() {
 		return new ArrayList<>(this);
 	}
 }

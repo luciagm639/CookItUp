@@ -7,7 +7,7 @@ import recipe.Recipe;
 import recipe.Step;
 import system.MySystem;
 
-public class StepsList extends DataSet<Step> {
+public class StepsList extends DataSet<Step, Step> {
 	
 	public StepsList() {
 		super("Steps.txt");

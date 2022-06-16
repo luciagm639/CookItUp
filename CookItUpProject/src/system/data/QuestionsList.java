@@ -3,9 +3,10 @@ package system.data;
 import recipe.Question;
 import recipe.Recipe;
 import system.MySystem;
+import system.RecipeExtended;
 import user.RegisteredUser;
 
-public final class QuestionsList extends DataSet<Question> {
+public final class QuestionsList extends DataSet<Question, Question> {
 
 	public QuestionsList() {
 		super("Questions.txt");
@@ -17,7 +18,7 @@ public final class QuestionsList extends DataSet<Question> {
 		
 		int id = sp.nextInt();
 		RegisteredUser author = system.getUser(sp.nextInt());
-		Recipe recipe = system.getRecipe(sp.nextInt());
+		RecipeExtended recipe = system.getRecipe(sp.nextInt());
 		String question = sp.next();
 		
 		Question c = new Question(author, question, recipe);

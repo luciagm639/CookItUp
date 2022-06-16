@@ -3,7 +3,7 @@ package system.data;
 import recipe.Ingredient;
 import system.MySystem;
 
-public final class IngredientsList extends DataSet<Ingredient> {
+public final class IngredientsList extends DataSet<Ingredient, Ingredient> {
 	
 	public IngredientsList() {
 		super("Ingredients.txt");

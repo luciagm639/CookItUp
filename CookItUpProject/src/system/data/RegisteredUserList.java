@@ -1,9 +1,10 @@
 package system.data;
 
 import system.MySystem;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
-public class RegisteredUserList extends DataSet<RegisteredUser> {
+public class RegisteredUserList extends DataSet<RegisteredUserExtended, RegisteredUser> {
 	
 	public RegisteredUserList() {
 		super("RegisteredUsers.txt");
@@ -11,7 +12,7 @@ public class RegisteredUserList extends DataSet<RegisteredUser> {
 
 	public RegisteredUser findUser(String name) {
 		for (RegisteredUser user : this) {
-			if (user.getName().equals(name)) {
+			if (user.getName().equalsIgnoreCase(name)) {
 				return user;
 			}
 		}
@@ -30,12 +31,12 @@ public class RegisteredUserList extends DataSet<RegisteredUser> {
 			int chips = Integer.parseInt(sp[3]);
 			boolean status = Boolean.getBoolean(sp[4]);
 		
-			add(new RegisteredUser(name, id, password, chips, status));
+			add(new RegisteredUserExtended(name, id, password, chips, status));
 		} catch(NumberFormatException e) {/*We don't add*/}
 	}
 	
 	@Override
-	public String writeData(RegisteredUser user) {
+	public String writeData(RegisteredUserExtended user) {
 		MyStringJoiner sj = new MyStringJoiner();
 		sj.add(user.getName());
 		sj.add(user.getId());

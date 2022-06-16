@@ -3,7 +3,7 @@ package system.data;
 import administrator.Administrator;
 import system.MySystem;
 
-public final class AdministratorList extends DataSet<Administrator> {
+public final class AdministratorList extends DataSet<Administrator, Administrator> {
 
 	public AdministratorList() {
 		super("Administrators.txt");

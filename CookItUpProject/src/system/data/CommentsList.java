@@ -3,9 +3,10 @@ package system.data;
 import recipe.Comment;
 import recipe.Recipe;
 import system.MySystem;
+import system.RecipeExtended;
 import user.RegisteredUser;
 
-public final class CommentsList extends DataSet<Comment> {
+public final class CommentsList extends DataSet<Comment, Comment> {
 	
 	public CommentsList() {
 		super("Comments.txt");
@@ -17,7 +18,7 @@ public final class CommentsList extends DataSet<Comment> {
 		
 		int id = sp.nextInt();
 		RegisteredUser author = system.getUser(sp.nextInt());
-		Recipe recipe = system.getRecipe(sp.nextInt());
+		RecipeExtended recipe = system.getRecipe(sp.nextInt());
 		String comment = sp.next();
 		
 		Comment c = new Comment(author, comment, recipe);

@@ -5,19 +5,19 @@ import java.util.List;
 
 import administrator.Administrator;
 import administrator.AdministratorInterface;
+import gson.ClientSystem;
 import menu.Interface;
 import recipe.Recipe;
-import system.MySystem;
 
 public class UserInterface implements Interface {
 	
-	MySystem system;
+	ClientSystem system;
 	
 	public UserInterface() {
-		this.system = new MySystem();
+		this.system = new ClientSystem();
 	}
 	
-	public UserInterface(MySystem system) {
+	public UserInterface(ClientSystem system) {
 		this.system = system;
 	}
 	

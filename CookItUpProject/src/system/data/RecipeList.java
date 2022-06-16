@@ -10,15 +10,16 @@ import recipe.Ingredient;
 import recipe.Question;
 import recipe.Recipe;
 import system.MySystem;
+import system.RecipeExtended;
 import user.RegisteredUser;
 
-public class RecipeList extends DataSet<Recipe> {
+public class RecipeList extends DataSet<RecipeExtended, Recipe> {
 	
 	public RecipeList() {
 		super("Recipes.txt");
 	}
 
-	public static String toString(List<Recipe> recipes) {
+	public static <R extends Recipe> String toString(List<R> recipes) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Showing "+recipes.size()+" recipes.\n");
 		for(int i=0;i<recipes.size();i++) {
@@ -33,8 +34,8 @@ public class RecipeList extends DataSet<Recipe> {
 		return RecipeList.toString(toList());
 	}
 
-	public Recipe find(String name) {
-		for (Recipe recipe : this) {
+	public RecipeExtended find(String name) {
+		for (RecipeExtended recipe : this) {
 			if (recipe.getName().equalsIgnoreCase(name)) {
 				return recipe;
 			}
@@ -42,18 +43,28 @@ public class RecipeList extends DataSet<Recipe> {
 		return null;
 	}
 	
-	/*Comment*/
+	public RecipeExtended get(Recipe recipe) {
+		return this.get(recipe.getId());
+	}
+	
+	/**
+	 * Comment
+	 */
 	public boolean setComment(Comment c) {
-		if (contains(c.getRecipe())) {
-			return c.getRecipe().addComment(c);
+		RecipeExtended recipe = get(c.getRecipe());
+		if (recipe != null) {
+			return recipe.addComment(c);
 		}
 		return false;
 	}
 	
-	/*Question*/
+	/**
+	 * Question
+	 */
 	public boolean setQuestion(Question q) {
-		if (contains(q.getRecipe())) {
-			return q.getRecipe().addQuestion(q);
+		RecipeExtended recipe = get(q.getRecipe());
+		if (recipe != null) {
+			return recipe.addQuestion(q);
 		}
 		return false;
 	}
@@ -68,13 +79,13 @@ public class RecipeList extends DataSet<Recipe> {
 		int priority = sp.nextInt();
 		RegisteredUser user = system.getUser(sp.nextInt());
 		
-		Recipe r = new Recipe(name, priority, user);
+		RecipeExtended r = new RecipeExtended(name, priority, user);
 		user.addRecipe(r);
 		add(r, id);
 	}
 	
 	@Override
-	public String writeData(Recipe recipe) {
+	public String writeData(RecipeExtended recipe) {
 		MyStringJoiner sj = new MyStringJoiner();
 		sj.add(recipe.getId());
 		sj.add(recipe.getName());
@@ -84,36 +95,36 @@ public class RecipeList extends DataSet<Recipe> {
 		return sj.toString();
 	}
 
-	public List<Recipe> fridgeFilter(Collection<Recipe> recipes, Set<Ingredient> fridge) {
-		List<Recipe> list = new LinkedList<>();
-		for (Recipe r : recipes) {
+	public List<RecipeExtended> fridgeFilter(Collection<RecipeExtended> recipes, Set<Ingredient> fridge) {
+		List<RecipeExtended> list = new LinkedList<>();
+		for (RecipeExtended r : recipes) {
 			if (fridgeContidion(r, fridge))
 				list.add(r);
 		}
 		return list;
 	}
 	
-	public List<Recipe> followerFilter(Collection<Recipe> recipes, Collection<RegisteredUser> following) {
-		List<Recipe> list = new LinkedList<>();
-		for (Recipe r : recipes) {
+	public List<RecipeExtended> followerFilter(Collection<RecipeExtended> recipes, Collection<RegisteredUser> following) {
+		List<RecipeExtended> list = new LinkedList<>();
+		for (RecipeExtended r : recipes) {
 			if (followerCondition(r, following))
 				list.add(r);
 		}
 		return list;
 	}
 	
-	public List<Recipe> blockedFilter(Collection<Recipe> recipes, Collection<RegisteredUser> blocked) {
-		List<Recipe> list = new LinkedList<>();
-		for (Recipe r : recipes) {
+	public List<RecipeExtended> blockedFilter(Collection<RecipeExtended> recipes, Collection<RegisteredUser> blocked) {
+		List<RecipeExtended> list = new LinkedList<>();
+		for (RecipeExtended r : recipes) {
 			if (blockedCondition(r, blocked))
 				list.add(r);
 		}
 		return list;
 	}
 	
-	public List<Recipe> nameFilter(Collection<Recipe> recipes, String name) {
-		List<Recipe> list = new LinkedList<>();
-		for (Recipe r : recipes) {
+	public List<RecipeExtended> nameFilter(Collection<RecipeExtended> recipes, String name) {
+		List<RecipeExtended> list = new LinkedList<>();
+		for (RecipeExtended r : recipes) {
 			if (nameCondition(r, name))
 				list.add(r);
 		}

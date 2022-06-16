@@ -4,9 +4,9 @@ import java.awt.Image;
 import java.util.List;
 import java.util.Set;
 
+import gson.ClientSystem;
 import recipe.*;
 import report.*;
-import system.MySystem;
 import system.data.Fridge;
 import system.data.IngredientsList;
 
@@ -14,7 +14,7 @@ public class RegisteredUserInterface extends UserInterface {
 	
 	private RegisteredUser reg;
 	
-	public RegisteredUserInterface (RegisteredUser ru, MySystem system) {
+	public RegisteredUserInterface (RegisteredUser ru, ClientSystem system) {
 		super(system);
 		this.reg = ru;
 	}
@@ -23,12 +23,6 @@ public class RegisteredUserInterface extends UserInterface {
 		System.out.println("The account has been logged out.");
 		UserInterface ui = new UserInterface(system);
 		return ui;
-	}
-	
-	public void uploadPhoto(Image ph, Recipe r) {
-		RecipePhoto photo = new RecipePhoto(ph,reg);
-		r.addRecipePhoto (photo);
-		reg.obtainChips(2);
 	}
 	
 	public Recipe createRecipe(String title) {
@@ -49,13 +43,8 @@ public class RegisteredUserInterface extends UserInterface {
 	public boolean addStep (int time, String desc, int order, Recipe recipe) {
 		boolean success = false;
 		if (recipe.checkOwner(reg)) {
-			if (order == -1) {
-				system.addStep(new Step(time, desc), recipe);
-				success = true;
-			} else {
-				system.addStep(new Step(time, desc), recipe, order);
-				success = true;
-			}
+			system.addStep(new Step(time, desc), recipe, order);
+			success = true;
 		}
 		return success;
 	}
@@ -215,5 +204,15 @@ public class RegisteredUserInterface extends UserInterface {
 
 	public void upLoadReview(Review review) {
 		system.addReview(review);
+	}
+	
+	/**
+	 * 
+	 * @param r
+	 * @return toStringExtended of the recipe with the same id
+	 */
+	public String getUpdated(Recipe r) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

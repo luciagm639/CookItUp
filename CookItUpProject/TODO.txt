@@ -1,0 +1,4 @@
+hacer mas tests
+los tests son para las cosas importantes
+cambiar el diagrama de clases
+terminar el codigo

@@ -1,8 +1,0 @@
-1	Tortilla de papa	0	4
-2	Huevo frito	0	4
-3	Pan de ajo	0	5
-4	macarrones con tomate	0	5
-5	pizza del mercadona	0	5
-6	cereales con leche	0	5
-7	g	0	5
-8	a	0	5

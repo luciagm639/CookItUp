@@ -3,9 +3,10 @@ package system.data;
 import recipe.Recipe;
 import recipe.Review;
 import system.MySystem;
+import system.RecipeExtended;
 import user.RegisteredUser;
 
-public class ReviewList extends DataSet<Review> {
+public class ReviewList extends DataSet<Review, Review> {
 	
 	public ReviewList() {
 		super("Reviews.txt");
@@ -16,7 +17,7 @@ public class ReviewList extends DataSet<Review> {
 		MyStringSplitter sp = new MyStringSplitter(text);
 		int id = sp.nextInt();
 		RegisteredUser author = system.getUser(sp.nextInt());
-		Recipe recipe = system.getRecipe(sp.nextInt());
+		RecipeExtended recipe = system.getRecipe(sp.nextInt());
 		boolean like = sp.nextBoolean();
 		Review r = new Review(author, like, recipe);
 		add(r, id);

@@ -1,8 +1,0 @@
-[deleted]	0	null	0	false
-Alfonso	1	password	20	false
-Inbal	2	password	0	false
-Jordan	3	password	0	false
-Jorge	4	password	40	false
-Javi	5	contrasena	200	false
-Victor	6	inbal	300	false
-Anita	7	javifeo	250	false

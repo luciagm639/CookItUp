@@ -7,7 +7,7 @@ import report.*;
 import system.MySystem;
 import user.RegisteredUser;
 
-public class ReportsList extends DataSet<Report> {
+public class ReportsList extends DataSet<Report, Report> {
 
 	public ReportsList() {
 		super("Reports.txt");

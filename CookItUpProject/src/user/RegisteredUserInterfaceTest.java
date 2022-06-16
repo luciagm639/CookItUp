@@ -15,16 +15,16 @@ import org.junit.jupiter.api.Test;
 
 import administrator.Administrator;
 import administrator.AdministratorInterface;
+import gson.ClientSystem;
 import recipe.*;
 import report.Report;
 import report.ReportRecipe;
 import report.ReportUser;
-import system.MySystem;
 
 class RegisteredUserInterfaceTest {
 	
 	// System Null
-	MySystem system = null;
+	ClientSystem system = null;
 	
 	// Users Null
 	RegisteredUser us0 = null;
@@ -74,7 +74,7 @@ class RegisteredUserInterfaceTest {
 	void setUp() throws Exception {
 		
 		// System set up
-		system = new MySystem();
+		system = new ClientSystem();
 		system.empty();		
 
 		// Users' Creation
@@ -223,38 +223,17 @@ class RegisteredUserInterfaceTest {
 	}
 	
 	@Test
-	void usuarioPreguntaUnaQuestionSobreUnaRecetaYSeAnadeAListaDePreguntasDeLaReceta() {
+	void usuarioPreguntaUnaQuestionSobreUnaRecetaYSeAnadeAListaDePreguntas() {
 		us0interface.askQuestion(question.getText(), recipe2);
-		assertTrue(recipe2.getQuestionsList().contains(question));
+		assertTrue(system.getQuestions().contains(question));
 		assertFalse (us0interface.askQuestion(question.getText(), recipe2));
 	}
 
 	@Test
-	void usuarioHaceComentarioSobreUnaRecetaYSeAnadeAListaDeComentariosDeLaReceta() {
+	void usuarioHaceComentarioSobreUnaRecetaYSeAnadeAListaDeComentarios() {
 		us0interface.makeComment(comment.getText(), recipe2);
-		assertTrue(recipe2.getCommentsList().contains(comment));
+		assertTrue(system.getComments().contains(comment));
 	}
-	
-	//Por ahora no vamos a usar las fotos
-	/*
-	@Test
-	void usuarioSubePhotoDeUnaRecetaYSeAnadeALaListaDePhotosDeLaReceta() {
-		us0.uploadRecipePhoto(recipe, photo);
-		boolean bool0 = recipe.getPhotosList().contains(photo);
-		Exception exception = assertThrows(RuntimeException.class, () -> us0.uploadRecipePhoto(recipe, photo));
-		boolean bool1 = ("ERROR: The user cannot upload the same recipe photo").equals(exception.getMessage());
-		assertTrue(bool0 && bool1);
-	}
-
-	@Test
-	void usuarioEliminaPhotoDeUnaRecetaYSeQuitaDeLaListaDePhotosDeLaReceta() {
-		us0.deleteRecipePhoto(recipe, photo1);
-		boolean bool0 = recipe.getPhotosList().contains(photo1);
-		Exception exception = assertThrows(RuntimeException.class, () -> us0.deleteRecipePhoto(recipe, photo1));
-		boolean bool1 = ("ERROR: The user cannot delete a recipe photo not previously done").equals(exception.getMessage());
-		assertTrue(!bool0 && bool1);
-	}
-	*/
 	
 	@Test
 	void usuarioAgregaIngredienteAlaRecetaYSeAnadeALaListaDeIngredientes() {
@@ -268,23 +247,6 @@ class RegisteredUserInterfaceTest {
 		assertFalse(recipe0.getIngredientsList().contains(ingredient0));
 	}
 	
-	//He quitado la lista de reports de la receta
-	/*
-	@Test
-	void usuarioReportaRecipeYSeAgregaALaListaDeReportsDeEsaRecipe() {
-		us0.reportRecipe(recipe, report);
-		boolean bool0 = false;
-		for (int i = 0; i < recipe.getReportsList().size(); i++) {
-				if (recipe.getReportsList().get(i).getReporting() == report.reporting)
-					bool0 = true;
-			}
-		Exception exception = assertThrows(RuntimeException.class, () -> 
-		us0.reportRecipe(recipe, report));
-		boolean bool1 = ("ERROR: The user cannot report a recipe already been reported").equals(exception.getMessage());
-		assertTrue(bool0 && bool1);
-	}
-	*/
-	
 	@Test
 	void usuarioAgregaPasoAUnaReceteYSeAgeregaALaListaDeStepsDeLaReceta() {
 		us0interface.addStep(step1.getTime(), step1.getDescription(), 1, recipe0);
@@ -296,35 +258,4 @@ class RegisteredUserInterfaceTest {
 		us0interface.deleteStep(0, recipe0);
 		assertFalse(recipe0.getStepsList().contains(step0));
 	}
-	
-	/*
-	@Test
-	void usuarioReportaUsuarioYSeAgregaALaListaDeReportsDeLosUsuarios() {
-		us0.reportUser(us1, report);
-		Boolean bool0 = us1.getReportsList().contains(report);
-		Exception exception = assertThrows(RuntimeException.class, () -> us0.reportUser(us1, report));
-		Boolean bool1 = ("ERROR: The user cannot report an user already been reported").equals(exception.getMessage());
-		assertTrue(bool0 && bool1);
-	}
-	*/
-	
-	/*
-	@Test
-	void usuarioReportaPreguntaYSeAgregaALaListaDeReportsDeLasPreguntas() {
-		us0.reportQuestion(question, report);
-		Boolean bool0 = question.getReportsList().contains(report);
-		Exception exception = assertThrows(RuntimeException.class, () -> us0.reportQuestion(question, report));
-		Boolean bool1 = ("ERROR: The user cannot report a question already been reported").equals(exception.getMessage());
-		assertTrue(bool0 && bool1);
-	}
-	
-	@Test
-	void usuarioReportaMensageYSeAgregaALaListaDeReportsDeLosMessages() {
-		us0.reportComment(comment, report);
-		Boolean bool0 = comment.getReportsList().contains(report);
-		Exception exception = assertThrows(RuntimeException.class, () -> us0.reportComment(comment, report));
-		Boolean bool1 = ("ERROR: The user cannot report a comment already been reported").equals(exception.getMessage());
-		assertTrue(bool0 && bool1);
-	}
-	*/
 }

@@ -10,8 +10,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import gson.ClientSystem;
 import recipe.Recipe;
-import system.MySystem;
 import system.data.RecipeList;
 import system.data.RegisteredUserList;
 import user.RegisteredUser;
@@ -23,7 +24,7 @@ class AdministratorInterfaceTest {
 	//NEW CODE (LUCIA G)
 	
 	//Initialize the system:
-	private static MySystem system = new MySystem();
+	private static ClientSystem system = new ClientSystem();
 	
 	//Initialize the Administrators:
 	private static Administrator admin1 = null;
@@ -66,7 +67,7 @@ class AdministratorInterfaceTest {
 		system.removeAdmin(admin1);
 		admin1 = null;
 		admin1Int = null;
-		system.empty();
+		system = new ClientSystem();
 	}
 
 	@BeforeEach
@@ -106,7 +107,7 @@ class AdministratorInterfaceTest {
 	
 	@Test
 	void alBloquearAUnUsuarioYaBloqueadoNoSeHaceNada() {
-		RegisteredUserList aux = system.getBlockedUserList();
+		Set<RegisteredUser> aux = system.getBlockedUserList();
 		admin1Int.blockAccount(blockedUser);
 		assertEquals(system.getBlockedUserList(), aux);
 	}
@@ -128,7 +129,7 @@ class AdministratorInterfaceTest {
 	
 	@Test
 	void alDesbloquearAUnUsuarioDesbloqueadoNoSeHaceNada() {
-		RegisteredUserList aux = system.getBlockedUserList();
+		Set<RegisteredUser> aux = system.getBlockedUserList();
 		admin1Int.unblockAccount(us1);
 		assertEquals(system.getBlockedUserList(), aux);
 	}
@@ -148,7 +149,7 @@ class AdministratorInterfaceTest {
 	
 	@Test
 	void alEliminarUnUsuarioNoExistenteNoSeHaceNada() {
-		RegisteredUserList aux = system.getUserList();
+		Set<RegisteredUser> aux = system.getUserList();
 		admin1Int.deleteAnyAccount(us2);
 		assertEquals(system.getUserList(), aux);
 	}
@@ -173,7 +174,7 @@ class AdministratorInterfaceTest {
 	
 	@Test
 	void alEliminarUnaRecetaNoExistenteNoSeHaceNada() {
-		RecipeList aux = system.getRecipes();
+		Set<Recipe> aux = system.getRecipes();
 		admin1Int.deleteRecipe(rec2);
 		assertEquals(system.getRecipes(), aux);
 	}

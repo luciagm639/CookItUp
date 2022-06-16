@@ -16,11 +16,11 @@ public abstract class Data<E extends Data<E>> implements Comparable<E> {
 		return id;
 	}
 	
-	public void setId(DataSet<E> ds) {
+	public <F extends E> void setId(DataSet<F, E> ds) {
 		id = ds.nextId();
 	}
 	
-	public void setId(DataSet<E> ds, int id) {
+	public <F extends E> void setId(DataSet<F, E> ds, int id) {
 		this.id = id;
 	}
 	
