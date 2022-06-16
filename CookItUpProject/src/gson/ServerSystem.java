@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import recipe.Recipe;
 import system.MySystem;
 import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
 import com.google.gson.Gson;
@@ -69,20 +70,28 @@ public class ServerSystem extends MySystem {
 				
 				switch (message.getFunction()) {
 				case CREATE_RECIPE:
-					line = system.createRecipe(message.getElement());
-					break;
-				case FIND_USER:
-					if (system.findUser(fromJson(message.getElement())) == null) {
-						System.out.println("Couldn't find user " + message.getElement());
-						line = "-1";
-					}
-					else {
-						line = system.parser.toJson(system.findUser(fromJson(message.getElement())), RegisteredUser.class);
-					}
-					break;
-				case ADD_ADMIN:
+                    line = system.createRecipe(message.getElement());
+                    break;
+                case DELETE_RECIPE:
+                    line = system.deleteRecipe(message.getElement());
+                    break;
+                case FIND_USER:
+                    line = system.parser.toJson(system.findUser(fromJson(message.getElement())), RegisteredUser.class);
+                    break;
+                case FIND_ADMIN:
+                    line = system.parser.toJson(system.findAdmin(fromJson(message.getElement())), Administrator.class);
+                    break;
+                case ADD_USER:
+                    line = system.addUser(message.getElement());
+                    break;
+                case ADD_ADMIN:
                     line = system.addAdmin(message.getElement());
                     break;
+                case GET_ALL_RECIPES:
+                    line = system.getAllRecipes(message.getElement());
+                    break;
+                case SHOW_RECIPES:
+                    line = system.showRecipes(message.getElement());
 				default:
 					System.out.println("Not found");
 					line = "Funcion no encontrada";
@@ -145,13 +154,52 @@ public class ServerSystem extends MySystem {
 		return null;
 	}
 	
-	private String addAdmin(String text) {
+	private String showRecipes(String text) {
+        System.out.println("showing recipes...");
+        Gson parser = new Gson();
+        String jsonString = parser.toJson(this.showRecipes(text));
+
+        return jsonString;
+    }
+
+    private String getAllRecipes(String text) {
+        System.out.println("getting all recipes...");
+        Gson parser = new Gson();
+        String jsonString = parser.toJson(this.getAllRecipes());
+
+        return jsonString;
+    }
+
+    private String addUser(String text) {
+        System.out.println("adding user...");
+        Gson parser = new Gson();
+        RegisteredUser u = parser.fromJson(text, RegisteredUser.class);
+        RegisteredUserExtended reg = new RegisteredUserExtended(u);
+        this.addUser(reg);
+
+        return Integer.toString(reg.getId());
+    }
+
+    private String addAdmin(String text) {
         System.out.println("adding admin...");
 
         Gson parser = new Gson();
         Administrator r = parser.fromJson(text, Administrator.class);
         this.addAdmin(r);;
         return Integer.toString(r.getId());
+    }
+
+    private String deleteRecipe(String text) {
+        System.out.println("deleting recipe...");
+
+        Gson parser = new Gson();
+        Recipe r = parser.fromJson(text, Recipe.class);
+        RecipeExtended re = new RecipeExtended(r);
+
+        String line = Boolean.toString(this.removeRecipe(re));
+        System.out.println("recipe has been deleted");
+
+        return line;
     }
 	
 	/*

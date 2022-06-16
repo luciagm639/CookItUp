@@ -146,15 +146,6 @@ public class RegisteredUserInterface extends UserInterface {
 	}
 	
 	public void deleteOwnAccount() {
-		for (Recipe r :this.reg.getRecipesList()) {
-			r.setUser(system.getDefaultUser());
-		}
-		for (Comment m : this.reg.getCommentList()) {
-			m.setAuthor(system.getDefaultUser());
-		}
-		for (Question m : this.reg.getQuestionList()) {
-			m.setAuthor(system.getDefaultUser());
-		}
 		system.removeUser(this.reg);
 	}
 
@@ -163,11 +154,11 @@ public class RegisteredUserInterface extends UserInterface {
 	}
 	
 	public String showUserRecipes() {
-		return system.showRecipes(reg.getRecipesList());
+		return system.showUserRecipes(reg);
 	}
 	
 	public List<Recipe> getUserRecipes() {
-		return reg.getRecipesList();
+		return system.getUserRecipes(reg);
 	}
 	
 	public boolean block(RegisteredUser us2) {

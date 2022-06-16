@@ -155,4 +155,8 @@ public class RecipeExtended extends Recipe {
 		return sb.toString();
 	}
 
+	public Recipe unextend() {
+		return new Recipe(this);
+	}
+
 }

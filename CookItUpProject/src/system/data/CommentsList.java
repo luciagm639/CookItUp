@@ -4,6 +4,7 @@ import recipe.Comment;
 import recipe.Recipe;
 import system.MySystem;
 import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
 public final class CommentsList extends DataSet<Comment, Comment> {
@@ -17,11 +18,11 @@ public final class CommentsList extends DataSet<Comment, Comment> {
 		MyStringSplitter sp = new MyStringSplitter(text);
 		
 		int id = sp.nextInt();
-		RegisteredUser author = system.getUser(sp.nextInt());
+		RegisteredUserExtended author = system.getUser(sp.nextInt());
 		RecipeExtended recipe = system.getRecipe(sp.nextInt());
 		String comment = sp.next();
 		
-		Comment c = new Comment(author, comment, recipe);
+		Comment c = new Comment(author.unextend(), comment, recipe.unextend());
 		add(c, id);
 		recipe.addComment(c);
 		system.addComment(c);

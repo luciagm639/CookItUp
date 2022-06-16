@@ -1,5 +1,6 @@
 package gson;
 
+import java.lang.reflect.Type;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -7,10 +8,12 @@ import java.net.PortUnreachableException;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import administrator.Administrator;
 import recipe.*;
@@ -29,6 +32,7 @@ public class ClientSystem extends Thread {
 	private String IPservidor;
 	private int puertoServidor;
 	DatagramSocket serviceSocket;
+	private Gson parser;
 
 	public ClientSystem() {
 		// direccion IP del servidor
@@ -39,6 +43,7 @@ public class ClientSystem extends Thread {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
+		parser = new Gson();
 
 		// puerto del servidor
 		puertoServidor = 10;
@@ -141,53 +146,62 @@ public class ClientSystem extends Thread {
 	 * sendDatagran(ServerSystem.LIST_OF_RECIPES+"\t"+page+"\t"+"\t"+idUser+"\t"+
 	 * false+"\t"+false+"\t"+null); }
 	 */
-
+	
 	public RegisteredUser findUser(String name) {
-		Message<String> message = new Message<String>(Function.FIND_USER, name);
-		System.out.println(sendDatagram(message));
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Administrator findAdmin(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void addUser(RegisteredUser user) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void addAdmin(Administrator adm) {
-        Message<Administrator> message = new Message<>(Function.ADD_ADMIN, adm);
-        System.out.println(sendDatagram(message));
-        // TODO Auto-generated method stub
+        Message<String> message = new Message<String>(Function.FIND_USER, name);
+        String text = sendDatagram(message);
+        RegisteredUser user = parser.fromJson(text, RegisteredUser.class);
+        return user;
     }
 
-	public List<Recipe> getAllRecipes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Administrator findAdmin(String name) {
+        Message<String> message = new Message<String>(Function.FIND_ADMIN, name);
+        String text = sendDatagram(message);
+        Administrator admin = parser.fromJson(text, Administrator.class);
+        return admin;
+    }
 
-	public String showRecipes(List<Recipe> allRecipes) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public void addUser(RegisteredUser user) {
+        Message<RegisteredUser> message = new Message<>(Function.ADD_USER, user);
+        sendDatagram(message);
+    }
+
+    public void addAdmin(Administrator adm) {
+        Message<Administrator> message = new Message<>(Function.ADD_ADMIN, adm);
+        sendDatagram(message);
+    }
+
+    public List<Recipe> getAllRecipes() {
+        Message<List<Recipe>> message = new Message<>(Function.GET_ALL_RECIPES, null);
+        String text = sendDatagram(message);
+        Type listOfMyClassObject = new TypeToken<ArrayList<Recipe>>() {}.getType();
+        List<Recipe> list = parser.fromJson(text, listOfMyClassObject);
+        return list;
+    }
+
+    public String showRecipes(List<Recipe> allRecipes) {
+        Message<List<Recipe>> message = new Message<>(Function.SHOW_RECIPES, allRecipes);
+        String text = sendDatagram(message);
+        return text;
+    }
+public int addRecipe(Recipe r) {
+        Message<Recipe> message = new Message<>(Function.CREATE_RECIPE, r);
+        String text = sendDatagram(message);
+        int id = parser.fromJson(text, Integer.class);
+        return id;
+    }
+
+    public boolean removeRecipe(Recipe r) {
+        Message<Recipe> message = new Message<>(Function.DELETE_RECIPE, r);
+        String text = sendDatagram(message);
+        boolean bool = parser.fromJson(text, Boolean.class);
+        return bool;
+    }
+
+	
 
 	public void close() {
 		// TODO Auto-generated method stub
-
-	}
-
-	public Recipe addRecipe(Recipe r) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public boolean removeRecipe(Recipe recipe) {
-		// TODO Auto-generated method stub
-		return true;
 
 	}
 
@@ -309,6 +323,16 @@ public class ClientSystem extends Thread {
 	}
 
 	public Set<Comment> getComments() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String showUserRecipes(RegisteredUser reg) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Recipe> getUserRecipes(RegisteredUser reg) {
 		// TODO Auto-generated method stub
 		return null;
 	}

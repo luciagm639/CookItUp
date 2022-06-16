@@ -4,6 +4,7 @@ import recipe.Recipe;
 import recipe.Review;
 import system.MySystem;
 import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
 public class ReviewList extends DataSet<Review, Review> {
@@ -16,10 +17,10 @@ public class ReviewList extends DataSet<Review, Review> {
 	public void readData(MySystem system, String text) {
 		MyStringSplitter sp = new MyStringSplitter(text);
 		int id = sp.nextInt();
-		RegisteredUser author = system.getUser(sp.nextInt());
+		RegisteredUserExtended author = system.getUser(sp.nextInt());
 		RecipeExtended recipe = system.getRecipe(sp.nextInt());
 		boolean like = sp.nextBoolean();
-		Review r = new Review(author, like, recipe);
+		Review r = new Review(author.unextend(), like, recipe.unextend());
 		add(r, id);
 		recipe.addReview(r);
 	}

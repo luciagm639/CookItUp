@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import system.data.Data;
 import user.*;
 
@@ -30,6 +32,17 @@ public class Recipe extends Data<Recipe> {
 		this(name, 0, user);
 	}
 	
+	public Recipe(RecipeExtended recipe) {
+		user = recipe.getUser();
+		if (user instanceof RegisteredUserExtended) {
+			user = ((RegisteredUserExtended) user).unextend();
+		}
+		name = recipe.name;
+		priority = recipe.priority;
+		ingredientsList = recipe.ingredientsList;
+		stepsList = recipe.stepsList;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		return (o instanceof Recipe) && (((Recipe) o).name.equalsIgnoreCase(name));

@@ -16,8 +16,6 @@ public class RegisteredUser extends Data<RegisteredUser> {
 
 	private String name;
 	private String password;
-	private List<RegisteredUser> blockList = new ArrayList<RegisteredUser>();
-	private List<RegisteredUser> followList = new ArrayList<RegisteredUser>();
 	private Set<Ingredient> fridge = new HashSet<>();
 	private int chips;
 	private boolean status;
@@ -44,6 +42,14 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		this.status = false;
 	}
 	  
+	public RegisteredUser(RegisteredUser user) {
+		name = user.name;
+		password = user.password;
+		fridge = user.fridge;
+		chips = user.chips;
+		status = user.status;
+	}
+
 	@Override
 	public String toString() {
 	  return name;
@@ -76,14 +82,6 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		return password;
 	}
 
-	public List<RegisteredUser> getBlockList() {
-		return blockList;
-	}
-
-	public List<RegisteredUser> getFollowList() {
-		return followList;
-	}
-
 	
 
 	
@@ -96,51 +94,6 @@ public class RegisteredUser extends Data<RegisteredUser> {
 		this.status = status;
 	}
 	
-	/*Block list*/
-	public boolean block(RegisteredUser user) {
-		if (this.blockList.contains(user)) {
-			System.err.println("ERROR: The user cannot block another user already blocked");
-			return false;
-		} else {
-			return this.blockList.add(user);
-		}
-	}
-	
-	public boolean unblock(RegisteredUser user) {
-		if (this.blockList.contains(user)) {
-			return this.blockList.remove(user);
-		} else {
-			System.err.println("ERROR: The user cannot unblock another user not previously blocked");
-			return false;
-		}
-	}
-	
-	public boolean isBlocked(RegisteredUser user) {
-		return blockList.contains(user);
-	}
-	
-	/*Follow list*/
-	public boolean follow(RegisteredUser user) {
-		if (this.followList.contains(user)) {
-			System.err.println("ERROR: The user cannot follow another user already followed");
-			return false;
-		} else {
-			return this.followList.add(user);
-		}
-	}
-	
-	public boolean unfollow(RegisteredUser user) {
-		if (this.followList.contains(user)) {
-			return this.followList.remove(user);
-		} else {
-			System.err.println("ERROR: The user cannot unfollow a user not previously followed");
-			return false;
-		}
-	}
-	
-	public boolean isFollowed(RegisteredUser user) {
-		return followList.contains(user);
-	}
 	
 	/*Chips*/
 	public static final int CREATE_NEW_RECIPE = 1;

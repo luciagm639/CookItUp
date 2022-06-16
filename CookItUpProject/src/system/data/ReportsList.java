@@ -5,6 +5,8 @@ import recipe.Question;
 import recipe.Recipe;
 import report.*;
 import system.MySystem;
+import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
 public class ReportsList extends DataSet<Report, Report> {
@@ -23,7 +25,7 @@ public class ReportsList extends DataSet<Report, Report> {
 		
 		try {
 			int id = Integer.parseInt(sp[0]);
-			RegisteredUser reporting = system.getUser(Integer.parseInt(sp[1]));
+			RegisteredUserExtended reporting = system.getUser(Integer.parseInt(sp[1]));
 			String justification = sp[2];
 			int type = Integer.parseInt(sp[3]);
 			int ReportedId = Integer.parseInt(sp[4]);
@@ -31,19 +33,19 @@ public class ReportsList extends DataSet<Report, Report> {
 			switch(type) {
 			case COMMENT:
 				Comment comment = system.getComment(ReportedId);
-				r = new ReportComment(reporting, justification, comment);
+				r = new ReportComment(reporting.unextend(), justification, comment);
 				break;
 			case QUESTION:
 				Question question = system.getQuestion(ReportedId);
-				r = new ReportQuestion(reporting, justification, question);
+				r = new ReportQuestion(reporting.unextend(), justification, question);
 				break;
 			case RECIPE:
-				Recipe recipe = system.getRecipe(ReportedId);
-				r = new ReportRecipe(reporting, justification, recipe);
+				RecipeExtended recipe = system.getRecipe(ReportedId);
+				r = new ReportRecipe(reporting.unextend(), justification, recipe.unextend());
 				break;
 			case USER:
-				RegisteredUser user = system.getUser(ReportedId);
-				r = new ReportUser(reporting, justification, user);
+				RegisteredUserExtended user = system.getUser(ReportedId);
+				r = new ReportUser(reporting.unextend(), justification, user.unextend());
 				break;
 			default:
 				return;

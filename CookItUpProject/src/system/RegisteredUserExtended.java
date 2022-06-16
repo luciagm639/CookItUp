@@ -15,7 +15,9 @@ public class RegisteredUserExtended extends RegisteredUser {
 	private List<Report> reportsList = new ArrayList<>();
 	private List<Comment> commentsList = new ArrayList<>();
 	private List<Question> questionsList = new ArrayList<>();
-	
+
+	private List<RegisteredUser> blockList = new ArrayList<RegisteredUser>();
+	private List<RegisteredUser> followList = new ArrayList<RegisteredUser>();
 	
 	public RegisteredUserExtended(String name, int id, String password, int chips, boolean status) {
 		super(name,id,password,chips,status);
@@ -56,7 +58,66 @@ public class RegisteredUserExtended extends RegisteredUser {
 		return commentsList.add(c);
 	}
 	
+	/*Block list*/
+	public boolean block(RegisteredUser user) {
+		if (this.blockList.contains(user)) {
+			System.err.println("ERROR: The user cannot block another user already blocked");
+			return false;
+		} else {
+			return this.blockList.add(user);
+		}
+	}
+	
+	public boolean unblock(RegisteredUser user) {
+		if (this.blockList.contains(user)) {
+			return this.blockList.remove(user);
+		} else {
+			System.err.println("ERROR: The user cannot unblock another user not previously blocked");
+			return false;
+		}
+	}
+	
+	public boolean isBlocked(RegisteredUser user) {
+		return blockList.contains(user);
+	}
+	
+	/*Follow list*/
+	public boolean follow(RegisteredUser user) {
+		if (this.followList.contains(user)) {
+			System.err.println("ERROR: The user cannot follow another user already followed");
+			return false;
+		} else {
+			return this.followList.add(user);
+		}
+	}
+	
+	public boolean unfollow(RegisteredUser user) {
+		if (this.followList.contains(user)) {
+			return this.followList.remove(user);
+		} else {
+			System.err.println("ERROR: The user cannot unfollow a user not previously followed");
+			return false;
+		}
+	}
+	
+	public boolean isFollowed(RegisteredUser user) {
+		return followList.contains(user);
+	}
+	
+	
 	public List<Report> getReportsList() {
 		return reportsList;
+	}
+
+	public List<RegisteredUser> getBlockList() {
+		return blockList;
+	}
+
+	public List<RegisteredUser> getFollowList() {
+		return followList;
+	}
+
+	public RegisteredUser unextend() {
+		return new RegisteredUser(this);
 	}
 }

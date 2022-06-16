@@ -11,6 +11,7 @@ import recipe.Question;
 import recipe.Recipe;
 import system.MySystem;
 import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
 public class RecipeList extends DataSet<RecipeExtended, Recipe> {
@@ -77,7 +78,7 @@ public class RecipeList extends DataSet<RecipeExtended, Recipe> {
 		int id = sp.nextInt();
 		String name = sp.next();
 		int priority = sp.nextInt();
-		RegisteredUser user = system.getUser(sp.nextInt());
+		RegisteredUserExtended user = system.getUser(sp.nextInt());
 		
 		RecipeExtended r = new RecipeExtended(name, priority, user);
 		user.addRecipe(r);

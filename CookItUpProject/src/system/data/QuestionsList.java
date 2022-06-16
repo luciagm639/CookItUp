@@ -4,6 +4,7 @@ import recipe.Question;
 import recipe.Recipe;
 import system.MySystem;
 import system.RecipeExtended;
+import system.RegisteredUserExtended;
 import user.RegisteredUser;
 
 public final class QuestionsList extends DataSet<Question, Question> {
@@ -17,11 +18,11 @@ public final class QuestionsList extends DataSet<Question, Question> {
 		MyStringSplitter sp = new MyStringSplitter(text);
 		
 		int id = sp.nextInt();
-		RegisteredUser author = system.getUser(sp.nextInt());
+		RegisteredUserExtended author = system.getUser(sp.nextInt());
 		RecipeExtended recipe = system.getRecipe(sp.nextInt());
 		String question = sp.next();
 		
-		Question c = new Question(author, question, recipe);
+		Question c = new Question(author.unextend(), question, recipe.unextend());
 		add(c, id);
 		system.addQuestion(c);
 		recipe.addQuestion(c);

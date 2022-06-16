@@ -55,11 +55,11 @@ public class MySystem {
 	 */
 	public void addRecipe(RecipeExtended recipe) {
 		recipesList.add(recipe);
-		recipe.getUser().addRecipe(recipe);
+		toExtended(recipe.getUser()).addRecipe(recipe);
 	}
 
 	public boolean removeRecipe(Recipe recipe) {
-		return (recipesList.remove(recipe) && recipe.getUser().deleteRecipe(recipe));
+		return (recipesList.remove(recipe) && toExtended(recipe.getUser()).deleteRecipe(recipe));
 	}
 
 	public List<RecipeExtended> getAllRecipes() {
@@ -93,14 +93,15 @@ public class MySystem {
 		userList.add(user);
 	}
 
-	public RegisteredUser getUser(int id) {
+	public RegisteredUserExtended getUser(int id) {
 		return userList.get(id);
 	}
 
-	public boolean removeUser(RegisteredUser user) {
+	public boolean removeUser(RegisteredUser u) {
 		boolean success = false;
+		RegisteredUserExtended user = toExtended(u);
 		//Set recipes to default
-		for (Recipe r :user.getRecipesList()) {
+		for (Recipe r : user.getRecipesList()) {
 			r.setUser(getDefaultUser());
 		}
 		//Set comments to default
@@ -116,7 +117,7 @@ public class MySystem {
 		success = userList.remove(user);
 		
 		//Remove from follow and block lists
-		for (RegisteredUser r : userList) {
+		for (RegisteredUserExtended r : userList) {
 			r.getFollowList().remove(user);
 			r.getBlockList().remove(user);
 		}
@@ -235,7 +236,7 @@ public class MySystem {
 	}
 
 	public boolean addComment(Comment c) {
-		return (commentList.add(c) && c.getAuthor().addComment(c) && recipesList.setComment(c));
+		return (commentList.add(c) && toExtended(c.getAuthor()).addComment(c) && recipesList.setComment(c));
 	}
 	
 	/**
@@ -250,7 +251,7 @@ public class MySystem {
 	}
 
 	public boolean addQuestion(Question q) {
-		return (questionList.add(q) && q.getAuthor().addQuestion(q) && recipesList.setQuestion(q));
+		return (questionList.add(q) && toExtended(q.getAuthor()).addQuestion(q) && recipesList.setQuestion(q));
 	}
 	
 	/** 
@@ -420,5 +421,13 @@ public class MySystem {
 		if (name != null)
 			recipes = recipesList.nameFilter(recipes, name);
 		return recipes;
+	}
+
+	public Set<Ingredient> getIngredients() {
+		return ingredientsList;
+	}
+
+	public Set<Review> getReviews() {
+		return reviewList;
 	}
 }
