@@ -1,4 +1,23 @@
-hacer mas tests
-los tests son para las cosas importantes
 cambiar el diagrama de clases
-terminar el codigo
+
+Código:
+arreglar los errores en los tests
+ordenar por prioridad y num likes
+filtros
+controlar que solo se pueda subir una receta al dia
+controlar que solo se puedan conseguir hasta un número máximo de chips al dia y hasta un tope
+
+
+Ideas:
+pasar objetos por id, no referencia
+	por ejemplo: Recipe tiene como autor un RegisteredUser, ponerlo como authorId
+	de esta forma, se pasa bien por json
+	
+cambiar message para que se puedan mandar todos los argumentos que se quieran
+	List<String> en formato json, primero siempre es funcion
+	se separan por "\t"
+	add(E element)
+	get(int, Type)
+	getFunction()
+	
+hacer control de log in

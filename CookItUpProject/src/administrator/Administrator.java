@@ -19,5 +19,11 @@ public class Administrator extends Data<Administrator> {
 	public String getPasword() {
 		return pasword;
 	}
+	
+	public boolean equals(Object o) {
+		return o instanceof Administrator 
+				&& ((Administrator) o).name.equals(name) 
+				&& ((Administrator) o).pasword.equals(pasword);
+	}
 }
 

@@ -7,6 +7,7 @@ import java.util.Set;
 import gson.ClientSystem;
 import recipe.*;
 import report.*;
+import system.RecipePrinting;
 import system.data.Fridge;
 import system.data.IngredientsList;
 
@@ -104,11 +105,11 @@ public class RegisteredUserInterface extends UserInterface {
 	public List<Recipe> lookForRecipe(boolean useFridge, String name, boolean onlyFollowing) {
 		Set<Ingredient> fridge = null;
 		List<RegisteredUser> following = null;
-		List<RegisteredUser> blocked = reg.getBlockList();
+		List<RegisteredUser> blocked = system.getBlockList(reg);
 		if (useFridge)
 			fridge = reg.getFridge();
 		if (onlyFollowing)
-			following = reg.getFollowList();
+			following = system.getFollowList(reg);
 		return system.filter(fridge, following, blocked, name);
 			
 	}
@@ -157,32 +158,32 @@ public class RegisteredUserInterface extends UserInterface {
 		return system.showUserRecipes(reg);
 	}
 	
-	public List<Recipe> getUserRecipes() {
+	public List<RecipePrinting> getUserRecipes() {
 		return system.getUserRecipes(reg);
 	}
 	
 	public boolean block(RegisteredUser us2) {
-		return reg.block(us2);
+		return system.block(reg, us2);
 	}
 
 	public boolean isBlocked(RegisteredUser us2) {
-		return reg.isBlocked(us2);
+		return system.isBlocked(reg, us2);
 	}
 
 	public boolean unblock(RegisteredUser us1) {
-		return reg.unblock(us1);
+		return system.unblock(reg, us1);
 	}
 
 	public boolean follow(RegisteredUser us2) {
-		return reg.follow(us2);
+		return system.follow(reg, us2);
 	}
 
 	public boolean isFollowed(RegisteredUser us2) {
-		return reg.isFollowed(us2);
+		return system.isFollowed(reg, us2);
 	}
 
 	public boolean unfollow(RegisteredUser us1) {
-		return reg.unfollow(us1);
+		return system.unfollow(reg, us1);
 	}
 
 	public int spendChips(int i) {
@@ -195,15 +196,5 @@ public class RegisteredUserInterface extends UserInterface {
 
 	public void upLoadReview(Review review) {
 		system.addReview(review);
-	}
-	
-	/**
-	 * 
-	 * @param r
-	 * @return toStringExtended of the recipe with the same id
-	 */
-	public String getUpdated(Recipe r) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

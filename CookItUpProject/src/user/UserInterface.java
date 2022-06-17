@@ -118,4 +118,8 @@ public class UserInterface implements Interface {
 	public void close() {
 		system.close();
 	}
+
+	public void endConnection() {
+		system.endConnection();
+	}
 }

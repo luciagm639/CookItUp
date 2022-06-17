@@ -66,7 +66,7 @@ public class MySystem {
 		return recipesList.toList();
 	}
 
-	public String showRecipes(List<Recipe> recipes) {
+	public String showRecipes(List<RecipeExtended> recipes) {
 		return RecipeList.toString(recipes);
 	}
 

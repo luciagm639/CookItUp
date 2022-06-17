@@ -11,7 +11,7 @@ import user.RegisteredUser;
 
 public class RegisteredUserExtended extends RegisteredUser {
 	
-	private List<Recipe> recipesList = new ArrayList<Recipe>();
+	private List<RecipeExtended> recipesList = new ArrayList<RecipeExtended>();
 	private List<Report> reportsList = new ArrayList<>();
 	private List<Comment> commentsList = new ArrayList<>();
 	private List<Question> questionsList = new ArrayList<>();
@@ -28,11 +28,11 @@ public class RegisteredUserExtended extends RegisteredUser {
 	}
 	
 	/*Recipes*/
-	public List<Recipe> getRecipesList() {
+	public List<RecipeExtended> getRecipesList() {
 		return recipesList;
 	}
 
-	public boolean addRecipe(Recipe recipe) {
+	public boolean addRecipe(RecipeExtended recipe) {
 		return recipesList.add(recipe);	
 	}
 	
