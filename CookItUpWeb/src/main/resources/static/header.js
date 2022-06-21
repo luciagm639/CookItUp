@@ -1,0 +1,1 @@
+document.body.innerHTML = "<h1 align='center'>CookItUp!</h1>"

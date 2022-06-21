@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### temporal code ###
+/src/main/resources/static/practice/
+/src/main/java/CookItUpWeb/temp/

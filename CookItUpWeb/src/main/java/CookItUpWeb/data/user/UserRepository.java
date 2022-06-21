@@ -1,4 +1,4 @@
-package CookItUpWeb.user;
+package CookItUpWeb.data.user;
 
 import org.springframework.data.repository.CrudRepository;
 
