@@ -1,12 +1,10 @@
 //TODO delete
 package CookItUpWeb.data.user;
 
+import CookItUpWeb.auxiliary.ListAuxiliary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,13 +48,9 @@ public class UserController {
         return "User not found";
     }
 
-    @GetMapping(path="all")
+    @RequestMapping(path="all", method = {RequestMethod.POST, RequestMethod.GET})
     public @ResponseBody List<User> allUsers() {
-        LinkedList<User> list = new LinkedList<>();
-        for (User u : userRepository.findAll()) {
-            list.add(u);
-        }
-        return list;
+        return ListAuxiliary.fromIterableToList(userRepository.findAll());
     }
 
 }

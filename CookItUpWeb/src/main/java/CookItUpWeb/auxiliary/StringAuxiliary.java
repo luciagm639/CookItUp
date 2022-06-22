@@ -1,8 +1,9 @@
-package CookItUpWeb.form;
+package CookItUpWeb.auxiliary;
 
-public class Form {
+public class StringAuxiliary {
 
     public static boolean isEmpty(String input) {
         return input == null || input.equals("");
     }
+
 }

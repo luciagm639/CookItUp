@@ -1,59 +1,83 @@
 <!--TODO redirect home to this-->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>CookItUp Home Page</title>
-    </head>
-    <body>
-        <script src="header.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>CookItUp Home Page</title>
+</head>
 
-        <h2>Log in</h2>
-        <form action = "home/log_in" method="post">
-            <p>Name: <input id="name" type="text" name="name" /></p>
-            <p>Password: <input id="password" type="password" name="password" /></p>
-            <p><input type="submit" name="submit" value="Submit" onclick="LogIn()"/></p>
-        </form>
-        <hr>
+<body>
+    <script src="header.js"></script>
+    <nav>
+        <article>
+            <section>
+                <h2>Log in</h2>
+                <form action = "home/log_in" method="post">
+                    <label for = "name">Name: </label>
+                    <input id="name" type="text" name="name" required/>
+                    <br/>
+                    <label for = "password">Password: </label>
+                    <input id="password" type="password" name="password" required/>
+                    <br/>
+                    <input type="submit" name="submit" value="Submit"/>
+                </form>
+            </section>
 
-        <h2>Sign up</h2>
-        <form action = "home/sign_up" method="post">
-            <p>Name: <input id="name1" type="text" name="name" /></p>
-            <p>Password: <input id="password1" type="password" name="password" /></p>
-            <p><input type="submit" name="submit" value="Submit" onclick="SignUp()"/></p>
-        </form>
-        <hr>
+            <hr>
 
-        <h2>Guest access</h2>
-        <p>If you want to access as a guest click bellow.</p>
-        <button onclick="EnterCookItUp()">Enter CookItUp!</button>
-        <script>
-            function getCurrentURL() {
-                var URL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                return URL;
-            }
-            function EnterCookItUp() {
-                alert("This doesn't work yet")
-                fetch(getCurrentURL() + "/enter");
-            }
-            function LogIn() {
-                let name = document.getElementById("name").value;
-                let password = document.getElementById("password").value;
-                let url = new URL(getCurrentURL() + "/log_in");
-                url.searchParams.set("name", name);
-                url.searchParams.set("password", password);
-                fetch(url, { method: 'POST' });
-            }
+            <section>
+                <h2>Sign up</h2>
+                <form action = "home/sign_up" method="post" autocomplete="off">
+                    <label for = "name1">Name: </label>
+                    <input id="name1" type="text" name="name" required/>
+                    <br/>
+                    <label for = "password1">Password: </label>
+                    <input id="password1" type="password" name="password" required/>
+                    <br/>
+                    <input type="submit" name="submit" value="Submit"/>
+                </form>
+            </section>
 
-            function SignUp() {
-                let name = document.getElementById("name1").value;
-                let password = document.getElementById("password1").value;
-                let url = new URL(getCurrentURL() + "/sign_up");
-                url.searchParams.set("name", name);
-                url.searchParams.set("password", password);
-                fetch(url, { method: 'POST' });
-            }
-        </script>
-    </body>
+            <hr>
 
+            <section>
+                <h2>Guest access</h2>
+                <p>If you want to access as a guest click bellow.</p>
+                <a href = "/home/enter">
+                    <button>Enter CookItUp!</button>
+                </a>
+            </section>
+        </article>
+    </nav>
+    <script src="footer.js"></script>
+    <script>
+        function getCurrentURL() {
+            var URL = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            return URL;
+        }
+        function EnterCookItUp() {
+            alert("This doesn't work yet")
+            fetch(getCurrentURL() + "/enter");
+        }
+        function checkLogIn() {
+            let name = document.getElementById("name").value;
+            let password = document.getElementById("password").value;
+
+            let url = new URL(getCurrentURL() + "/log_in");
+            url.searchParams.set("name", name);
+            url.searchParams.set("password", password);
+            fetch(url, { method: 'POST' });
+
+        }
+
+        function SignUp() {
+            let name = document.getElementById("name1").value;
+            let password = document.getElementById("password1").value;
+            let url = new URL(getCurrentURL() + "/sign_up");
+            url.searchParams.set("name", name);
+            url.searchParams.set("password", password);
+            fetch(url, { method: 'POST' });
+        }
+    </script>
+</body>
 </html>

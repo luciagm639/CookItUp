@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify a recipe</title>
+</head>
+<body>
+    <script src="..\header.js"></script>
+    <nav>
+        <article>
+            <h2>Name of the recipe</h2>
+            <selection>
+                <h3>Ingredients</h3>
+                <ul id = "ingredients">
+                </ul>
+                <hr>
+                <form onsubmit="searchIngredient()" action="/ingredient/search">
+                    <input id = "searchIngredient" name = "name" type = "search"/>
+                    <button onclick="searchIngredient()">Look for an ingredient</button>
+                </form>
+            </selection>
+        </article>
+    </nav>
+    <script src="..\footer.js"></script>
+    <script>
+        function searchIngredient() {
+            let ingredient = document.getElementById("searchIngredient").value;
+            let ingredients = document.getElementById("ingredients");
+            let ingredientsChildNodes = ingredients.childNodes;
+            var found = false;
+            for(var i = 0; i < ingredientsChildNodes.length && !found; i++) {
+                if (ingredientsChildNodes[i].textContent == ingredient) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                return true;
+                //TODO change this
+                let listElement = document.createElement('li');
+                listElement.appendChild(document.createTextNode(ingredient));
+
+                ingredients.appendChild(listElement);
+            }
+            else {
+                alert("Ingredient is already in the recipe")
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>

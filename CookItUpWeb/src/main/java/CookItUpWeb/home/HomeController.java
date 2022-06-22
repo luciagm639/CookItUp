@@ -1,6 +1,6 @@
 package CookItUpWeb.home;
 
-import CookItUpWeb.form.Form;
+import CookItUpWeb.auxiliary.StringAuxiliary;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +25,33 @@ public class HomeController {
     @RequestMapping(path="log_in")
     public ModelAndView logIn(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
         request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-        if (Form.isEmpty(name) || Form.isEmpty(password)) {
-            return new ModelAndView("redirect:/error/form_incomplete");
+        String redirect = null;
+        if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
+            redirect = "redirect:/error/form_incomplete";
         }
-       for (User user : userRepository.findAll()) {
-            if (name.equalsIgnoreCase(user.getName())) {
-                if (password.equals(user.getPassword())) {
-                    session.setAttribute("user", user);
-                    return new ModelAndView("redirect:/home/enter");
-                }
-                else {
-                    return new ModelAndView("redirect:/error/wrong_password");
+        else {
+            for (User user : userRepository.findAll()) {
+                if (name.equalsIgnoreCase(user.getName())) {
+                    if (password.equals(user.getPassword())) {
+                        session.setAttribute("user", user);
+                        redirect = "redirect:/home/enter";
+                        break;
+                    } else {
+                        redirect = "redirect:/error/wrong_password";
+                        break;
+                    }
                 }
             }
+            if (redirect == null)
+                redirect = "redirect:/error/user_not_found";
         }
-        return new ModelAndView("redirect:/error/user_not_found");
+        return new ModelAndView(redirect);
     }
 
     @RequestMapping(path="sign_up")
     public ModelAndView signUp(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
         request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-        if (Form.isEmpty(name) || Form.isEmpty(password)) {
+        if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
             return new ModelAndView("redirect:/error/form_incomplete");
         }
         for (User user : userRepository.findAll()) {
