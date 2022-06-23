@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -51,6 +51,16 @@ public class UserController {
     @RequestMapping(path="all", method = {RequestMethod.POST, RequestMethod.GET})
     public @ResponseBody List<User> allUsers() {
         return ListAuxiliary.fromIterableToList(userRepository.findAll());
+    }
+
+    @RequestMapping(path="own_recipes")
+    public @ResponseBody String ownRecipes(HttpSession session) {
+        String url = "";
+        if (session.getAttribute("user") instanceof User) {
+            User user = (User) session.getAttribute("user");
+            url = "/user/"+user.getId()+"/recipes";
+        }
+        return '"'+ url+'"';
     }
 
 }
