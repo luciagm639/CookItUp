@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CookItUp! View a Recipe</title>
+</head>
+<body>
+    <script src="..\..\header.js"></script>
+    <nav>
+        <article id = "article">
+        </article>
+    </nav>
+    <script src="..\..\footer.js"></script>
+    <script>
+        /*
+        TODO TASK 2: Show the comments and questions
+        /recipe/{id}/comments
+        /recipe/{id}/questions
+        TODO TASK 3: Allow registered users to add comments and questions
+        /user/current gets you the current user or null if there is none
+        TODO TASK 4: Add a delete button available for the owner
+        /recipe/{id}/author to get the author
+        TODO TASK 5: Add a modify button available for the owner
+        /recipe/{id}/author to get the author
+        TODO TASK 6: Allow an admin to delete the recipe
+        admin/current gets you the current admin or null if there is none
+        TODO TASK 7: View reviews
+        /recipe/{id}/reviews
+        TODO TASK 8: Allow to add a review if registered user
+        /recipe/{id}/add_review
+        TODO TASK 9: Allow to add comments or questions
+        /recipe/{id}/add_comment
+        /recipe/{id}/add_question
+
+        Note: the response is wrong
+        */
+        fetch("").then( response => {
+            const jsonPromise = response.text();
+            jsonPromise.then( json => {
+            console.log(json);
+            });
+        });
+    </script>
+</body>
+</html>

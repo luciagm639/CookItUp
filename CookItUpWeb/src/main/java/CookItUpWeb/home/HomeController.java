@@ -23,40 +23,38 @@ public class HomeController {
     private UserRepository userRepository;
 
     @RequestMapping(path="log_in")
-    public ModelAndView logIn(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
-        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
-        String redirect = null;
+    public @ResponseBody String logIn(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
+        String result = null;
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
-            redirect = "redirect:/error/form_incomplete";
+            result = "result:/error/form_incomplete";
         }
         else {
             for (User user : userRepository.findAll()) {
                 if (name.equalsIgnoreCase(user.getName())) {
                     if (password.equals(user.getPassword())) {
                         session.setAttribute("user", user);
-                        redirect = "redirect:/home/enter";
+                        result = "";
                         break;
                     } else {
-                        redirect = "redirect:/error/wrong_password";
+                        result = "result:/error/wrong_password";
                         break;
                     }
                 }
             }
-            if (redirect == null)
-                redirect = "redirect:/error/user_not_found";
+            if (result == null)
+                result = "result:/error/user_not_found";
         }
-        return new ModelAndView(redirect);
+        return result;
     }
 
     @RequestMapping(path="sign_up")
-    public ModelAndView signUp(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
-        request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+    public @ResponseBody String signUp(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
-            return new ModelAndView("redirect:/error/form_incomplete");
+            return "The submitted form is incomplete";
         }
         for (User user : userRepository.findAll()) {
             if (name.equalsIgnoreCase(user.getName())) {
-                return new ModelAndView("redirect:/error/username_not_available");
+                return "The user name you are trying to get is already assigned";
             }
         }
         User user = new User();
@@ -66,7 +64,7 @@ public class HomeController {
         user.setChips(0);
         userRepository.save(user);
         session.setAttribute("user", user);
-        return new ModelAndView("redirect:/home/enter");
+        return "";
     }
 
     //TODO change this to an html that shows all recipes

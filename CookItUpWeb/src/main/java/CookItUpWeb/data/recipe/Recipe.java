@@ -8,6 +8,7 @@ import CookItUpWeb.data.recipe.step.Step;
 import CookItUpWeb.data.user.User;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -34,10 +35,21 @@ public class Recipe {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Question> questions;
-/*
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<Review> reviews;
-*/
+
+    public Recipe() {
+        name = "";
+        priority = 0;
+        author = null;
+        ingredients = new LinkedList<>();
+        steps = new LinkedList<>();
+        comments = new LinkedList<>();
+        questions = new LinkedList<>();
+        reviews = new LinkedList<>();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -105,7 +117,7 @@ public class Recipe {
         }
         return added;
     }
-/*
+
     public List<Review> getReview() {
         return reviews;
     }
@@ -117,5 +129,17 @@ public class Recipe {
         }
         return added;
     }
-*/
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public boolean addStep(Step step) {
+        boolean added = false;
+        if (!steps.contains(step)) {
+            added = steps.add(step);
+        }
+        return added;
+    }
+
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CookItUp! Create a Recipe</title>
+</head>
+<body>
+    <script src="../header.js"></script>
+    <nav>
+        <article>
+            <selection>
+                <h2>Recipe name</h2>
+                <label for="name">Look for an available recipe name:</label>
+                <input name="name" id="name" type="search" required/>
+                <input type="submit" value="Submit" onclick="createNewRecipe()"/>
+            </selection>
+        </article>
+    </nav>
+    <script src="../footer.js"></script>
+    <script>
+        /*
+        TODO TASK 1:
+        Only allow this if the user has logged in
+        We can do this by checking /user/current that it is different from null
+        Note: Right now it is producing an http error
+         */
+        function createNewRecipe() {
+            let name = document.getElementById("name").value;
+            fetch('/recipe/create?name='+name).then( response => {
+                const jsonPromise = response.json();
+                jsonPromise.then(json => {
+                    let url = "/recipe/" + json.id + "/modify.html";
+                    window.location.replace(url);
+                }).catch(err => console.error('Fetch problem: ${err.message}'));
+            });
+        }
+    </script>
+</body>
+</html>

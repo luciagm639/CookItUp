@@ -1,4 +1,3 @@
-<!--TODO redirect home to this-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,75 +8,59 @@
 <body>
     <script src="header.js"></script>
     <nav>
-        <article>
-            <section>
-                <h2>Log in</h2>
-                <form action = "home/log_in" method="post">
-                    <label for = "name">Name: </label>
-                    <input id="name" type="text" name="name" required/>
-                    <br/>
-                    <label for = "password">Password: </label>
-                    <input id="password" type="password" name="password" required/>
-                    <br/>
-                    <input type="submit" name="submit" value="Submit"/>
-                </form>
-            </section>
-
-            <hr>
-
-            <section>
-                <h2>Sign up</h2>
-                <form action = "home/sign_up" method="post" autocomplete="off">
-                    <label for = "name1">Name: </label>
-                    <input id="name1" type="text" name="name" required/>
-                    <br/>
-                    <label for = "password1">Password: </label>
-                    <input id="password1" type="password" name="password" required/>
-                    <br/>
-                    <input type="submit" name="submit" value="Submit"/>
-                </form>
-            </section>
-
-            <hr>
-
-            <section>
-                <h2>Guest access</h2>
-                <p>If you want to access as a guest click bellow.</p>
-                <a href = "/home/enter">
-                    <button>Enter CookItUp!</button>
-                </a>
-            </section>
+        <article id = "article">
         </article>
     </nav>
-    <script src="footer.js"></script>
     <script>
-        function getCurrentURL() {
-            var URL = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            return URL;
-        }
-        function EnterCookItUp() {
-            alert("This doesn't work yet")
-            fetch(getCurrentURL() + "/enter");
-        }
-        function checkLogIn() {
-            let name = document.getElementById("name").value;
-            let password = document.getElementById("password").value;
+        fetch('/recipe/all').then( response => {
+            const jsonPromise = response.json();
+            jsonPromise.then( json => {
+                let article = document.getElementById("article");
+                for (let i = 0; i < json.length; i++) {
+                    let selection = document.createElement("selection");
 
-            let url = new URL(getCurrentURL() + "/log_in");
-            url.searchParams.set("name", name);
-            url.searchParams.set("password", password);
-            fetch(url, { method: 'POST' });
+                    //create the title
+                    let link = document.createElement("a");
+                    link.href = "/recipe/" + json[i].id + "/view.html";
+                    let title = document.createElement("h2");
+                    title.textContent = json[i].name;
+                    link.appendChild(title);
+                    selection.appendChild(link);
 
-        }
+                    //create the title for the ingredients
+                    let ingredientsTitle = document.createElement("h3");
+                    ingredientsTitle.textContent = "Ingredients";
+                    selection.appendChild(ingredientsTitle);
+                    //create the list for the ingredients
+                    let ingredientsList = document.createElement("ul");
+                    let ingredients = json[i]["ingredients"];
+                    for(let i = 0; i < ingredients.length; i++) {
+                        let li = document.createElement("li");
+                        li.textContent = ingredients[i].name;
+                        ingredientsList.appendChild(li);
+                    }
+                    selection.appendChild(ingredientsList);
 
-        function SignUp() {
-            let name = document.getElementById("name1").value;
-            let password = document.getElementById("password1").value;
-            let url = new URL(getCurrentURL() + "/sign_up");
-            url.searchParams.set("name", name);
-            url.searchParams.set("password", password);
-            fetch(url, { method: 'POST' });
-        }
+                    //create the title for the steps
+                    let stepsTitle = document.createElement("h3");
+                    stepsTitle.textContent = "Steps";
+                    selection.appendChild(stepsTitle);
+                    //create the list for the steps
+                    let stepsList = document.createElement("ol");
+                    let steps = json[i]["steps"];
+                    for(let i = 0; i < steps.length; i++) {
+                        let li = document.createElement("li");
+                        li.textContent = steps[i].title;
+                        stepsList.appendChild(li);
+                    }
+                    selection.appendChild(stepsList);
+
+                    article.appendChild(selection);
+                    article.appendChild(document.createElement("hr"));
+                }
+            });
+        });
     </script>
+    <script src="footer.js"></script>
 </body>
 </html>

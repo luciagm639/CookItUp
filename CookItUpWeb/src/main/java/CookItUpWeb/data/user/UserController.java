@@ -2,12 +2,16 @@
 package CookItUpWeb.data.user;
 
 import CookItUpWeb.auxiliary.ListAuxiliary;
+import CookItUpWeb.data.recipe.Recipe;
+import CookItUpWeb.data.recipe.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path="/user")
@@ -15,6 +19,30 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
+
+    @RequestMapping(path="current")
+    public @ResponseBody User currentUser(HttpSession session) {
+        User user = null;
+        //TODO
+
+        return user;
+    }
+
+    @RequestMapping(path="{id}/recipes")
+    public @ResponseBody List<Recipe> userRecipes(@PathVariable int id) {
+        List<Recipe> list = new LinkedList<>();
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            for (Recipe recipe : recipeRepository.findAll()) {
+                if (recipe.getAuthor().getId() == id)
+                    list.add(recipe);
+            }
+        }
+        return list;
+    }
 
     @RequestMapping(path="add")
     public @ResponseBody String add(@RequestParam String name, @RequestParam String password ) {

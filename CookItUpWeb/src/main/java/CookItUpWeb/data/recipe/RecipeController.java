@@ -5,12 +5,14 @@ import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(path="recipe")
@@ -24,19 +26,39 @@ public class RecipeController {
         return ListAuxiliary.fromIterableToList(recipeRepository.findAll());
     }
 
-    @RequestMapping(path="add")
+    @RequestMapping(path="{id}")
+    public @ResponseBody Recipe getRecipe(@PathVariable int id) {
+        Recipe recipe = null;
+        Optional<Recipe> optional = recipeRepository.findById(id);
+        if (optional.isPresent()) {
+            recipe = optional.get();
+        }
+        return recipe;
+    }
+
+    @RequestMapping(path="create")
     public @ResponseBody Recipe addRecipe(HttpSession session, @RequestParam String name) {
         Recipe recipe = null;
         if (session.getAttribute("user") instanceof User) {
-            //TODO look for recipe of the same name and if user is blocked...
-            recipe = new Recipe();
-            recipe.setName(name);
-            recipe.setPriority(0);
-            //recipe.setAuthor((User) session.getAttribute("user"));
-            recipeRepository.save(recipe);
+            User user = (User) session.getAttribute("user");
+            if (user.isBlocked()) {
+                //TODO add an error message stating that the user is blocked and therefore cannot create a recipe
+            }
+            else {
+                if (RecipeRepository.searchByName(recipeRepository, name) != null) {
+                    //TODO add an error message, this recipe name is already taken
+                }
+                else {
+                    recipe = new Recipe();
+                    recipe.setName(name);
+                    recipe.setPriority(0);
+                    recipe.setAuthor(user);
+                    recipeRepository.save(recipe);
+                }
+            }
         }
         else {
-            //TODO error?, ya veremos
+            //TODO error you cannot create a recipe without logging in
         }
         return recipe;
     }

@@ -11,13 +11,18 @@ import java.util.List;
 @Entity
 public class User {
 
+    public User() {
+        chips = 0;
+        blocked = false;
+    }
+
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
     private String password;
     private int chips;
     private boolean blocked;
-
+/*   TODO
     @OneToMany(cascade = CascadeType.ALL)
     private List<Recipe> recipes;
 
@@ -30,11 +35,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Review> reviews;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<User> following;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<User> blockedUsers;
+
+ */
 
     public Integer getId() {
         return id;
@@ -80,7 +87,7 @@ public class User {
     public String toString() {
         return name;
     }
-
+/*
     public List<Recipe> getRecipes() {
         return recipes;
     }
@@ -127,5 +134,5 @@ public class User {
     public boolean addBlockedUsers(User user) {
         return blockedUsers.add(user);
     }
-
+*/
 }
