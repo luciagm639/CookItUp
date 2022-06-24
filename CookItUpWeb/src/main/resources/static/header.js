@@ -6,22 +6,35 @@ let h1 = document.createElement("h1");
 h1.textContent = "CookItUp!";
 cookitup.appendChild(h1);
 
+let logIn = document.createElement("a");
+logIn.href = "/logIn.html";
+let logInButton = document.createElement("button");
+logInButton.textContent = "Log in";
+logIn.appendChild(logInButton);
+
+let signUp = document.createElement("a");
+signUp.href = "/signUp.html";
+let signUpButton = document.createElement("button");
+signUpButton.textContent = "Sign up";
+signUp.appendChild(signUpButton);
 
 
 let hr = document.createElement("hr");
 
 header.appendChild(cookitup);
+header.appendChild(logIn);
+header.appendChild(signUp);
 
 document.body.appendChild(header);
 document.body.appendChild(hr);
 
-const fetchPromise = fetch('/user/own_recipes');
+const fetchPromise = fetch('/user/own_recipes_link');
 
 fetchPromise.then( response => {
-   const jsonPromise = response.json();
+   const jsonPromise = response.text();
    jsonPromise.then( url => {
        if (url != "") {
-           console.log("here");
+           console.log(url);
 
            let createRecipe = document.createElement("a");
            createRecipe.href = "/recipe/create.html";
@@ -38,23 +51,6 @@ fetchPromise.then( response => {
            header.appendChild(createRecipe);
            header.appendChild(viewOwnRecipes);
        }
-       else {
-           let logIn = document.createElement("a");
-           logIn.href = "logIn.html";
-           let logInButton = document.createElement("button");
-           logInButton.textContent = "Log in";
-           logIn.appendChild(logInButton);
-
-           let signUp = document.createElement("a");
-           signUp.href = "signUp.html";
-           let signUpButton = document.createElement("button");
-           signUpButton.textContent = "Sign up";
-           signUp.appendChild(signUpButton);
-
-           header.appendChild(logIn);
-           header.appendChild(signUp);
-       }
-
    });
 });
 

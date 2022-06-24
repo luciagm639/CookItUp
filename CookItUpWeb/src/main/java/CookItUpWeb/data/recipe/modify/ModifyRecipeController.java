@@ -49,6 +49,28 @@ public class ModifyRecipeController {
         return recipe;
     }
 
+    //TODO check
+    @RequestMapping(path="{id}/delete_ingredient")
+    public @ResponseBody
+    Recipe deleteIngredient(HttpSession session, @PathVariable int id, @RequestParam int idIng) {
+        Recipe recipe = null;
+        if (session.getAttribute("user") instanceof User) {
+            Optional<Recipe> optional = recipeRepository.findById(id);
+            if (optional.isPresent()) {
+                recipe = optional.get();
+                if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
+                    Optional<Ingredient> optional2 = ingredientRepository.findById(idIng);
+                    if (optional2.isPresent()) {
+                        Ingredient ingredient = optional2.get();
+                        recipe.deleteIngredient(ingredient);
+                        recipeRepository.save(recipe);
+                    }
+                }
+            }
+        }
+        return recipe;
+    }
+
     @RequestMapping(path="{id}/add_step")
     public @ResponseBody
     Recipe addStep(HttpSession session, @PathVariable int id,
@@ -67,6 +89,27 @@ public class ModifyRecipeController {
                     step.setDescription(description);
                     recipe.addStep(step);
                     stepRepository.save(step);
+                    recipeRepository.save(recipe);
+                }
+            }
+        }
+        return recipe;
+    }
+
+    //TODO check
+    @RequestMapping(path="{id}/delete_step")
+    public @ResponseBody
+    Recipe deleteStep(HttpSession session, @PathVariable int id, @RequestParam int idStep) {
+        Recipe recipe = null;
+        if (session.getAttribute("user") instanceof User) {
+            Optional<Recipe> optional = recipeRepository.findById(id);
+            if (optional.isPresent()) {
+                recipe = optional.get();
+                if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
+                    Optional<Step> optional2 = stepRepository.findById(idStep);
+                    Step step = optional2.get();
+                    recipe.deleteStep(step);
+                    stepRepository.delete(step);
                     recipeRepository.save(recipe);
                 }
             }

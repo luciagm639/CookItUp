@@ -28,7 +28,7 @@ public class Recipe {
 
     @OneToMany()
     private List<Step> steps;
-
+/*
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments;
 
@@ -37,16 +37,12 @@ public class Recipe {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Review> reviews;
-
+*/
     public Recipe() {
         name = "";
         priority = 0;
         author = null;
         ingredients = new LinkedList<>();
-        steps = new LinkedList<>();
-        comments = new LinkedList<>();
-        questions = new LinkedList<>();
-        reviews = new LinkedList<>();
     }
 
     public Integer getId() {
@@ -93,6 +89,34 @@ public class Recipe {
         return added;
     }
 
+    public boolean deleteIngredient(Ingredient ingredient) {
+        boolean removed = false;
+        if (ingredients.contains(ingredient)) {
+            removed = ingredients.remove(ingredient);
+        }
+        return removed;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public boolean addStep(Step step) {
+        boolean added = false;
+        if (!steps.contains(step)) {
+            added = steps.add(step);
+        }
+        return added;
+    }
+
+    public boolean deleteStep(Step step) {
+        boolean removed = false;
+        if (steps.contains(step)) {
+            removed = steps.remove(step);
+        }
+        return removed;
+    }
+/*
     public List<Comment> getComments() {
         return comments;
     }
@@ -129,16 +153,5 @@ public class Recipe {
         return added;
     }
 
-    public List<Step> getSteps() {
-        return steps;
-    }
-
-    public boolean addStep(Step step) {
-        boolean added = false;
-        if (!steps.contains(step)) {
-            added = steps.add(step);
-        }
-        return added;
-    }
-
+*/
 }

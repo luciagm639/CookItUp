@@ -23,10 +23,7 @@ public class UserController {
 
     @RequestMapping(path="current")
     public @ResponseBody User currentUser(HttpSession session) {
-        User user = null;
-        //TODO
-
-        return user;
+        return (User) session.getAttribute("user");
     }
 
     @RequestMapping(path="{id}/recipes")
@@ -82,12 +79,21 @@ public class UserController {
 
     @RequestMapping(path="own_recipes")
     public @ResponseBody String ownRecipes(HttpSession session) {
+        if (session.getAttribute("user") instanceof User) {
+            User user = (User) session.getAttribute("user");
+            //TODO
+        }
+        return null;
+    }
+
+    @RequestMapping(path="own_recipes_link")
+    public @ResponseBody String ownRecipesLink(HttpSession session) {
         String url = "";
         if (session.getAttribute("user") instanceof User) {
             User user = (User) session.getAttribute("user");
             url = "/user/"+user.getId()+"/recipes";
         }
-        return '"'+ url+'"';
+        return url;
     }
 
 }
