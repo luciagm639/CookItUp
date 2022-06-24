@@ -1,4 +1,3 @@
-//TODO delete
 package CookItUpWeb.data.user;
 
 import CookItUpWeb.auxiliary.ListAuxiliary;

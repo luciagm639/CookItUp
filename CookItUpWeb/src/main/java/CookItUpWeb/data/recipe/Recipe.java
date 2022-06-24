@@ -26,8 +26,7 @@ public class Recipe {
     @ManyToMany()
     private List<Ingredient> ingredients;
 
-    //TODO add a field to order the steps whithin a recipe
-    @ManyToMany()
+    @OneToMany()
     private List<Step> steps;
 
     @OneToMany(cascade = CascadeType.ALL)

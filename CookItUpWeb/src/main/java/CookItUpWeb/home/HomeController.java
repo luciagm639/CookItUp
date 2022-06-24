@@ -23,7 +23,7 @@ public class HomeController {
     private UserRepository userRepository;
 
     @RequestMapping(path="log_in")
-    public @ResponseBody String logIn(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
+    public @ResponseBody String logIn(HttpSession session, @RequestParam String name, @RequestParam String password ) {
         String result = null;
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
             result = "result:/error/form_incomplete";

@@ -35,8 +35,6 @@ public class TestUserController {
         }
     }
 
-
-
     /**
      * Tests for the function ownRecipes()
      */
