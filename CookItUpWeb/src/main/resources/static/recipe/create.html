@@ -5,17 +5,15 @@
     <title>CookItUp! Create a Recipe</title>
 </head>
 <body>
-    <script src="../header.js"></script>
+    <script src="..\header.js"></script>
     <nav>
         <article>
             <selection>
-                <h2>Recipe name</h2>
-                <p>Look for an available recipe name:<input name="name" id="name" type="search" required/></p>
-                <button type="submit" onclick="createNewRecipe()">Submit</button>
+                hola
             </selection>
         </article>
     </nav>
-    <script src="../footer.js"></script>
+    <script src="..\footer.js"></script>
     <script>
         /*
         TODO TASK 1:
@@ -23,6 +21,7 @@
         We can do this by checking /user/current that it is different from null
         Note: Right now it is producing an http error
          */
+        /*
         function createNewRecipe() {
             let name = document.getElementById("name").value;
             fetch('/recipe/create', {
@@ -40,6 +39,7 @@
                 }).catch(err => console.error('Fetch problem: ${err.message}'));
             });
         }
+        */
     </script>
 </body>
 </html>

@@ -22,7 +22,9 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -129,5 +131,35 @@ public class RecipeController {
             Recipe recipe = optional.get();
         }
         return bool;
+    }
+
+    //TODO check
+    @RequestMapping(path="{name}/search")
+    public @ResponseBody List<Recipe> searchByName (@PathVariable String name) {
+        List<Recipe> list = new LinkedList<>();
+
+        for (Recipe r : recipeRepository.findAll()){
+            if(r.getName().toLowerCase(Locale.ROOT).contains(name.toLowerCase(Locale.ROOT))){
+
+                list.add(r);
+            }
+        }
+        return list;
+    }
+
+    //TODO check
+    @RequestMapping(path= "{id}/author")
+    public @ResponseBody User getAuthor(@PathVariable int id) {
+        User user = null;
+
+        Optional <Recipe> optional = recipeRepository.findById(id);
+
+        if (optional.isPresent()) {
+            Recipe recipe = optional.get();
+            user = recipe.getAuthor();
+
+
+        }
+        return user;
     }
 }

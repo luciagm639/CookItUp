@@ -9,14 +9,16 @@
     <nav>
         <article id = "article">
             <section id = "recipe">
-                <h2 id = "recipe_name"></h2>
+                <h2 id = "recipe_name">Modify a Recipe</h2>
                 <h3>Ingredients</h3>
                 <ul id = "ingredients"></ul>
                 <h3>Steps</h3>
                 <ol id = "steps"></ol>
                 <p>Number of likes: <t id="likes"></t></p>
                 <p>Number of dislikes: <t id="dislikes"></t></p>
-                <button id="modify" hidden>Modify</button>
+                <form id="modify" hidden action="modify.html">
+                    <input type="submit" value="Modify"/>
+                </form>
                 <button id="delete" hidden>Delete</button>
             </section>
             <!-- TODO add reviews -->
@@ -69,6 +71,7 @@
                 let name = json["name"];
                 let recipe_name = document.getElementById("recipe_name");
                 recipe_name.innerText = name;
+                //TODO change the name
 
                 if (json["author"]["id"] == id_user) {
                     document.getElementById("modify").hidden = false;
@@ -89,7 +92,24 @@
                 let steps = json["steps"];
                 for(let i = 0; i < steps.length; i++) {
                     let li = document.createElement("li");
-                    li.textContent = steps[i].title;
+                    //title
+                    let stepTitle = document.createElement("strong");
+                    stepTitle.textContent = steps[i].title;
+                    li.appendChild(stepTitle);
+
+                    li.appendChild(document.createElement("br"));
+
+                    //minutes
+                    let minutes = document.createElement("small");
+                    minutes.textContent = steps[i]["numberOfMinutes"]+" minutes";
+                    li.appendChild(minutes)
+
+                    //description
+                    if (steps[i]["description"] != "") {
+                        li.appendChild(document.createElement("br"));
+                        li.appendChild(document.createTextNode(steps[i]["description"]));
+                    }
+
                     stepsList.appendChild(li);
                 }
                 //TODO add link to the profile of the author
