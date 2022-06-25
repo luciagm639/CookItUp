@@ -122,15 +122,21 @@ public class RecipeController {
         return "forward:/recipe/"+id+"/view.html";
     }
 
-    //TODO same as add comment
     @RequestMapping(path="{id}/add_question")
-    public @ResponseBody boolean addQuestion(@PathVariable int id, Question question) {
+    public String addQuestion(@PathVariable int id, @RequestParam String text, HttpSession session) {
         Optional<Recipe> optional = recipeRepository.findById(id);
-        Boolean bool = null;
-        if (optional.isPresent()) {
-            Recipe recipe = optional.get();
+        if (session.getAttribute("user") instanceof User) {
+            User user = (User) session.getAttribute("user");
+            if (optional.isPresent()) {
+                Recipe recipe = optional.get();
+                Question question = new Question();
+                question.setAuthor(user);
+                question.setRecipe(recipe);
+                question.setText(text);
+                questionRepository.save(question);
+            }
         }
-        return bool;
+        return "forward:/recipe/"+id+"/view.html";
     }
 
     //TODO check
@@ -164,14 +170,29 @@ public class RecipeController {
     }
 
     @RequestMapping(path="{id}/delete")
-    public String deleteRecipe(@PathVariable Integer id) {
-        Optional<Recipe> optional = recipeRepository.findById(id);
-        if (optional.isPresent()) {
-            Recipe recipe = optional.get();
-            recipeRepository.delete(recipe);
+    public String deleteRecipe(HttpSession session, @PathVariable int id) {
+        if (session.getAttribute("user") instanceof User) {
+            User user = (User) session.getAttribute("user");
+            if (user.isBlocked()) {
+                //TODO add an error message stating that the user is blocked and therefore cannot create a recipe
+            }
+            else {
+                Optional<Recipe> optional = recipeRepository.findById(id);
+                if (optional.isPresent()) {
+                    Recipe recipe = optional.get();
+                    if (recipe.getAuthor() == user) {
+                        recipeRepository.delete(recipe);
+                    } else {
+                        // TODO show message recipe is not yours
+                    }
+                }
+                else {
+                    //TODO show message recipe not found
+                }
+            }
         }
         else {
-            //TODO show message recipe not found
+            //TODO error you cannot create a recipe without logging in
         }
         return "forward:/home.html";
     }
