@@ -196,4 +196,21 @@ public class RecipeController {
         }
         return "forward:/home.html";
     }
+
+    @RequestMapping(path="{id}/delete_admin")
+    public String deleteRecipeAdmin(HttpSession session, @PathVariable int id) {
+        if (session.getAttribute("admin") instanceof Administrator) {
+            Administrator admin = (Administrator) session.getAttribute("admin");
+            Optional<Recipe> optional = recipeRepository.findById(id);
+            if (optional.isPresent()) {
+                Recipe recipe = optional.get();
+                recipeRepository.delete(recipe);
+            } else {
+                //TODO show message recipe not found
+            }
+        } else {
+            //TODO error you cannot create a recipe without logging in
+        }
+        return "forward:/home.html";
+    }
 }
