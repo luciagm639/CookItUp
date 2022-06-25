@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CookItUp! View a Recipe</title>
+</head>
+<body>
+    <script src="..\..\header.js"></script>
+    <nav>
+        <article id = "article">
+            <section id = "recipe">
+                <h2 id = "recipe_name">Modify a Recipe</h2>
+                <h3>Ingredients</h3>
+                <ul id = "ingredients"></ul>
+                <h3>Steps</h3>
+                <ol id = "steps"></ol>
+                <p>Number of likes: <t id="likes"></t></p>
+                <p>Number of dislikes: <t id="dislikes"></t></p>
+                <form id="modify" hidden action="modify.html">
+                    <input type="submit" value="Modify"/>
+                </form>
+                <button id="delete" hidden>Delete</button>
+            </section>
+            <!-- TODO add reviews -->
+            <section id = "comments_section">
+                <h3>Comments</h3>
+                <div id = "comments"></div>
+                <form action = "add_comment" id = "comment_form" hidden>
+                    <label for="comment">Add a comment</label>
+                    <input type="text" id="comment" name = "text"/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </section>
+            <section id = "questions_section">
+                <h3>Questions</h3>
+                <div id = "questions"></div>
+                <form action = "add_question" id = "question_form" hidden>
+                    <label for="question">Add a question</label>
+                    <input type="text" id="question" name = "text"/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </section>
+        </article>
+    </nav>
+    <script src="..\..\footer.js"></script>
+    <script>
+        /*
+        TODO TASK 6: Allow an admin to delete the recipe
+        admin/current gets you the current admin or null if there is none
+        TODO TASK 7: View reviews
+        /recipe/{id}/reviews
+        TODO TASK 8: Allow to add a review if registered user
+        /recipe/{id}/add_review
+        */
+        let id_user = -1;
+        let url = "/user/current";
+        fetch(url).then( response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+            id_user = json.id;
+            document.getElementById("comment_form").hidden = false;
+            document.getElementById("question_form").hidden = false;
+        });//TODO catch error and if error look for an admin
+
+        url = "get";
+        fetch(url).then( response => {
+            const jsonPromise = response.json();
+            jsonPromise.then( json => {
+                let name = json["name"];
+                let recipe_name = document.getElementById("recipe_name");
+                recipe_name.innerText = name;
+
+                if (json["author"]["id"] == id_user) {
+                    document.getElementById("modify").hidden = false;
+                    document.getElementById("delete").hidden = false;
+                }
+
+                //Ingredients
+                let ingredientsList = document.getElementById("ingredients");
+                let ingredients = json["ingredients"];
+                for(let i = 0; i < ingredients.length; i++) {
+                    let li = document.createElement("li");
+                    li.textContent = ingredients[i].name;
+                    ingredientsList.appendChild(li);
+                }
+
+                //Steps
+                let stepsList = document.getElementById("steps");
+                let steps = json["steps"];
+                for(let i = 0; i < steps.length; i++) {
+                    let li = document.createElement("li");
+                    //title
+                    let stepTitle = document.createElement("strong");
+                    stepTitle.textContent = steps[i].title;
+                    li.appendChild(stepTitle);
+
+                    li.appendChild(document.createElement("br"));
+
+                    //minutes
+                    let minutes = document.createElement("small");
+                    minutes.textContent = steps[i]["numberOfMinutes"]+" minutes";
+                    li.appendChild(minutes);
+
+                    //description
+                    if (steps[i]["description"] != "") {
+                        li.appendChild(document.createElement("br"));
+                        li.appendChild(document.createTextNode(steps[i]["description"]));
+                    }
+
+                    stepsList.appendChild(li);
+                }
+                //TODO add link to the profile of the author
+            });
+        });
+
+        //Reviews
+        url = "reviews";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+        })
+
+        //Comments
+        url = "comments";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+        })
+
+        //Questions
+        url = "questions";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+        })
+
+    </script>
+</body>
+</html>
