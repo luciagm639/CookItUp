@@ -22,6 +22,11 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
+    @RequestMapping()
+    public String home() {
+        return "forward:/home.html";
+    }
+
     @RequestMapping(path="log_in")
     public @ResponseBody String logIn(HttpSession session, @RequestParam String name, @RequestParam String password ) {
         String result = null;

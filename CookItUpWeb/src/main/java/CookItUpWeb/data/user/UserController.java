@@ -26,6 +26,21 @@ public class UserController {
         return (User) session.getAttribute("user");
     }
 
+    @RequestMapping(path="{id}/follow")
+    public @ResponseBody String followUser(HttpSession session, @PathVariable int id) {
+        String response = "";
+        if (session.getAttribute("user") instanceof User) {
+            User user = (User) session.getAttribute("user");
+            Optional<User> optional = userRepository.findById(id);
+            if (optional.isPresent()) {
+                User user1 = optional.get();
+                user.follow(user1);
+                userRepository.save(user);
+            }
+        }
+        return response;
+    }
+
     @RequestMapping(path="{id}/recipes")
     public @ResponseBody List<Recipe> userRecipes(@PathVariable int id) {
         List<Recipe> list = new LinkedList<>();
@@ -75,15 +90,6 @@ public class UserController {
     @RequestMapping(path="all", method = {RequestMethod.POST, RequestMethod.GET})
     public @ResponseBody List<User> allUsers() {
         return ListAuxiliary.fromIterableToList(userRepository.findAll());
-    }
-
-    @RequestMapping(path="own_recipes")
-    public @ResponseBody String ownRecipes(HttpSession session) {
-        if (session.getAttribute("user") instanceof User) {
-            User user = (User) session.getAttribute("user");
-            //TODO
-        }
-        return null;
     }
 
     @RequestMapping(path="own_recipes_link")

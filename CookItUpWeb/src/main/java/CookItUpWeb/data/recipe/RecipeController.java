@@ -67,7 +67,7 @@ public class RecipeController {
                     recipe.setAuthor(user);
                     recipeRepository.save(recipe);
                     try {
-                        CopyFolder.copyFolder(CopyFolder.STATIC_RESOURCES+"recipe\\0", CopyFolder.STATIC_RESOURCES+"recipe\\"+recipe.getId());
+                        CopyFolder.copyFolder("recipe\\0", "recipe\\"+recipe.getId());
                     } catch (IOException e) {
                         e.printStackTrace();
                         recipeRepository.delete(recipe);
@@ -119,7 +119,8 @@ public class RecipeController {
     }
 
     @RequestMapping(path="{id}/add_comment")
-    public String addComment(@PathVariable int id, @RequestParam String text, HttpSession session) {
+    public @ResponseBody String addComment(@PathVariable int id, @RequestParam String text, HttpSession session) {
+        String message = "";
         Optional<Recipe> optional = recipeRepository.findById(id);
         if (session.getAttribute("user") instanceof User) {
             User user = (User) session.getAttribute("user");
@@ -131,8 +132,14 @@ public class RecipeController {
                 comment.setText(text);
                 commentRepository.save(comment);
             }
+            else {
+                message = "The recipe was not found";
+            }
         }
-        return "forward:/recipe/"+id+"/view.html";
+        else {
+            message = "You have lo register to add a comment to a recipe";
+        }
+        return message;
     }
 
     @RequestMapping(path="{id}/add_question")
@@ -149,7 +156,7 @@ public class RecipeController {
                 questionRepository.save(question);
             }
         }
-        return "forward:/recipe/"+id+"/view.html";
+        return "redirect:/recipe/"+id+"/view.html";
     }
 
     //TODO check
@@ -207,7 +214,7 @@ public class RecipeController {
         else {
             //TODO error you cannot create a recipe without logging in
         }
-        return "forward:/home.html";
+        return "redirect:/home.html";
     }
 
     @RequestMapping(path="{id}/delete_admin")
@@ -224,7 +231,7 @@ public class RecipeController {
         } else {
             //TODO error you cannot create a recipe without logging in
         }
-        return "forward:/home.html";
+        return "redirect:/home.html";
     }
 
     @RequestMapping(path="{id}/num_likes")

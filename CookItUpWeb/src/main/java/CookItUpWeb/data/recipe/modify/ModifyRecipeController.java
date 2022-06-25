@@ -30,14 +30,14 @@ public class ModifyRecipeController {
 
     @RequestMapping(path="{id}/add_ingredient")
     public @ResponseBody
-    Recipe addIngredient(HttpSession session, @PathVariable int id, @RequestParam String name) {
-        Recipe recipe = null;
+    Ingredient addIngredient(HttpSession session, @PathVariable int id, @RequestParam String name) {
+        Ingredient ingredient = null;
         if (session.getAttribute("user") instanceof User) {
             Optional<Recipe> optional = recipeRepository.findById(id);
             if (optional.isPresent()) {
-                recipe = optional.get();
+                Recipe recipe = optional.get();
                 if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
-                    Ingredient ingredient = IngredientRepository.searchByName(ingredientRepository, name);
+                    ingredient = IngredientRepository.searchByName(ingredientRepository, name);
                     if (ingredient == null) {
                         ingredient = IngredientRepository.newIngredient(ingredientRepository, name);
                     }
@@ -46,10 +46,11 @@ public class ModifyRecipeController {
                 }
             }
         }
-        return recipe;
+        return ingredient;
     }
 
     //TODO check
+    //TODO return empty message if everything went okay and error message otherwise
     @RequestMapping(path="{id}/delete_ingredient")
     public @ResponseBody
     Recipe deleteIngredient(HttpSession session, @PathVariable int id, @RequestParam int idIng) {
@@ -73,17 +74,17 @@ public class ModifyRecipeController {
 
     @RequestMapping(path="{id}/add_step")
     public @ResponseBody
-    Recipe addStep(HttpSession session, @PathVariable int id,
+    Step addStep(HttpSession session, @PathVariable int id,
                    @RequestParam String title,
                    @RequestParam int numberOfMinutes,
                    @RequestParam(required = false, defaultValue = "") String description) {
-        Recipe recipe = null;
+        Step step = null;
         if (session.getAttribute("user") instanceof User) {
             Optional<Recipe> optional = recipeRepository.findById(id);
             if (optional.isPresent()) {
-                recipe = optional.get();
+                Recipe recipe = optional.get();
                 if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
-                    Step step = new Step();
+                    step = new Step();
                     step.setTitle(title);
                     step.setNumberOfMinutes(numberOfMinutes);
                     step.setDescription(description);
@@ -93,7 +94,7 @@ public class ModifyRecipeController {
                 }
             }
         }
-        return recipe;
+        return step;
     }
 
     //TODO check

@@ -5,41 +5,33 @@
     <title>CookItUp! Create a Recipe</title>
 </head>
 <body>
-    <script src="..\header.js"></script>
-    <nav>
-        <article>
-            <selection>
-                hola
-            </selection>
-        </article>
-    </nav>
-    <script src="..\footer.js"></script>
-    <script>
-        /*
-        TODO TASK 1:
-        Only allow this if the user has logged in
-        We can do this by checking /user/current that it is different from null
-        Note: Right now it is producing an http error
-         */
-        /*
-        function createNewRecipe() {
-            let name = document.getElementById("name").value;
-            fetch('/recipe/create', {
-                method: 'POST',
-                headers: new Headers({
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                }),
-                body: '?name='+name
-            })
-            .then( response => {
-                const jsonPromise = response.json();
-                jsonPromise.then(json => {
-                    let url = "/recipe/" + json.id + "/modify.html";
-                    window.location.replace(url);
-                }).catch(err => console.error('Fetch problem: ${err.message}'));
-            });
-        }
-        */
-    </script>
+<script src="..\header.js"></script>
+<nav>
+    <article>
+        <selection>
+            <h2>Recipe name</h2>
+            <p>Look for an available recipe name:<input name="name" id="name" type="search" required/></p>
+            <button onclick="createNewRecipe()">Submit</button>
+        </selection>
+    </article>
+</nav>
+<script src="..\footer.js"></script>
+<script>
+
+    function createNewRecipe() {
+        let name = document.getElementById("name").value;
+        fetch('/recipe/create?name='+name)
+        .then( response => {
+            const jsonPromise = response.json();
+            jsonPromise.then(json => {
+                console.log(json);
+                console.log(json.id);
+                let url = "/recipe/" + json.id + "/modify.html";
+                window.location.replace(url);
+            }).catch(err => console.error('Fetch problem: ${err.message}'));
+        });
+    }
+
+</script>
 </body>
 </html>

@@ -6,7 +6,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class CopyFolder extends SimpleFileVisitor<Path> {
 
-    public static final String STATIC_RESOURCES = "src\\main\\resources\\static\\";
+    private static final String SOURCE = "src\\main\\resources\\static\\";
+    private static final String TARGET = "target\\classes\\static\\";
 
     private Path source;
     private final Path target;
@@ -50,6 +51,9 @@ public class CopyFolder extends SimpleFileVisitor<Path> {
     }
 
     public static void copyFolder(String source, String target) throws IOException {
+        source = SOURCE + source;
+        target = TARGET + target;
+
         CopyFolder copyFolder = new CopyFolder(source, target);
         Files.walkFileTree(Paths.get(source), copyFolder);
     }

@@ -4,16 +4,21 @@ import CookItUpWeb.data.recipe.Recipe;
 import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.question.Question;
 import CookItUpWeb.data.recipe.review.Review;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
 public class User {
 
     public User() {
+        id = -1;
         chips = 0;
         blocked = false;
+        following = new LinkedList<>();
+        blockedUsers = new LinkedList<>();
     }
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,26 +27,15 @@ public class User {
     private String password;
     private int chips;
     private boolean blocked;
-/*   TODO
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Recipe> recipes;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Question> questions;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Review> reviews;
-
-    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("{following, blockedUsers}")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> following;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("{following, blockedUsers}")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> blockedUsers;
 
- */
 
     public Integer getId() {
         return id;
@@ -87,7 +81,13 @@ public class User {
     public String toString() {
         return name;
     }
-/*
+
+
+    public boolean follow(User user) {
+        return following.add(user);
+    }
+
+    /*
     public List<Recipe> getRecipes() {
         return recipes;
     }
@@ -123,9 +123,6 @@ public class User {
         return following;
     }
 
-    public boolean addFollowing(User user) {
-        return following.add(user);
-    }
 
     public List<User> getBlockedUsers() {
         return blockedUsers;
