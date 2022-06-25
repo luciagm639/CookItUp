@@ -28,29 +28,27 @@ header.appendChild(signUp);
 document.body.appendChild(header);
 document.body.appendChild(hr);
 
-const fetchPromise = fetch('/user/own_recipes_link');
+const fetchPromise = fetch('/user/current');
 
 fetchPromise.then( response => {
-   const jsonPromise = response.text();
-   jsonPromise.then( url => {
-       if (url != "") {
-           console.log(url);
+   const jsonPromise = response.json();
+   jsonPromise.then( user => {
+       console.log(user);
 
-           let createRecipe = document.createElement("a");
-           createRecipe.href = "/recipe/create.html";
-           let createRecipeButton = document.createElement("button");
-           createRecipeButton.textContent = "Create a recipe";
-           createRecipe.appendChild(createRecipeButton);
+       let createRecipe = document.createElement("a");
+       createRecipe.href = "/recipe/create.html";
+       let createRecipeButton = document.createElement("button");
+       createRecipeButton.textContent = "Create a recipe";
+       createRecipe.appendChild(createRecipeButton);
 
-           let viewOwnRecipes = document.createElement("a");
-           let viewOwnRecipeButton = document.createElement("button");
-           viewOwnRecipeButton.textContent = "View own recipes";
-           viewOwnRecipes.appendChild(viewOwnRecipeButton);
-           viewOwnRecipes.href = url;
+       let viewOwnRecipes = document.createElement("a");
+       let viewOwnRecipeButton = document.createElement("button");
+       viewOwnRecipeButton.textContent = "View own recipes";
+       viewOwnRecipes.appendChild(viewOwnRecipeButton);
+       viewOwnRecipes.href = "/user/"+user.id+"/recipes.html";
 
-           header.appendChild(createRecipe);
-           header.appendChild(viewOwnRecipes);
-       }
+       header.appendChild(createRecipe);
+       header.appendChild(viewOwnRecipes);
    });
 });
 

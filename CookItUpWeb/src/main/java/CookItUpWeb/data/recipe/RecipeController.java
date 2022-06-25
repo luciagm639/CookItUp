@@ -1,27 +1,21 @@
 package CookItUpWeb.data.recipe;
 
 import CookItUpWeb.auxiliary.ListAuxiliary;
+import CookItUpWeb.data.administrator.Administrator;
 import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.comment.CommentRepository;
 import CookItUpWeb.data.recipe.question.Question;
+import CookItUpWeb.data.recipe.question.QuestionRepository;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
-import org.apache.tomcat.util.http.parser.HttpParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sun.net.www.protocol.http.HttpURLConnection;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLDocument;
-import java.net.URL;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -34,6 +28,7 @@ public class RecipeController {
     @Autowired private RecipeRepository recipeRepository;
     @Autowired private UserRepository userRepository;
     @Autowired private CommentRepository commentRepository;
+    @Autowired private QuestionRepository questionRepository;
 
     @RequestMapping(path="all")
     public @ResponseBody List<Recipe> allRecipes() {
