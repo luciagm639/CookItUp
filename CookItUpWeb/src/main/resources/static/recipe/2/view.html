@@ -52,7 +52,6 @@
         TODO TASK 8: Allow to add a review if registered user
         /recipe/{id}/add_review
         */
-        let id = 2;
         let id_user = -1;
         let url = "/user/current";
         fetch(url).then( response => {
@@ -64,14 +63,13 @@
             document.getElementById("question_form").hidden = false;
         });//TODO catch error and if error look for an admin
 
-        url = "/recipe/" + id;
+        url = "get";
         fetch(url).then( response => {
             const jsonPromise = response.json();
             jsonPromise.then( json => {
                 let name = json["name"];
                 let recipe_name = document.getElementById("recipe_name");
                 recipe_name.innerText = name;
-                //TODO change the name
 
                 if (json["author"]["id"] == id_user) {
                     document.getElementById("modify").hidden = false;
@@ -102,7 +100,7 @@
                     //minutes
                     let minutes = document.createElement("small");
                     minutes.textContent = steps[i]["numberOfMinutes"]+" minutes";
-                    li.appendChild(minutes)
+                    li.appendChild(minutes);
 
                     //description
                     if (steps[i]["description"] != "") {

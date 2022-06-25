@@ -40,7 +40,7 @@ public class RecipeController {
         return ListAuxiliary.fromIterableToList(recipeRepository.findAll());
     }
 
-    @RequestMapping(path="{id}")
+    @RequestMapping(path="{id}/get")
     public @ResponseBody Recipe getRecipe(@PathVariable int id) {
         Recipe recipe = null;
         Optional<Recipe> optional = recipeRepository.findById(id);
@@ -161,5 +161,18 @@ public class RecipeController {
 
         }
         return user;
+    }
+
+    @RequestMapping(path="{id}/delete")
+    public String deleteRecipe(@PathVariable Integer id) {
+        Optional<Recipe> optional = recipeRepository.findById(id);
+        if (optional.isPresent()) {
+            Recipe recipe = optional.get();
+            recipeRepository.delete(recipe);
+        }
+        else {
+            //TODO show message recipe not found
+        }
+        return "forward:/home.html";
     }
 }

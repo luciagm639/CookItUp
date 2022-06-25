@@ -49,8 +49,7 @@
             id_user = json.id;
         });
 
-        let id = 2;
-        url = "/recipe/" + id;
+        url = "get";
         fetch(url).then( response => {
             const jsonPromise = response.json();
             jsonPromise.then(json => {
@@ -126,7 +125,7 @@
                 listElement.appendChild(document.createTextNode(ingredient));
                 ingredients.appendChild(listElement);
                 document.getElementById("message_ingredient").textContent = "The ingredient has been added";
-                url = "/recipe/modify/"+id+"/add_ingredient"+"?name="+ingredient;
+                url = "add_ingredient?name="+ingredient;
                 fetch(url).then( response => {
                     return response.json();
                 }).then( json => {
@@ -168,7 +167,7 @@
             minutes1.textContent = minutes + " minutes";
             li.appendChild(minutes1);
 
-            url = "/recipe/modify/"+id+"/add_step?" +
+            url = "add_step?" +
                 "title="+title
                 +"&numberOfMinutes="+minutes;
             if (description != "") {

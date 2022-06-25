@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path="recipe/modify")
+@RequestMapping(path="recipe")
 public class ModifyRecipeController {
 
     @Autowired private RecipeRepository recipeRepository;
