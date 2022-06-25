@@ -6,6 +6,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class CopyFolder extends SimpleFileVisitor<Path> {
 
+    public static final String STATIC_RESOURCES = "src\\main\\resources\\static\\";
+
     private Path source;
     private final Path target;
 
@@ -51,5 +53,7 @@ public class CopyFolder extends SimpleFileVisitor<Path> {
         CopyFolder copyFolder = new CopyFolder(source, target);
         Files.walkFileTree(Paths.get(source), copyFolder);
     }
+
+    //THE CHANGES ARE DONE IN THE COMPUTER, NOT THE SERVER!
 
 }

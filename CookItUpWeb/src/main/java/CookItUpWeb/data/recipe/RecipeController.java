@@ -1,11 +1,14 @@
 package CookItUpWeb.data.recipe;
 
+import CookItUpWeb.auxiliary.CopyFolder;
 import CookItUpWeb.auxiliary.ListAuxiliary;
 import CookItUpWeb.data.administrator.Administrator;
 import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.comment.CommentRepository;
 import CookItUpWeb.data.recipe.question.Question;
 import CookItUpWeb.data.recipe.question.QuestionRepository;
+import CookItUpWeb.data.recipe.review.Review;
+import CookItUpWeb.data.recipe.review.ReviewRepository;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping(path="recipe")
@@ -29,6 +30,8 @@ public class RecipeController {
     @Autowired private UserRepository userRepository;
     @Autowired private CommentRepository commentRepository;
     @Autowired private QuestionRepository questionRepository;
+    @Autowired private ReviewRepository reviewRepository;
+
 
     @RequestMapping(path="all")
     public @ResponseBody List<Recipe> allRecipes() {
@@ -63,6 +66,13 @@ public class RecipeController {
                     recipe.setPriority(0);
                     recipe.setAuthor(user);
                     recipeRepository.save(recipe);
+                    try {
+                        CopyFolder.copyFolder(CopyFolder.STATIC_RESOURCES+"recipe\\0", CopyFolder.STATIC_RESOURCES+"recipe\\"+recipe.getId());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        recipeRepository.delete(recipe);
+                        recipe.setId(-1);
+                    }
                 }
             }
         }
@@ -74,13 +84,17 @@ public class RecipeController {
 
     @RequestMapping(path="{id}/comments")
     public @ResponseBody List<Comment> getComments(@PathVariable int id) {
-        List<Comment> list = null;
-
+        List<Comment> list = new ArrayList<>();
         Optional<Recipe> optional = recipeRepository.findById(id);
-
         if (optional.isPresent()) {
             Recipe recipe = optional.get();
-            //TODO
+            for (Comment comment : commentRepository.findAll()) {
+                if (comment.getRecipe().getId() == recipe.getId()) {
+                    list.add(comment);
+                }
+            }
+        } else {
+            //TODO show message recipe not found
         }
 
         return list;
@@ -88,13 +102,17 @@ public class RecipeController {
 
     @RequestMapping(path="{id}/questions")
     public @ResponseBody List<Question> getQuestions(@PathVariable int id) {
-        List<Question> list = null;
-
+        List<Question> list = new ArrayList<>();
         Optional<Recipe> optional = recipeRepository.findById(id);
-
         if (optional.isPresent()) {
             Recipe recipe = optional.get();
-            //TODO
+            for (Question question : questionRepository.findAll()) {
+                if (question.getRecipe().getId() == recipe.getId()) {
+                    list.add(question);
+                }
+            }
+        } else {
+            //TODO show message recipe not found
         }
 
         return list;
@@ -207,5 +225,45 @@ public class RecipeController {
             //TODO error you cannot create a recipe without logging in
         }
         return "forward:/home.html";
+    }
+
+    @RequestMapping(path="{id}/num_likes")
+    public @ResponseBody int getLikes(@PathVariable int id, HttpSession session) {
+        Optional<Recipe> optional = recipeRepository.findById(id);
+        int likes = 0;
+        User user = (User) session.getAttribute("user");
+        if (optional.isPresent()) {
+            Recipe recipe = optional.get();
+            for (Review review : reviewRepository.findAll()) {
+                if (review.isLikeIt() == true) {
+                    likes++;
+                }
+            }
+        } else {
+            //TODO show message recipe not found
+            likes = -1;
+        }
+
+        return likes;
+    }
+
+    @RequestMapping(path="{id}/num_dislikes")
+    public @ResponseBody int getDislikes(@PathVariable int id, HttpSession session) {
+        Optional<Recipe> optional = recipeRepository.findById(id);
+        int dislikes = 0;
+        User user = (User) session.getAttribute("user");
+        if (optional.isPresent()) {
+            Recipe recipe = optional.get();
+            for (Review review : reviewRepository.findAll()) {
+                if (review.isLikeIt() == false) {
+                    dislikes++;
+                }
+            }
+        } else {
+            //TODO show message recipe not found
+            dislikes = -1;
+        }
+
+        return dislikes;
     }
 }
