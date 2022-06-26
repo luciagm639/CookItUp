@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify a recipe</title>
+</head>
+<body>
+    <script src="..\..\header.js"></script>
+    <nav>
+        <article>
+            <a href="view.html">
+                <h2 id = "recipe_name"></h2>
+            </a>
+
+            <section id="section" hidden>
+
+
+            <h3>Ingredients</h3>
+            <ul id = "ingredients"></ul>
+
+            <button id="button_delete_ingredient" onclick="deleteIngredients()">Delete an ingredient</button>
+            <button id="done_deleting_ingredients" onclick="doneDeleteIngredients()" hidden>Done</button>
+
+            <hr>
+
+            <input id = "searchIngredient" name = "name" type = "search"/>
+            <button onclick="searchIngredient()">Add an ingredient</button>
+            <p id = "message_ingredient"></p>
+
+            <h3>Steps</h3>
+            <ol id = "steps"></ol>
+
+            <button id="button_delete_step" onclick="deleteSteps()">Delete a step</button>
+            <button id="done_deleting_steps" onclick="doneDeleteSteps()" hidden>Done</button>
+
+            <p><button id="step_button" onclick="addStep1()">Add step</button></p>
+            <div id="step" hidden>
+                <p>Title: <input id="title" type="text"/></p>
+                <p>Number of minutes: <input id="minutes" type="number"/></p>
+                <p>Description: <textarea id="description" rows="3" cols="50"></textarea></p>
+                <p><button onclick="addStep2()">Add step</button></p>
+            </div>
+
+            </section>
+        </article>
+    </nav>
+    <script src="..\..\footer.js"></script>
+    <script>
+
+        let id_user = -1;
+        let ingredientsList = document.getElementById("ingredients");
+        let stepsList = document.getElementById("steps");
+
+        let url = "/user/current";
+        fetch(url).then( response => {
+            return response.json();
+        }).then( json => {
+            id_user = json.id;
+            url = "get";
+            return fetch(url);
+        }).then( response => {
+            const jsonPromise = response.json();
+            jsonPromise.then(json => {
+                if (json["author"]["id"] != id_user) {
+                    let error = document.getElementById("recipe_name");
+                    error.textContent = "You cannot edit this recipe because you are not its author";
+                }
+                else {
+                    document.getElementById("section").hidden = false;
+                    let name_recipe = document.getElementById("recipe_name");
+                    name_recipe.textContent = json["name"];
+
+                    //Ingedients
+                    let ingredients = json["ingredients"];
+                    for(let i = 0; i < ingredients.length; i++) {
+                        addIngredient(ingredients[i]);
+                    }
+
+                    //Steps
+                    let steps = json["steps"];
+                    for(let i = 0; i < steps.length; i++) {
+                        addStep(steps[i]);
+                    }
+                }
+            });
+        });
+
+
+
+    </script>
+    <script>
+
+        /**
+         * Ingredients functions
+         */
+        function searchIngredient() {
+            let ingredient = document.getElementById("searchIngredient").value;
+            let ingredients = ingredientsList.childNodes;
+            let found = false;
+            for(let i = 0; i < ingredients.length && !found; i++) {
+                if (ingredients[i].childNodes[0].textContent.toLowerCase() ==
+                    ingredient.toLocaleString().toLowerCase()) {
+                    found = true;
+                }
+            }
+            if(!found) {
+
+                document.getElementById("message_ingredient").textContent = "The ingredient has been added";
+                url = "add_ingredient?name="+ingredient;
+                fetch(url).then( response => {
+                    return response.json();
+                }).then( json => {
+                    console.log(json);
+                    addIngredient(json);
+                });
+
+                return true;
+            }
+            else {
+                document.getElementById("message_ingredient").textContent = "The ingredient is already in the recipe";
+            }
+            return false;
+        }
+
+        function addIngredient(ingredient) {
+            let li = document.createElement("li");
+            li.textContent = ingredient.name;
+            li.id = "ingredient"+ingredient.id;
+            let button = document.createElement("button");
+            button.textContent = "Delete ingredient";
+            button.hidden = true;
+            button.name = "ingredient_button";
+            button.onclick = ev => deleteIngredient(ingredient.id);
+            li.appendChild(document.createElement("br"));
+            li.appendChild(button);
+
+            ingredientsList.appendChild(li);
+        }
+
+        function deleteIngredients() {
+            let buttons = document.getElementsByName("ingredient_button");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].hidden = false;
+            }
+            document.getElementById("button_delete_ingredient").hidden = true;
+            document.getElementById("done_deleting_ingredients").hidden = false;
+        }
+
+        function doneDeleteIngredients() {
+            let buttons = document.getElementsByName("ingredient_button");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].hidden = true;
+            }
+            document.getElementById("button_delete_ingredient").hidden = false;
+            document.getElementById("done_deleting_ingredients").hidden = true;
+        }
+
+        function deleteIngredient(id) {
+            let url = "delete_ingredient?idIng=" + id;
+            fetch(url).then(response => {
+                return response.text();
+            }).then(text => {
+                document.getElementById("ingredients").removeChild(
+                    document.getElementById("ingredient" + id));
+            });
+        }
+
+        /**
+         * Step functions
+         */
+        function addStep(step) {
+            let li = document.createElement("li");
+            li.id = "step"+step.id;
+            //title
+            let stepTitle = document.createElement("strong");
+            stepTitle.textContent = step.title;
+            li.appendChild(stepTitle);
+
+            li.appendChild(document.createElement("br"));
+
+            //minutes
+            let minutes = document.createElement("small");
+            minutes.textContent = step["numberOfMinutes"] + " minutes";
+            li.appendChild(minutes);
+
+
+            //description
+            if (step["description"] != "") {
+                li.appendChild(document.createElement("br"));
+                li.appendChild(document.createTextNode(step["description"]));
+            }
+
+            let button = document.createElement("button");
+            button.textContent = "Delete step";
+            button.hidden = true;
+            button.name = "step_button";
+            button.onclick = ev => deleteStep(step.id);
+            li.appendChild(document.createElement("br"));
+            li.appendChild(button);
+
+            stepsList.appendChild(li);
+        }
+
+        function addStep1() {
+            document.getElementById("step").hidden = false;
+            document.getElementById("step_button").hidden = true;
+        }
+
+        function addStep2() {
+            let step = {
+                id: -1,
+                title: document.getElementById("title").value,
+                numberOfMinutes: document.getElementById("minutes").value,
+                description: document.getElementById("description").value
+            };
+            if (step.title == "" || step.numberOfMinutes == "") {
+                alert("You have left required fields unresponded");
+                return;
+            }
+
+            url = "add_step?" +
+                "title="+step.title
+                +"&numberOfMinutes="+step.numberOfMinutes;
+            if (step.description != "") {
+                url += "&description="+step.description;
+            }
+
+            fetch(url).then( response => {
+                return response.json();
+            }).then( json => {
+                step.id = json.id;
+                addStep(step);
+            });
+        }
+
+        function deleteSteps() {
+            let buttons = document.getElementsByName("step_button");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].hidden = false;
+            }
+            document.getElementById("button_delete_step").hidden = true;
+            document.getElementById("done_deleting_steps").hidden = false;
+        }
+
+        function doneDeleteSteps() {
+            let buttons = document.getElementsByName("step_button");
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].hidden = true;
+            }
+            document.getElementById("button_delete_step").hidden = false;
+            document.getElementById("done_deleting_steps").hidden = true;
+
+        }
+
+        function deleteStep(id) {
+            let url = "delete_step?idStep=" + id;
+            fetch(url).then(response => {
+                return response.text();
+            }).then(text => {
+                document.getElementById("steps").removeChild(
+                    document.getElementById("step" + id));
+            });
+        }
+
+    </script>
+</body>
+</html>
