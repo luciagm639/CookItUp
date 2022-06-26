@@ -6,8 +6,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 public class CopyFolder extends SimpleFileVisitor<Path> {
 
-    private static final String SOURCE = "src\\main\\resources\\static\\";
-    private static final String TARGET = "target\\classes\\static\\";
+    public static final String SOURCE = "src\\main\\resources\\static\\";
+    public static final String TARGET = "target\\classes\\static\\";
 
     private Path source;
     private final Path target;

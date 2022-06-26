@@ -26,21 +26,6 @@ public class UserController {
         return (User) session.getAttribute("user");
     }
 
-    @RequestMapping(path="{id}/follow")
-    public @ResponseBody String followUser(HttpSession session, @PathVariable int id) {
-        String response = "";
-        if (session.getAttribute("user") instanceof User) {
-            User user = (User) session.getAttribute("user");
-            Optional<User> optional = userRepository.findById(id);
-            if (optional.isPresent()) {
-                User user1 = optional.get();
-                user.follow(user1);
-                userRepository.save(user);
-            }
-        }
-        return response;
-    }
-
     @RequestMapping(path="{id}/recipes")
     public @ResponseBody List<Recipe> userRecipes(@PathVariable int id) {
         List<Recipe> list = new LinkedList<>();
