@@ -125,42 +125,4 @@ public class Recipe implements Comparable<Recipe> {
         }
         return res;
     }
-/*
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public boolean addComment(Comment comment) {
-        boolean added = false;
-        if (!comments.contains(comment)) {
-            added = comments.add(comment);
-        }
-        return added;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public boolean addQuestion(Question question) {
-        boolean added = false;
-        if (!questions.contains(question)) {
-            added = questions.add(question);
-        }
-        return added;
-    }
-
-    public List<Review> getReview() {
-        return reviews;
-    }
-
-    public boolean addReview(Review review) {
-        boolean added = false;
-        if (!reviews.contains(review)) {
-            added = reviews.add(review);
-        }
-        return added;
-    }
-
-*/
 }

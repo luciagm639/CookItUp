@@ -29,7 +29,7 @@ public class RecipePhoto {
 
     public String getURL() {
         return "/recipe/" + recipe.getId() +
-                "/recipe_photos/photo" + id +
+                "/recipe_photos/user" + author.getId() +
                 "." + type;
     }
 }

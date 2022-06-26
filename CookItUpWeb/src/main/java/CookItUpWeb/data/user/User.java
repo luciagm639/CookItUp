@@ -13,8 +13,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Data
 public class User {
+
+    public User() {
+        chips = 0;
+        blocked = false;
+    }
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
@@ -67,6 +71,14 @@ public class User {
 
     public void setBlocked(boolean blocked) {
         this.blocked = blocked;
+    }
+
+    public List<Ingredient> getFridge() {
+        return fridge;
+    }
+
+    public void setFridge(List<Ingredient> fridge) {
+        this.fridge = fridge;
     }
 
     @Override

@@ -117,9 +117,8 @@ public class UserController {
                 User us = optional.get();
                 List<Ingredient> fridge = us.getFridge();
                 fridge.add(newIng);
-                us.setFridge(fridge);
                 res = newIng;
-                System.out.println(res.getId());
+                userRepository.save(us);
             }
 
         }else{
@@ -138,7 +137,6 @@ public class UserController {
             for (Ingredient ing : user.getFridge()) {
                 if (ing.getId() == idIng) {
                     fridge.remove(ing);
-                    user.setFridge(fridge);
                     return "";
                 }
             }

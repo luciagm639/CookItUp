@@ -27,34 +27,41 @@
                     <input type="submit" value="Delete"/>
                 </form>
             </section>
+            <section id = "photos_section">
+                <h3>Photos of user's versions of this recipe</h3>
+                <div id = "photos"></div>
+                <form id = "photo_form" hidden>
+                    <label for="photo">Add a photo</label>
+                    <input type="file" id="photo" />
+                    <button type="button" onclick="addPhotoFetch()">Submit</button>
+                </form>
+                <p id="photo_error" name ="error"></p>
+            </section>
             <section id = "comments_section">
                 <h3>Comments</h3>
                 <div id = "comments"></div>
                 <form id = "comment_form" hidden>
                     <label for="comment">Add a comment</label>
-                    <input type="text" id="comment" name = "text"/>
+                    <input type="text" id="comment"/>
                     <button type="button" onclick="addCommentFetch()">Submit</button>
                 </form>
-                <p id="comment_error"></p>
+                <p id="comment_error" name="error"></p>
             </section>
             <section id = "questions_section">
                 <h3>Questions</h3>
                 <div id = "questions"></div>
                 <form action = "add_question" id = "question_form" hidden>
                     <label for="question">Add a question</label>
-                    <input type="text" id="question" name = "text"/>
-                    <input type="submit" value="Submit"/>
+                    <input type="text" id="question"/>
+                    <button type="button" onclick="addQuestionFetch()">Submit</button>
                 </form>
+                <p id="question_error" name="error"></p>
             </section>
         </article>
     </nav>
     <script src="..\..\footer.js"></script>
     <script>
         /*
-        TODO TASK 6: Allow an admin to delete the recipe
-        admin/current gets you the current admin or null if there is none
-        TODO TASK 7: View reviews
-        /recipe/{id}/reviews
         TODO TASK 8: Allow to add a review if registered user
         /recipe/{id}/add_review
         */
@@ -66,6 +73,7 @@
         }).then( json => {
             id_user = json.id;
             user_name = json.name;
+            document.getElementById("photo_form").hidden = false;
             document.getElementById("comment_form").hidden = false;
             document.getElementById("question_form").hidden = false;
         }).catch( error => {
@@ -163,25 +171,6 @@
             }
         });
 
-        //Questions
-        let questions = document.getElementById("questions");
-        url = "questions";
-        fetch(url).then (response => {
-            return response.json();
-        }).then( json => {
-            console.log(json);
-            let questions = document.getElementById("questions");
-            for (let i=0; i<json.length; i++) {
-                let question = json[i];
-                let questionParagraph = document.createElement("p");
-                questionParagraph.textContent = question["author"]["name"] + ": " +
-                    question["text"];
-                questions.appendChild(questionParagraph);
-                console.log(question["author"]["name"])
-            }
-        });
-
-
         function addComment(author, text) {
             let comment = document.createElement("p");
             comment.textContent = author + ": " + text;
@@ -195,10 +184,9 @@
             fetch(url).then (response => {
                 return response.text();
             }).then( responseText => {
-                console.log(responseText);
+                hideErrors();
                 if (responseText == "") {
                     addComment(user_name, text);
-                    comment_error.hidden = true;
                 }
                 else {
                     comment_error.textContent = responseText;
@@ -206,6 +194,19 @@
                 }
             });
         }
+
+        //Questions
+        let questions = document.getElementById("questions");
+        url = "questions";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+            for (let i=0; i<json.length; i++) {
+                let question = json[i];
+                addQuestion(question["author"]["name"], question["text"]);
+            }
+        });
 
         function addQuestion(author, text) {
             let question = document.createElement("p");
@@ -220,15 +221,81 @@
             fetch(url).then(response => {
                 return response.text();
             }).then(responseText => {
-                console.log(responseText);
+                hideErrors();
                 if (responseText == "") {
                     addQuestion(user_name, text);
-                    question_error.hidden = true;
                 } else {
                     question_error.textContent = responseText;
                     question_error.hidden = false;
                 }
             });
+        }
+
+        // Photos
+        let photos = document.getElementById("photos");
+        url = "all_recipe_photos";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+            for (let i=0; i<json.length; i++) {
+                let photo = json[i];
+                addPhoto("recipe_photos/user" + photo["author"]["id"]
+                    + "." + photo["type"]);
+            }
+        });
+
+        function addPhoto(src) {
+            let photo = document.createElement("img");
+            photo.src = src;
+            photo.height = 200;
+            photos.appendChild(photo);
+        }
+
+        function addPhotoFetch() {
+            let photo_error = document.getElementById("photo_error");
+            let photo = document.getElementById("photo");
+
+            const input = document.querySelector('input[type="file"]');
+            console.log(input);
+
+            const data = new FormData();
+            data.append('image', input.files[0]);
+
+            url = "upload_recipe_photo";
+            fetch(url, {
+                method: 'POST',
+                body: data,
+            }).then(response => {
+                return response.text();
+            }).then(responseText => {
+                hideErrors();
+                console.log("here");
+                /*
+                console.log(input.childNodes);
+                console.log(input.attributes);
+                console.log(input.namespaceURI);
+                console.log(input.prototype);
+                console.log(input.innerHTML);
+                console.log(input.outerHTML);
+                console.log(input.baseURI);
+                 */
+                console.log(input.files[0])
+                if (responseText == "") {
+                    //addPhoto(input.src);
+                } else {
+                    photo_error.textContent = responseText;
+                    photo_error.hidden = false;
+                }
+            });
+        }
+
+        // Errors
+        function hideErrors() {
+            let errors = document.getElementsByName("error");
+            for(let i = 0; i < errors.length; i++) {
+                errors[i].hidden = true;
+            }
         }
     </script>
 </body>
