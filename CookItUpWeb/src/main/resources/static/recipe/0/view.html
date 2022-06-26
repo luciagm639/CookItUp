@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CookItUp! View a Recipe</title>
+</head>
+<body>
+    <script src="..\..\header.js"></script>
+    <nav>
+        <article id = "article">
+            <section id = "recipe">
+                <h2 id = "recipe_name">View a Recipe</h2>
+                <h3>Ingredients</h3>
+                <ul id = "ingredients"></ul>
+                <h3>Steps</h3>
+                <ol id = "steps"></ol>
+                <p>Recipe done by: <a id="author"></a></p>
+                <p>Number of likes: <t id="likes"></t></p>
+                <p>Number of dislikes: <t id="dislikes"></t></p>
+                <form id="modify" hidden action="modify.html">
+                    <input type="submit" value="Modify"/>
+                </form>
+                <form id="delete" hidden action="delete">
+                    <input type="submit" value="Delete"/>
+                </form>
+                <form id="delete_admin" hidden action="delete_admin">
+                    <input type="submit" value="Delete"/>
+                </form>
+            </section>
+            <section id = "comments_section">
+                <h3>Comments</h3>
+                <div id = "comments"></div>
+                <form id = "comment_form" hidden>
+                    <label for="comment">Add a comment</label>
+                    <input type="text" id="comment" name = "text"/>
+                    <button type="button" onclick="addCommentFetch()">Submit</button>
+                </form>
+                <p id="comment_error"></p>
+            </section>
+            <section id = "questions_section">
+                <h3>Questions</h3>
+                <div id = "questions"></div>
+                <form action = "add_question" id = "question_form" hidden>
+                    <label for="question">Add a question</label>
+                    <input type="text" id="question" name = "text"/>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </section>
+        </article>
+    </nav>
+    <script src="..\..\footer.js"></script>
+    <script>
+        /*
+        TODO TASK 6: Allow an admin to delete the recipe
+        admin/current gets you the current admin or null if there is none
+        TODO TASK 7: View reviews
+        /recipe/{id}/reviews
+        TODO TASK 8: Allow to add a review if registered user
+        /recipe/{id}/add_review
+        */
+        let id_user = -1;
+        let user_name;
+        let url = "/user/current";
+        fetch(url).then( response => {
+            return response.json();
+        }).then( json => {
+            id_user = json.id;
+            user_name = json.name;
+            document.getElementById("comment_form").hidden = false;
+            document.getElementById("question_form").hidden = false;
+        }).catch( error => {
+            url = "/admin/current";
+            fetch(url).then(response => {
+                return response.json();
+            }).then(json => {
+                document.getElementById("delete_admin").hidden = false;
+            }).catch(error => {
+                console.log("Actions restricted to unregistered user");
+            });
+        });
+
+
+        url = "get";
+        fetch(url).then( response => {
+            const jsonPromise = response.json();
+            jsonPromise.then( json => {
+                let name = json["name"];
+                let recipe_name = document.getElementById("recipe_name");
+                recipe_name.innerText = name;
+                document.title = "CookItUp! " + name;
+
+                if (json["author"]["id"] == id_user) {
+                    document.getElementById("modify").hidden = false;
+                    document.getElementById("delete").hidden = false;
+                }
+
+                //Ingredients
+                let ingredientsList = document.getElementById("ingredients");
+                let ingredients = json["ingredients"];
+                for(let i = 0; i < ingredients.length; i++) {
+                    let li = document.createElement("li");
+                    li.textContent = ingredients[i].name;
+                    ingredientsList.appendChild(li);
+                }
+
+                //Steps
+                let stepsList = document.getElementById("steps");
+                let steps = json["steps"];
+                for(let i = 0; i < steps.length; i++) {
+                    let li = document.createElement("li");
+                    //title
+                    let stepTitle = document.createElement("strong");
+                    stepTitle.textContent = steps[i].title;
+                    li.appendChild(stepTitle);
+
+                    li.appendChild(document.createElement("br"));
+
+                    //minutes
+                    let minutes = document.createElement("small");
+                    minutes.textContent = steps[i]["numberOfMinutes"]+" minutes";
+                    li.appendChild(minutes);
+
+                    //description
+                    if (steps[i]["description"] != "") {
+                        li.appendChild(document.createElement("br"));
+                        li.appendChild(document.createTextNode(steps[i]["description"]));
+                    }
+
+                    stepsList.appendChild(li);
+                }
+                let author = document.getElementById("author");
+                console.log(json);
+                console.log(json["author"]["name"]);
+                author.textContent = json["author"]["name"];
+                author.href = "/user/"+json["author"]["id"]+"/profile.html";
+            });
+        });
+
+        //Reviews
+        url = "num_likes";
+        fetch(url).then (response => {
+            return response.text();
+        }).then( text => {
+            document.getElementById("likes").textContent = text;
+        });
+
+        url = "num_dislikes";
+        fetch(url).then (response => {
+            return response.text();
+        }).then( text => {
+            document.getElementById("dislikes").textContent = text;
+        });
+
+        //Comments
+        let comments = document.getElementById("comments");
+        url = "comments";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            for (let i=0; i<json.length; i++) {
+                let comment = json[i];
+                addComment(comment["author"]["name"], comment["text"]);
+            }
+        });
+
+        //Questions
+        let questions = document.getElementById("questions");
+        url = "questions";
+        fetch(url).then (response => {
+            return response.json();
+        }).then( json => {
+            console.log(json);
+            let questions = document.getElementById("questions");
+            for (let i=0; i<json.length; i++) {
+                let question = json[i];
+                let questionParagraph = document.createElement("p");
+                questionParagraph.textContent = question["author"]["name"] + ": " +
+                    question["text"];
+                questions.appendChild(questionParagraph);
+                console.log(question["author"]["name"])
+            }
+        });
+
+
+        function addComment(author, text) {
+            let comment = document.createElement("p");
+            comment.textContent = author + ": " + text;
+            comments.appendChild(comment);
+        }
+
+        function addCommentFetch() {
+            let comment_error = document.getElementById("comment_error");
+            let text = document.getElementById("comment").value;
+            url = "add_comment?text=" + text;
+            fetch(url).then (response => {
+                return response.text();
+            }).then( responseText => {
+                console.log(responseText);
+                if (responseText == "") {
+                    addComment(user_name, text);
+                    comment_error.hidden = true;
+                }
+                else {
+                    comment_error.textContent = responseText;
+                    comment_error.hidden = false;
+                }
+            });
+        }
+
+        function addQuestion(author, text) {
+            let question = document.createElement("p");
+            question.textContent = author + ": " + text;
+            questions.appendChild(question);
+        }
+
+        function addQuestionFetch() {
+            let question_error = document.getElementById("question_error");
+            let text = document.getElementById("question").value;
+            url = "add_question?text=" + text;
+            fetch(url).then(response => {
+                return response.text();
+            }).then(responseText => {
+                console.log(responseText);
+                if (responseText == "") {
+                    addQuestion(user_name, text);
+                    question_error.hidden = true;
+                } else {
+                    question_error.textContent = responseText;
+                    question_error.hidden = false;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
