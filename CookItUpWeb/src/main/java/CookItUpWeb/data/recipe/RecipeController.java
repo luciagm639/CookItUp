@@ -32,10 +32,17 @@ public class RecipeController {
     @Autowired private QuestionRepository questionRepository;
     @Autowired private ReviewRepository reviewRepository;
 
+    public static SortedSet<Recipe> fromIterableToSortedSet(Collection<Recipe> iter){
+        SortedSet<Recipe> res = new TreeSet<>();
+        for (Recipe r : iter) {
+            res.add(r);
+        }
+        return res;
+    }
 
     @RequestMapping(path="all")
-    public @ResponseBody List<Recipe> allRecipes() {
-        return ListAuxiliary.fromIterableToList(recipeRepository.findAll());
+    public @ResponseBody SortedSet<Recipe> allRecipes() {
+        return fromIterableToSortedSet((Collection<Recipe>) recipeRepository.findAll());
     }
 
     @RequestMapping(path="{id}/get")
@@ -159,9 +166,8 @@ public class RecipeController {
         return "redirect:/recipe/"+id+"/view.html";
     }
 
-    //TODO check
     @RequestMapping(path="{name}/search")
-    public @ResponseBody List<Recipe> searchByName (@PathVariable String name) {
+    public @ResponseBody SortedSet<Recipe> searchByName (@PathVariable String name) {
         List<Recipe> list = new LinkedList<>();
 
         for (Recipe r : recipeRepository.findAll()){
@@ -170,7 +176,7 @@ public class RecipeController {
                 list.add(r);
             }
         }
-        return list;
+        return fromIterableToSortedSet((Collection<Recipe>) list);
     }
 
     //TODO check

@@ -119,7 +119,11 @@ public class Recipe implements Comparable<Recipe> {
 
     @Override
     public int compareTo(Recipe o) {
-        return 0;
+        int res = priority - o.getPriority();
+        if (res == 0){
+            res = id - o.getId();
+        }
+        return res;
     }
 /*
     public List<Comment> getComments() {

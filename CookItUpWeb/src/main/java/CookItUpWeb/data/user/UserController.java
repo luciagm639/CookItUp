@@ -2,6 +2,7 @@ package CookItUpWeb.data.user;
 
 import CookItUpWeb.auxiliary.ListAuxiliary;
 import CookItUpWeb.data.recipe.Recipe;
+import CookItUpWeb.data.recipe.RecipeController;
 import CookItUpWeb.data.recipe.RecipeRepository;
 import CookItUpWeb.data.recipe.ingredient.Ingredient;
 import CookItUpWeb.data.recipe.ingredient.IngredientRepository;
@@ -10,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping(path="/user")
@@ -33,7 +31,7 @@ public class UserController {
     }
 
     @RequestMapping(path="{id}/recipes")
-    public @ResponseBody List<Recipe> userRecipes(@PathVariable int id) {
+    public @ResponseBody SortedSet<Recipe> userRecipes(@PathVariable int id) {
         List<Recipe> list = new LinkedList<>();
         Optional<User> optional = userRepository.findById(id);
         if (optional.isPresent()) {
@@ -43,7 +41,7 @@ public class UserController {
                     list.add(recipe);
             }
         }
-        return list;
+        return RecipeController.fromIterableToSortedSet((Collection<Recipe>) list);
     }
 
     @RequestMapping(path="{id}/get")
