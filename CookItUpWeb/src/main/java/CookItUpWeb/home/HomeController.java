@@ -31,7 +31,7 @@ public class HomeController {
 
     @RequestMapping(path="log_in")
     public @ResponseBody String logIn(HttpSession session, @RequestParam String name, @RequestParam String password ) {
-        String result = "";
+        String result = null;
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
             result = "result:/error/form_incomplete";
         }
@@ -40,10 +40,12 @@ public class HomeController {
                 if (name.equalsIgnoreCase(user.getName())) {
                     if (password.equals(user.getPassword())) {
                         session.setAttribute("user", user);
+                        result = "";
+                        break;
                     } else {
                         result = "result:/error/wrong_password";
+                        break;
                     }
-                    break;
                 }
             }
             if (result == null)
