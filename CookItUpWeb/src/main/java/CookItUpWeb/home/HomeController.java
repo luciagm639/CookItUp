@@ -31,7 +31,7 @@ public class HomeController {
 
     @RequestMapping(path="log_in")
     public @ResponseBody String logIn(HttpSession session, @RequestParam String name, @RequestParam String password ) {
-        String result = "";
+        String result = null;
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
             result = "result:/error/form_incomplete";
         }
@@ -41,10 +41,12 @@ public class HomeController {
                     if (password.equals(user.getPassword())) {
                         session.setAttribute("user", user);
                         session.setAttribute("spent_chips", 0);
+                        result = "";
+                        break;
                     } else {
                         result = "result:/error/wrong_password";
+                        break;
                     }
-                    break;
                 }
             }
             if (result == null)
@@ -69,14 +71,16 @@ public class HomeController {
         user.setBlocked(false);
         user.setChips(0);
         userRepository.save(user);
-        session.setAttribute("user", user);
+        System.out.println(user.getId());
         try {
             CopyFolder.copyFolder("user\\0", "user\\"+user.getId());
         } catch (IOException e) {
             e.printStackTrace();
             userRepository.delete(user);
             user.setId(-1);
+
         }
+        session.setAttribute("user", user);
         return "";
     }
 

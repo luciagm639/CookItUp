@@ -18,7 +18,9 @@ public interface IngredientRepository extends CrudRepository<Ingredient, Integer
 
     public static Ingredient newIngredient(IngredientRepository ingredientRepository, String name) {
         Ingredient ingredient = new Ingredient();
-        ingredient.setName(name);
+        String capital = name.substring(0,1).toUpperCase();
+        String rest = name.substring(1).toLowerCase();
+        ingredient.setName(capital+rest);
         ingredientRepository.save(ingredient);
         return ingredient;
     }

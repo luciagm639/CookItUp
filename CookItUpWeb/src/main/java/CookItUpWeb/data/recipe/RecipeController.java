@@ -1,6 +1,7 @@
 package CookItUpWeb.data.recipe;
 
 import CookItUpWeb.auxiliary.CopyFolder;
+import CookItUpWeb.auxiliary.ListAuxiliary;
 import CookItUpWeb.data.administrator.Administrator;
 import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.comment.CommentRepository;
@@ -37,8 +38,7 @@ public class RecipeController {
     private final int RECIPE_CREATION_CHIPS = 10;
     private final int MAX_SPEND_CHIPS = 10;
 
-
-    public static SortedSet<Recipe> fromCollectionToSortedSet(Collection<Recipe> iter){
+    public static SortedSet<Recipe> fromIterableToSortedSet(Collection<Recipe> iter){
         SortedSet<Recipe> res = new TreeSet<>();
         for (Recipe r : iter) {
             res.add(r);
@@ -46,9 +46,10 @@ public class RecipeController {
         return res;
     }
 
+
     @RequestMapping(path="all")
     public @ResponseBody SortedSet<Recipe> allRecipes() {
-        return fromCollectionToSortedSet((Collection<Recipe>) recipeRepository.findAll());
+        return fromIterableToSortedSet((Collection<Recipe>) recipeRepository.findAll());
     }
 
     @RequestMapping(path="{id}/get")
@@ -66,7 +67,6 @@ public class RecipeController {
         Recipe recipe = null;
         if (session.getAttribute("user") instanceof User) {
             User user = (User) session.getAttribute("user");
-            System.out.println(session.getAttribute("user"));
             if (user.isBlocked()) {
                 //TODO add an error message stating that the user is blocked and therefore cannot create a recipe
             }
@@ -80,10 +80,8 @@ public class RecipeController {
                     recipe.setPriority(0);
                     recipe.setAuthor(user);
                     recipeRepository.save(recipe);
-
                     user.setChips((user.getChips()+ RECIPE_CREATION_CHIPS));
                     userRepository.save(user);
-
                     try {
                         CopyFolder.copyFolder("recipe\\0", "recipe\\"+recipe.getId());
                     } catch (IOException e) {
@@ -149,10 +147,8 @@ public class RecipeController {
                 comment.setRecipe(recipe);
                 comment.setText(text);
                 commentRepository.save(comment);
-
                 user.setChips(user.getChips() + COMMENT_CHIPS);
                 userRepository.save(user);
-
             }
             else {
                 message = "The recipe was not found";
@@ -176,15 +172,14 @@ public class RecipeController {
                 question.setRecipe(recipe);
                 question.setText(text);
                 questionRepository.save(question);
-
                 user.setChips(user.getChips() + QUESTION_CHIPS);
                 userRepository.save(user);
-
             }
         }
         return "redirect:/recipe/"+id+"/view.html";
     }
 
+    //TODO check
     @RequestMapping(path="{name}/search")
     public @ResponseBody SortedSet<Recipe> searchByName (@PathVariable String name) {
         List<Recipe> list = new LinkedList<>();
@@ -195,7 +190,7 @@ public class RecipeController {
                 list.add(r);
             }
         }
-        return fromCollectionToSortedSet((Collection<Recipe>) list);
+        return fromIterableToSortedSet((Collection<Recipe>) list);
     }
 
     //TODO check
@@ -298,7 +293,6 @@ public class RecipeController {
 
         return dislikes;
     }
-
     @RequestMapping(path="{id}/spend")
     public @ResponseBody String spendChips(@PathVariable int id, @RequestParam int amount, HttpSession session) {
 

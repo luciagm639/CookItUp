@@ -45,8 +45,15 @@ fetchPromise.then( response => {
    viewOwnRecipes.appendChild(viewOwnRecipeButton);
    viewOwnRecipes.href = "/user/"+user.id+"/recipes.html";
 
+   let viewOwnProfile = document.createElement("a");
+   let viewOwnProfileButton = document.createElement("button");
+   viewOwnProfileButton.textContent = "View own profile";
+   viewOwnProfile.appendChild(viewOwnProfileButton);
+   viewOwnProfile.href = "/user/"+user.id+"/profile.html";
+
    header.appendChild(createRecipe);
    header.appendChild(viewOwnRecipes);
+   header.appendChild(viewOwnProfile);
 }).catch( error => { console.log("There isn't a user logged in") });
 
 

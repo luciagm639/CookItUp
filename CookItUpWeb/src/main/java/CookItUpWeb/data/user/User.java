@@ -16,12 +16,6 @@ import java.util.List;
 @Data
 public class User {
 
-    public User() {
-        id = -1;
-        chips = 0;
-        blocked = false;
-    }
-
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;

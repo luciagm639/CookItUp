@@ -6,6 +6,7 @@ import CookItUpWeb.data.recipe.RecipeController;
 import CookItUpWeb.data.recipe.RecipeRepository;
 import CookItUpWeb.data.recipe.ingredient.Ingredient;
 import CookItUpWeb.data.recipe.ingredient.IngredientRepository;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
-@RequestMapping(path="user")
+@RequestMapping(path="/user")
 public class UserController {
 
     @Autowired
@@ -27,8 +28,6 @@ public class UserController {
 
     @RequestMapping(path="current")
     public @ResponseBody User currentUser(HttpSession session) {
-        System.out.println("here");
-        System.out.println(session.getAttribute("user"));
         return (User) session.getAttribute("user");
     }
 
@@ -43,7 +42,7 @@ public class UserController {
                     list.add(recipe);
             }
         }
-        return RecipeController.fromCollectionToSortedSet((Collection<Recipe>) list);
+        return RecipeController.fromIterableToSortedSet((Collection<Recipe>) list);
     }
 
     @RequestMapping(path="{id}/get")
@@ -104,8 +103,8 @@ public class UserController {
     }
 
     @RequestMapping(path="{id}/add_fridge_ingredient")
-    public @ResponseBody String addFridgeIngredient(@PathVariable int id, @RequestParam String ing){
-        String res;
+    public @ResponseBody Ingredient addFridgeIngredient(@PathVariable int id, @RequestParam String ing){
+        Ingredient res = null;
 
         Optional<User> optional = userRepository.findById(id);
 
@@ -113,30 +112,31 @@ public class UserController {
             Ingredient newIng = IngredientRepository.searchByName(ingredientRepository, ing);
 
             if(newIng == null){
-                res = "Error: ingredient not found";
+                //res = "Error: ingredient not found";
             } else{
                 User us = optional.get();
                 List<Ingredient> fridge = us.getFridge();
                 fridge.add(newIng);
                 us.setFridge(fridge);
-                res = "";
+                res = newIng;
+                System.out.println(res.getId());
             }
 
         }else{
-            res = "Error: user not found";
+            //res = "Error: user not found";
         }
 
         return res;
     }
 
     @RequestMapping(path="{id}/delete_fridge_ingredient")
-    public @ResponseBody String deleteFridgeIngredient(@PathVariable int id, @RequestParam String name) {
+    public @ResponseBody String deleteFridgeIngredient(@PathVariable int id, @RequestParam int idIng) {
         Optional<User> optional = userRepository.findById(id);
         if (optional.isPresent()) {
             User user = optional.get();
             List<Ingredient> fridge = user.getFridge();
             for (Ingredient ing : user.getFridge()) {
-                if (ing.getName() == name) {
+                if (ing.getId() == idIng) {
                     fridge.remove(ing);
                     user.setFridge(fridge);
                     return "";
@@ -157,6 +157,19 @@ public class UserController {
                 if (user.getFridge().containsAll(recipe.getIngredients())) {
                     list.add(recipe);
                 }
+            }
+        }
+        return list;
+    }
+
+    @RequestMapping(path="{id}/fridge_ingredients")
+    public @ResponseBody List<Ingredient> fridgeIngredients(@PathVariable int id) {
+        Optional<User> optional = userRepository.findById(id);
+        List<Ingredient> list = new ArrayList<>();
+        if (optional.isPresent()) {
+            User user = optional.get();
+            for (Ingredient ing : user.getFridge()) {
+                list.add(ing);
             }
         }
         return list;

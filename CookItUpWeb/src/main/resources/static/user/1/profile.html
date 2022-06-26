@@ -9,6 +9,7 @@
 <section id = "profile">
     <h1 id = "profile_name">View profile</h1>
     <p>Number of chips: <t id = "chips"></t></p>
+    <button id = "fridge" onclick="location.href='fridge.html'">FRIDGE</button>
     <h1>Recipes</h1>
 </section>
 <nav>
@@ -19,9 +20,9 @@
     url = "get";
     fetch(url).then( response => {
         const jsonPromise = response.json(); //This returns the user
-        console.log(jsonPromise);
         jsonPromise.then( json => {
-            let name = json["name"];
+            let name = json.name;
+            console.log(name);
             let user_name = document.getElementById("profile_name");
             user_name.innerText = name;
             document.title = "CookItUp! " + name;
