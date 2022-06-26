@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-public class Recipe {
+public class Recipe implements Comparable<Recipe> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -115,6 +115,15 @@ public class Recipe {
             removed = steps.remove(step);
         }
         return removed;
+    }
+
+    @Override
+    public int compareTo(Recipe o) {
+        int res = priority - o.getPriority();
+        if (res == 0){
+            res = id - o.getId();
+        }
+        return res;
     }
 /*
     public List<Comment> getComments() {

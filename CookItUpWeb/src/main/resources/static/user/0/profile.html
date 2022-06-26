@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CookItUp!</title>
+</head>
+<body>
+<script src="..\..\header.js"></script>
+<section id = "profile">
+    <h1 id = "profile_name">View profile</h1>
+    <p>Number of chips: <t id = "chips"></t></p>
+    <h1>Recipes</h1>
+</section>
+<nav>
+    <article id = "article">
+    </article>
+</nav>
+<script>
+    url = "get";
+    fetch(url).then( response => {
+        const jsonPromise = response.json(); //This returns the user
+        console.log(jsonPromise);
+        jsonPromise.then( json => {
+            let name = json["name"];
+            let user_name = document.getElementById("profile_name");
+            user_name.innerText = name;
+            document.title = "CookItUp! " + name;
+
+            /*if (json["id"] == id_user) {
+                document.getElementById("follow").hidden = false;
+                document.getElementById("block").hidden = false;
+            }*/
+
+            //Chips
+            document.getElementById("chips").textContent = json["chips"];
+
+            //Recipes
+            fetch('recipes').then( response => {
+                const jsonPromise = response.json();
+                jsonPromise.then( json => {
+                    let article = document.getElementById("article");
+                    for (let i = 0; i < json.length; i++) {
+                        article.appendChild(document.createElement("hr"));
+                        let section = document.createElement("section");
+
+                        //create the title
+                        let link = document.createElement("a");
+                        link.href = "/recipe/" + json[i].id + "/view.html";
+                        let title = document.createElement("h2");
+                        title.textContent = json[i].name;
+                        link.appendChild(title);
+                        section.appendChild(link);
+
+                        //create the title for the ingredients
+                        let ingredientsTitle = document.createElement("h3");
+                        ingredientsTitle.textContent = "Ingredients";
+                        section.appendChild(ingredientsTitle);
+                        //create the list for the ingredients
+                        let ingredientsList = document.createElement("ul");
+                        let ingredients = json[i]["ingredients"];
+                        for(let j = 0; j < ingredients.length; j++) {
+                            let li = document.createElement("li");
+                            li.textContent = ingredients[j].name;
+                            ingredientsList.appendChild(li);
+                        }
+                        section.appendChild(ingredientsList);
+
+                        //create the title for the steps
+                        let stepsTitle = document.createElement("h3");
+                        stepsTitle.textContent = "Steps";
+                        section.appendChild(stepsTitle);
+                        //create the list for the steps
+                        let stepsList = document.createElement("ol");
+                        let steps = json[i]["steps"];
+                        for(let j = 0; j < steps.length; j++) {
+                            let li = document.createElement("li");
+                            li.textContent = steps[j].title;
+                            stepsList.appendChild(li);
+                        }
+                        section.appendChild(stepsList);
+
+                        article.appendChild(section);
+
+                    }
+                });
+            });
+        });
+    });
+
+</script>
+<script src="..\..\footer.js"></script>
+</body>
+</html>

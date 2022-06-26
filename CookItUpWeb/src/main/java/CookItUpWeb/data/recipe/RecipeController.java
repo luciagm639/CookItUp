@@ -1,7 +1,6 @@
 package CookItUpWeb.data.recipe;
 
 import CookItUpWeb.auxiliary.CopyFolder;
-import CookItUpWeb.auxiliary.ListAuxiliary;
 import CookItUpWeb.data.administrator.Administrator;
 import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.comment.CommentRepository;
@@ -32,10 +31,17 @@ public class RecipeController {
     @Autowired private QuestionRepository questionRepository;
     @Autowired private ReviewRepository reviewRepository;
 
+    public static SortedSet<Recipe> fromCollectionToSortedSet(Collection<Recipe> iter){
+        SortedSet<Recipe> res = new TreeSet<>();
+        for (Recipe r : iter) {
+            res.add(r);
+        }
+        return res;
+    }
 
     @RequestMapping(path="all")
-    public @ResponseBody List<Recipe> allRecipes() {
-        return ListAuxiliary.fromIterableToList(recipeRepository.findAll());
+    public @ResponseBody SortedSet<Recipe> allRecipes() {
+        return fromCollectionToSortedSet((Collection<Recipe>) recipeRepository.findAll());
     }
 
     @RequestMapping(path="{id}/get")
@@ -160,9 +166,8 @@ public class RecipeController {
         return "redirect:/recipe/"+id+"/view.html";
     }
 
-    //TODO check
     @RequestMapping(path="{name}/search")
-    public @ResponseBody List<Recipe> searchByName (@PathVariable String name) {
+    public @ResponseBody SortedSet<Recipe> searchByName (@PathVariable String name) {
         List<Recipe> list = new LinkedList<>();
 
         for (Recipe r : recipeRepository.findAll()){
@@ -171,7 +176,7 @@ public class RecipeController {
                 list.add(r);
             }
         }
-        return list;
+        return fromCollectionToSortedSet((Collection<Recipe>) list);
     }
 
     //TODO check

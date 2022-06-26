@@ -2,15 +2,16 @@ package CookItUpWeb.data.user;
 
 import CookItUpWeb.auxiliary.ListAuxiliary;
 import CookItUpWeb.data.recipe.Recipe;
+import CookItUpWeb.data.recipe.RecipeController;
 import CookItUpWeb.data.recipe.RecipeRepository;
+import CookItUpWeb.data.recipe.ingredient.Ingredient;
+import CookItUpWeb.data.recipe.ingredient.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping(path="user")
@@ -21,6 +22,9 @@ public class UserController {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
     @RequestMapping(path="current")
     public @ResponseBody User currentUser(HttpSession session) {
         System.out.println("here");
@@ -29,7 +33,7 @@ public class UserController {
     }
 
     @RequestMapping(path="{id}/recipes")
-    public @ResponseBody List<Recipe> userRecipes(@PathVariable int id) {
+    public @ResponseBody SortedSet<Recipe> userRecipes(@PathVariable int id) {
         List<Recipe> list = new LinkedList<>();
         Optional<User> optional = userRepository.findById(id);
         if (optional.isPresent()) {
@@ -39,7 +43,17 @@ public class UserController {
                     list.add(recipe);
             }
         }
-        return list;
+        return RecipeController.fromCollectionToSortedSet((Collection<Recipe>) list);
+    }
+
+    @RequestMapping(path="{id}/get")
+    public @ResponseBody User getUser(@PathVariable int id) {
+        User user = null;
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isPresent()) {
+            user = optional.get();
+        }
+        return user;
     }
 
     @RequestMapping(path="add")
@@ -87,6 +101,65 @@ public class UserController {
             url = "/user/"+user.getId()+"/recipes";
         }
         return url;
+    }
+
+    @RequestMapping(path="{id}/add_fridge_ingredient")
+    public @ResponseBody String addFridgeIngredient(@PathVariable int id, @RequestParam String ing){
+        String res;
+
+        Optional<User> optional = userRepository.findById(id);
+
+        if(optional.isPresent()){
+            Ingredient newIng = IngredientRepository.searchByName(ingredientRepository, ing);
+
+            if(newIng == null){
+                res = "Error: ingredient not found";
+            } else{
+                User us = optional.get();
+                List<Ingredient> fridge = us.getFridge();
+                fridge.add(newIng);
+                us.setFridge(fridge);
+                res = "";
+            }
+
+        }else{
+            res = "Error: user not found";
+        }
+
+        return res;
+    }
+
+    @RequestMapping(path="{id}/delete_fridge_ingredient")
+    public @ResponseBody String deleteFridgeIngredient(@PathVariable int id, @RequestParam String name) {
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            List<Ingredient> fridge = user.getFridge();
+            for (Ingredient ing : user.getFridge()) {
+                if (ing.getName() == name) {
+                    fridge.remove(ing);
+                    user.setFridge(fridge);
+                    return "";
+                }
+            }
+            return "Ingredient not found";
+        }
+        return "User not found";
+    }
+
+    @RequestMapping(path="{id}/filter_fridge_ingredient")
+    public @ResponseBody List<Recipe> filterFridgeIngredient(@PathVariable int id) {
+        Optional<User> optional = userRepository.findById(id);
+        List<Recipe> list = new ArrayList<>();
+        if (optional.isPresent()) {
+            User user = optional.get();
+            for (Recipe recipe : recipeRepository.findAll()) {
+                if (user.getFridge().containsAll(recipe.getIngredients())) {
+                    list.add(recipe);
+                }
+            }
+        }
+        return list;
     }
 
 }

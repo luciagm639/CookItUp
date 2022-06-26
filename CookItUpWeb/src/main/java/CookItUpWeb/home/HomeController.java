@@ -1,5 +1,6 @@
 package CookItUpWeb.home;
 
+import CookItUpWeb.auxiliary.CopyFolder;
 import CookItUpWeb.auxiliary.StringAuxiliary;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.View;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 @Controller
 @RequestMapping(path="/home")
@@ -67,6 +69,13 @@ public class HomeController {
         user.setChips(0);
         userRepository.save(user);
         session.setAttribute("user", user);
+        try {
+            CopyFolder.copyFolder("user\\0", "user\\"+user.getId());
+        } catch (IOException e) {
+            e.printStackTrace();
+            userRepository.delete(user);
+            user.setId(-1);
+        }
         return "";
     }
 
