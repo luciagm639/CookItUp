@@ -40,6 +40,7 @@ public class HomeController {
                 if (name.equalsIgnoreCase(user.getName())) {
                     if (password.equals(user.getPassword())) {
                         session.setAttribute("user", user);
+                        session.setAttribute("spent_chips", 0);
                     } else {
                         result = "result:/error/wrong_password";
                     }
