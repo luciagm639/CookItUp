@@ -29,7 +29,9 @@ public class User {
     private int chips;
     private boolean blocked;
 
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "fridge", joinColumns = @JoinColumn(name = "ingredient_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private List<Ingredient> fridge;
 
 
