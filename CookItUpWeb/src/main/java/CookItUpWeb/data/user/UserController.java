@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path="/user")
+@RequestMapping(path="user")
 public class UserController {
 
     @Autowired
@@ -23,6 +23,8 @@ public class UserController {
 
     @RequestMapping(path="current")
     public @ResponseBody User currentUser(HttpSession session) {
+        System.out.println("here");
+        System.out.println(session.getAttribute("user"));
         return (User) session.getAttribute("user");
     }
 

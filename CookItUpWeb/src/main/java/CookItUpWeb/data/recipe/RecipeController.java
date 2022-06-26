@@ -53,6 +53,7 @@ public class RecipeController {
         Recipe recipe = null;
         if (session.getAttribute("user") instanceof User) {
             User user = (User) session.getAttribute("user");
+            System.out.println(session.getAttribute("user"));
             if (user.isBlocked()) {
                 //TODO add an error message stating that the user is blocked and therefore cannot create a recipe
             }
