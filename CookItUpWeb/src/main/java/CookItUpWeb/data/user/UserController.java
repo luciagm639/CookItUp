@@ -21,6 +21,9 @@ public class UserController {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Autowired
+    private IngredientRepository ingredientRepository;
+
     @RequestMapping(path="current")
     public @ResponseBody User currentUser(HttpSession session) {
         return (User) session.getAttribute("user");
@@ -85,6 +88,65 @@ public class UserController {
             url = "/user/"+user.getId()+"/recipes";
         }
         return url;
+    }
+
+    @RequestMapping(path="{id}/add_fridge_ingredient")
+    public @ResponseBody String addFridgeIngredient(@PathVariable int id, @RequestParam String ing){
+        String res;
+
+        Optional<User> optional = userRepository.findById(id);
+
+        if(optional.isPresent()){
+            Ingredient newIng = IngredientRepository.searchByName(ingredientRepository, ing);
+
+            if(newIng == null){
+                res = "Error: ingredient not found";
+            } else{
+                User us = optional.get();
+                List<Ingredient> fridge = us.getFridge();
+                fridge.add(newIng);
+                us.setFridge(fridge);
+                res = "";
+            }
+
+        }else{
+            res = "Error: user not found";
+        }
+
+        return res;
+    }
+
+    @RequestMapping(path="{id}/delete_fridge_ingredient")
+    public @ResponseBody String deleteFridgeIngredient(@PathVariable int id, @RequestParam String name) {
+        Optional<User> optional = userRepository.findById(id);
+        if (optional.isPresent()) {
+            User user = optional.get();
+            List<Ingredient> fridge = user.getFridge();
+            for (Ingredient ing : user.getFridge()) {
+                if (ing.getName() == name) {
+                    fridge.remove(ing);
+                    user.setFridge(fridge);
+                    return "";
+                }
+            }
+            return "Ingredient not found";
+        }
+        return "User not found";
+    }
+
+    @RequestMapping(path="{id}/filter_fridge_ingredient")
+    public @ResponseBody List<Recipe> filterFridgeIngredient(@PathVariable int id) {
+        Optional<User> optional = userRepository.findById(id);
+        List<Recipe> list = new ArrayList<>();
+        if (optional.isPresent()) {
+            User user = optional.get();
+            for (Recipe recipe : recipeRepository.findAll()) {
+                if (user.getFridge().containsAll(recipe.getIngredients())) {
+                    list.add(recipe);
+                }
+            }
+        }
+        return list;
     }
 
 }
