@@ -31,6 +31,13 @@ public class RecipeController {
     @Autowired private QuestionRepository questionRepository;
     @Autowired private ReviewRepository reviewRepository;
 
+    private final int CHIPS_POWER = 100;
+    private final int QUESTION_CHIPS = 5;
+    private final int COMMENT_CHIPS = 5;
+    private final int RECIPE_CREATION_CHIPS = 10;
+    private final int MAX_SPEND_CHIPS = 10;
+
+
     public static SortedSet<Recipe> fromCollectionToSortedSet(Collection<Recipe> iter){
         SortedSet<Recipe> res = new TreeSet<>();
         for (Recipe r : iter) {
@@ -73,6 +80,10 @@ public class RecipeController {
                     recipe.setPriority(0);
                     recipe.setAuthor(user);
                     recipeRepository.save(recipe);
+
+                    user.setChips((user.getChips()+ RECIPE_CREATION_CHIPS));
+                    userRepository.save(user);
+
                     try {
                         CopyFolder.copyFolder("recipe\\0", "recipe\\"+recipe.getId());
                     } catch (IOException e) {
@@ -138,6 +149,10 @@ public class RecipeController {
                 comment.setRecipe(recipe);
                 comment.setText(text);
                 commentRepository.save(comment);
+
+                user.setChips(user.getChips() + COMMENT_CHIPS);
+                userRepository.save(user);
+
             }
             else {
                 message = "The recipe was not found";
@@ -161,6 +176,10 @@ public class RecipeController {
                 question.setRecipe(recipe);
                 question.setText(text);
                 questionRepository.save(question);
+
+                user.setChips(user.getChips() + QUESTION_CHIPS);
+                userRepository.save(user);
+
             }
         }
         return "redirect:/recipe/"+id+"/view.html";
@@ -279,4 +298,95 @@ public class RecipeController {
 
         return dislikes;
     }
+
+    @RequestMapping(path="{id}/spend")
+    public @ResponseBody String spendChips(@PathVariable int id, @RequestParam int amount, HttpSession session) {
+
+        String res;
+        User user = (User) session.getAttribute("user");
+        Optional<Recipe> optional = recipeRepository.findById(id);
+
+        int spent = (int) session.getAttribute("spent_chips");
+
+        res = "";
+
+        if(amount > user.getChips()){
+            return "Error: you do not have enough chips";
+        }
+
+        if (spent + amount <= MAX_SPEND_CHIPS){
+            return "Error: cannot spend more than " + MAX_SPEND_CHIPS + " chips";
+        }
+
+        if(!optional.isPresent()){
+            return "Error: recipe not found";
+        }
+
+        Recipe r = optional.get();
+
+        if(r.getAuthor().getId() == user.getId()){
+            r.setPriority((r.getPriority() + amount* CHIPS_POWER));
+            recipeRepository.save(r);
+
+            user.setChips(user.getChips() - amount);
+            userRepository.save(user);
+
+            session.setAttribute("spent_chips", (spent+amount));
+        } else{
+            return "Error: this recipe is not owned by you";
+        }
+
+        return res;
+    }
+
+    @RequestMapping(path="{id}/like")
+    public @ResponseBody String likeRecipe(@PathVariable int id, HttpSession session) {
+
+        String res;
+        User user = (User) session.getAttribute("user");
+        Optional<Recipe> optional = recipeRepository.findById(id);
+
+        res = "";
+
+        if(!optional.isPresent()){
+            return "Error: recipe not found";
+        }
+        Recipe r = optional.get();
+
+        if(!(r.getAuthor().getId() == user.getId())){
+
+            r.setPriority((r.getPriority() + 1));
+            recipeRepository.save(r);
+
+        } else{
+            return "Error: this recipe is owned by you";
+        }
+        return res;
+    }
+
+    @RequestMapping(path="{id}/dislike")
+    public @ResponseBody String dislikeRecipe(@PathVariable int id, HttpSession session) {
+
+        String res;
+        User user = (User) session.getAttribute("user");
+        Optional<Recipe> optional = recipeRepository.findById(id);
+
+        res = "";
+
+        if(!optional.isPresent()){
+            return "Error: recipe not found";
+        }
+        Recipe r = optional.get();
+
+        if(!(r.getAuthor().getId() == user.getId())){
+
+            r.setPriority((r.getPriority() - 1));
+            recipeRepository.save(r);
+
+        } else{
+            return "Error: this recipe is owned by you";
+        }
+        return res;
+    }
+
 }
