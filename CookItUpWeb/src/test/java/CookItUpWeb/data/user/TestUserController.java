@@ -1,8 +1,8 @@
 package CookItUpWeb.data.user;
 
 import CookItUpWeb.data.recipe.Recipe;
-import CookItUpWeb.data.recipe.RecipeController;
 import CookItUpWeb.data.recipe.RecipeRepository;
+import CookItUpWeb.data.recipe.ingredient.IngredientRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.setup.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +30,8 @@ public class TestUserController {
     private UserRepository userRepository;
     @Mock
     private RecipeRepository recipeRepository;
+    @Mock
+    private IngredientRepository ingredientRepository;
 
     @InjectMocks
     private UserController userController;
@@ -177,5 +180,51 @@ public class TestUserController {
                 .willReturn(recipes);
 
         assertEquals(userController.userRecipes(1), PepeRecipes);
+    }
+
+    @Test
+    public void Given_ThereIsUserInSession_Then_ownRecipesLink_ShouldReturn_TheCorrespondingLink() {
+        MockHttpSession session = new MockHttpSession();
+        User user = new User();
+        String name = "pepe";
+        String password = "password";
+        user.setId(1); user.setName(name); user.setPassword(password);
+        session.setAttribute("user", user);
+
+        assertEquals("/user/1/recipes", userController.ownRecipesLink(session));
+    }
+
+    @Test
+    public void Given_UserById_Then_getUser_ShouldReturn_User() {
+        User user = new User();
+        String name = "pepe";
+        String password = "password";
+        user.setId(1); user.setName(name); user.setPassword(password);
+        given(userRepository.findById(1)).willReturn(Optional.of(user));
+
+        assertEquals(user, userController.getUser(1));
+    }
+
+    @Test
+    public void Given_User_Then_allUser_ShouldReturn_ListOfAllUsers() {
+        User user = new User();
+        String name = "pepe";
+        String password = "password";
+        user.setId(1); user.setName(name); user.setPassword(password);
+        List<User> users = new LinkedList<>(userController.allUsers());
+        users.add(user);
+
+        given(userRepository.findAll()).willReturn(users);
+        assertEquals(userController.allUsers(), users);
+    }
+
+    @RequestMapping(path="own_recipes_link")
+    public @ResponseBody String ownRecipesLink(HttpSession session) {
+        String url = "";
+        if (session.getAttribute("user") instanceof User) {
+            User user = (User) session.getAttribute("user");
+            url = "/user/"+user.getId()+"/recipes";
+        }
+        return url;
     }
 }

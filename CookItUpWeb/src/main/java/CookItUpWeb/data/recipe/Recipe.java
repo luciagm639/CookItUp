@@ -35,6 +35,7 @@ public class Recipe implements Comparable<Recipe> {
         priority = 0;
         author = null;
         ingredients = new LinkedList<>();
+        steps = new LinkedList<>();
     }
 
     public Integer getId() {

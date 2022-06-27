@@ -166,7 +166,7 @@ public class RecipeController {
                 message = "The recipe was not found";
             }
         } else {
-            message = "You have lo register to add a comment to a recipe";
+            message = "You have to register to add a comment to a recipe";
         }
         return message;
     }
@@ -191,12 +191,11 @@ public class RecipeController {
                 message = "The recipe was not found";
             }
         } else {
-            message = "You have lo register to add a comment to a recipe";
+            message = "You have to register to add a question to a recipe";
         }
         return message;
     }
 
-    //TODO check
     @RequestMapping(path = "{name}/search")
     public @ResponseBody
     SortedSet<Recipe> searchByName(@PathVariable String name) {

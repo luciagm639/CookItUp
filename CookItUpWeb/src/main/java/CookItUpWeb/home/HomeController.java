@@ -48,7 +48,7 @@ public class HomeController {
     }
 
     @RequestMapping(path="sign_up")
-    public @ResponseBody String signUp(HttpServletRequest request, HttpSession session, @RequestParam String name, @RequestParam String password ) {
+    public @ResponseBody String signUp(HttpSession session, @RequestParam String name, @RequestParam String password ) {
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
             return "The submitted form is incomplete";
         }

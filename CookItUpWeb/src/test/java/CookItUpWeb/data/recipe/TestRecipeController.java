@@ -4,6 +4,8 @@ import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.comment.CommentRepository;
 import CookItUpWeb.data.recipe.question.Question;
 import CookItUpWeb.data.recipe.question.QuestionRepository;
+import CookItUpWeb.data.recipe.review.Review;
+import CookItUpWeb.data.recipe.review.ReviewRepository;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserController;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,10 +16,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +41,9 @@ public class TestRecipeController {
 
     @Mock
     private QuestionRepository questionRepository;
+
+    @Mock
+    private ReviewRepository reviewRepository;
 
     @InjectMocks
     private RecipeController recipeController;
@@ -117,5 +124,79 @@ public class TestRecipeController {
                 .willReturn(Optional.of(recipe));
 
         assertEquals(questions, recipeController.getQuestions(1));
+    }
+
+    @Test
+    public void Given_RecipeIsNotFound_Then_addComent_ShouldReturn_AStringWithTheErrorMessage(){
+        MockHttpSession session = new MockHttpSession();
+
+        User user = new User();
+        session.setAttribute("user", user);
+
+        given(recipeRepository.findById(1))
+                .willReturn(Optional.empty());
+
+        String message = recipeController.addComment(1, "comment", session);
+        assertEquals("The recipe was not found", message);
+    }
+
+    @Test
+    public void Given_UserNotRegistered_Then_addComment_ShouldReturn_AStringWithTheErrorMessage(){
+        MockHttpSession session = new MockHttpSession();
+
+        given(recipeRepository.findById(1))
+                .willReturn(Optional.empty());
+
+        String message = recipeController.addComment(1, "comment", session);
+        assertEquals("You have to register to add a comment to a recipe", message);
+    }
+    @Test
+    public void Given_RecipeIsNotFound_Then_addQuestion_ShouldReturn_AStringWithTheErrorMessage(){
+        MockHttpSession session = new MockHttpSession();
+
+        User user = new User();
+        session.setAttribute("user", user);
+
+        given(recipeRepository.findById(1))
+                .willReturn(Optional.empty());
+
+        String message = recipeController.addQuestion(1, "comment", session);
+        assertEquals("The recipe was not found", message);
+    }
+
+    @Test
+    public void Given_UserNotRegistered_Then_addQuestion_ShouldReturn_AStringWithTheErrorMessage(){
+        MockHttpSession session = new MockHttpSession();
+
+        given(recipeRepository.findById(1))
+                .willReturn(Optional.empty());
+
+        String message = recipeController.addQuestion(1, "comment", session);
+        assertEquals("You have to register to add a question to a recipe", message);
+    }
+    @Test
+    public void Given_TheUserHasAReview_Then_getUserReview_ShouldReturn_TheReview(){
+        MockHttpSession session = new MockHttpSession();
+
+        User user = new User();
+
+        Recipe recipe = new Recipe();
+        recipe.setId(1);
+
+        Review review = new Review();
+        review.setRecipe(recipe);
+        review.setAuthor(user);
+
+        List<Review> reviews = new LinkedList<>();
+        reviews.add(review);
+
+        session.setAttribute("user", user);
+
+        given(reviewRepository.findAll())
+                .willReturn(reviews);
+
+        Review result = recipeController.getUserReview(session, 1);
+
+        assertEquals(review, result);
     }
 }
