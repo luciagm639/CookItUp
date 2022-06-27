@@ -1,6 +1,5 @@
 package CookItUpWeb.data.recipe.photo;
 
-import CookItUpWeb.auxiliary.ListAuxiliary;
 import CookItUpWeb.data.recipe.Recipe;
 import CookItUpWeb.data.recipe.RecipeRepository;
 import CookItUpWeb.data.user.User;
@@ -39,7 +38,7 @@ public class RecipePhotoController {
                 User user = (User) session.getAttribute("user");
                 RecipePhoto recipePhoto = null;
                 for (RecipePhoto recipePhoto1 : recipePhotoRepository.findAll()) {
-                    if (recipePhoto1.getAuthor().getId() == user.getId()
+                    if (recipePhoto1.getAuthor().equals(user)
                         && recipePhoto1.getRecipe().getId() == id) {
                         recipePhoto = recipePhoto1;
                         break;
@@ -51,7 +50,7 @@ public class RecipePhotoController {
                 else {
                     recipePhoto = new RecipePhoto();
                     recipePhoto.setAuthor(user);
-                    recipePhoto.setRecipe(recipe);
+                    recipePhoto.setRecipe(optional.get());
                     recipePhoto.setType(getImageType(file.getContentType()));
                     recipePhotoRepository.save(recipePhoto);
                 }
@@ -101,5 +100,10 @@ public class RecipePhotoController {
             }
         }
         return response;
+    }
+
+    private String getImageType(String originalType) {
+        String[] split = originalType.split("/");
+        return split[1];
     }
 }

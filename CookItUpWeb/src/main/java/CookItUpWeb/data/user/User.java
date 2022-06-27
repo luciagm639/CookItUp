@@ -11,6 +11,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class User {
@@ -82,8 +83,17 @@ public class User {
     }
 
     @Override
-    public String toString() {
-        return name;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return Objects.equals(id, user.id);
     }
 
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

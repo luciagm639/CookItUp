@@ -2,23 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CookItUp! Sign Up</title>
+    <title>CookItUp! Log In</title>
+    <style>
+        h2 { text-align: center; font-weight: bold; color: black }
+        p { color: black }
+        body { background-color: pink }
+    </style>
 </head>
 <body>
-    <script src="practice/header.js"></script>
+    <script src="header.js"></script>
     <nav>
         <article>
             <selection id = "selection">
-                <h2>Sign up</h2>
+                <h2>Log in</h2>
                 <p>Name: <input id="name" type="text" name="name" /></p>
                 <p>Password: <input id="password" type="password" name="password" /></p>
-                <button onclick="SignUp()">Submit</button>
+                <button onclick="LogIn()">Submit</button>
             </selection>
         </article>
     </nav>
     <script src="footer.js"></script>
     <script>
-        function SignUp() {
+        function LogIn() {
             let nameUser = document.getElementById("name").value;
             let password = document.getElementById("password").value;
             let searchParams = "name="+nameUser+"&password="+password;
@@ -26,12 +31,12 @@
             let fetchOptions = {
                 method: 'POST',
                 headers: new Headers({
-                    'Content-Type': 'application/x-www-form-urlencoded', // <-- Specifying the Content-Type
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 }),
                 body: searchParams
             }
 
-            let url = "home/sign_up";
+            let url = "home/log_in";
             fetch(url, fetchOptions).then( response => {
                 let textPromise = response.text();
                 textPromise.then(text => {
@@ -48,7 +53,7 @@
                         }
                     }
                     else {
-                        window.location.replace('/home.html');
+                        window.location.replace('/home');
                     }
                 });
             });

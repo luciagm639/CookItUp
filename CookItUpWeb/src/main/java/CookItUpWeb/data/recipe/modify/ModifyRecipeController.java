@@ -24,7 +24,6 @@ import java.util.Optional;
 public class ModifyRecipeController {
 
     @Autowired private RecipeRepository recipeRepository;
-    @Autowired private UserRepository userRepository;
     @Autowired private IngredientRepository ingredientRepository;
     @Autowired private StepRepository stepRepository;
 
@@ -36,7 +35,7 @@ public class ModifyRecipeController {
             Optional<Recipe> optional = recipeRepository.findById(id);
             if (optional.isPresent()) {
                 Recipe recipe = optional.get();
-                if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
+                if (((User) session.getAttribute("user")).equals(recipe.getAuthor())) {
                     ingredient = IngredientRepository.searchByName(ingredientRepository, name);
                     if (ingredient == null) {
                         ingredient = IngredientRepository.newIngredient(ingredientRepository, name);
@@ -59,7 +58,7 @@ public class ModifyRecipeController {
             Optional<Recipe> optional = recipeRepository.findById(id);
             if (optional.isPresent()) {
                 recipe = optional.get();
-                if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
+                if (((User) session.getAttribute("user")).equals(recipe.getAuthor())) {
                     Optional<Ingredient> optional2 = ingredientRepository.findById(idIng);
                     if (optional2.isPresent()) {
                         Ingredient ingredient = optional2.get();
@@ -83,7 +82,7 @@ public class ModifyRecipeController {
             Optional<Recipe> optional = recipeRepository.findById(id);
             if (optional.isPresent()) {
                 Recipe recipe = optional.get();
-                if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
+                if (((User) session.getAttribute("user")).equals(recipe.getAuthor())) {
                     step = new Step();
                     step.setTitle(title);
                     step.setNumberOfMinutes(numberOfMinutes);
@@ -106,7 +105,7 @@ public class ModifyRecipeController {
             Optional<Recipe> optional = recipeRepository.findById(id);
             if (optional.isPresent()) {
                 recipe = optional.get();
-                if (((User) session.getAttribute("user")).getId() == recipe.getAuthor().getId()) {
+                if (((User) session.getAttribute("user")).equals(recipe.getAuthor())) {
                     Optional<Step> optional2 = stepRepository.findById(idStep);
                     Step step = optional2.get();
                     recipe.deleteStep(step);

@@ -10,6 +10,7 @@ import CookItUpWeb.data.user.User;
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Recipe implements Comparable<Recipe> {
@@ -28,16 +29,7 @@ public class Recipe implements Comparable<Recipe> {
 
     @OneToMany()
     private List<Step> steps;
-/*
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Comment> comments;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Question> questions;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Review> reviews;
-*/
     public Recipe() {
         name = "";
         priority = 0;
@@ -119,10 +111,27 @@ public class Recipe implements Comparable<Recipe> {
 
     @Override
     public int compareTo(Recipe o) {
-        int res = priority - o.getPriority();
+        // first the ones with the highest priority
+        int res = o.getPriority() - priority;
         if (res == 0){
-            res = id - o.getId();
+            // then the most recent ones first
+            res = o.getId() - id;
         }
         return res;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Recipe recipe = (Recipe) o;
+
+        return Objects.equals(id, recipe.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

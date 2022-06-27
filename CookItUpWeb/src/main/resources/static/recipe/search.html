@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>CookItUp! Home Page</title>
+    <style>
+        body { background-color: pink }
+        header { text-align: center }
+    </style>
 </head>
 
 <body>
-    <script src="..\header.js"></script>
+    <script src="\header.js"></script>
     <nav>
         <article id="article">
             <section>
@@ -14,18 +18,16 @@
                     <label for="name">Search for recipes: </label>
                     <input type="text" id="name">
                     <br/>
-                    <button type="button" onclick="search()">Submit</button>
+                    <button type="button" onclick="searchRecipes()">Submit</button>
                 </form>
             </section>
         </article>
     </nav>
     <script>
-        function search() {
-            console.log("here");
+        function searchRecipes() {
             let name = document.getElementById("name").value;
             let url = "/recipe/"+name+"/search";
             fetch(url).then(response => {
-
                 return response.json();
             }).then(json => {
                 let article = document.getElementById("article");
@@ -81,6 +83,6 @@
             });
         }
     </script>
-    <script src="..\footer.js"></script>
+    <script src="\footer.js"></script>
 </body>
 </html>

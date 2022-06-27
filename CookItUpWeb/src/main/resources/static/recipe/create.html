@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>CookItUp! Create a Recipe</title>
+    <style>
+        body { background-color: pink }
+        header { text-align: center }
+    </style>
 </head>
 <body>
-<script src="..\header.js"></script>
+<script src="\header.js"></script>
 <nav>
     <article>
         <selection>
             <h2>Recipe name</h2>
             <p>Look for an available recipe name:<input name="name" id="name" type="search" required/></p>
             <button onclick="createNewRecipe()">Submit</button>
+            <p id="error"></p>
         </selection>
     </article>
 </nav>
-<script src="..\footer.js"></script>
+<script src="\footer.js"></script>
 <script>
 
     function createNewRecipe() {
@@ -23,12 +28,15 @@
         fetch('/recipe/create?name='+name)
         .then( response => {
             const jsonPromise = response.json();
-            jsonPromise.then(json => {
-                console.log(json);
-                console.log(json.id);
-                let url = "/recipe/" + json.id + "/modify.html";
+            jsonPromise.then(recipe => {
+                console.log(recipe);
+                console.log(recipe.id);
+                let url = "/recipe/" + recipe.id + "/modify";
                 window.location.replace(url);
-            }).catch(err => console.error('Fetch problem: ${err.message}'));
+            }).catch(err => {
+                let error = document.getElementById("error");
+                error.textContent = "The recipe name is taken or you are not registered";
+            });
         });
     }
 

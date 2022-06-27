@@ -5,7 +5,6 @@ import CookItUpWeb.auxiliary.StringAuxiliary;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,16 +21,11 @@ public class HomeController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping()
-    public String home() {
-        return "forward:/home.html";
-    }
-
     @RequestMapping(path="log_in")
     public @ResponseBody String logIn(HttpSession session, @RequestParam String name, @RequestParam String password ) {
         String result = null;
         if (StringAuxiliary.isEmpty(name) || StringAuxiliary.isEmpty(password)) {
-            result = "result:/error/form_incomplete";
+            result = "The submitted form is incomplete";
         }
         else {
             for (User user : userRepository.findAll()) {
@@ -42,13 +36,13 @@ public class HomeController {
                         result = "";
                         break;
                     } else {
-                        result = "result:/error/wrong_password";
+                        result = "The password is wrong";
                         break;
                     }
                 }
             }
             if (result == null)
-                result = "result:/error/user_not_found";
+                result = "User not found";
         }
         return result;
     }
@@ -81,11 +75,5 @@ public class HomeController {
         }
         session.setAttribute("user", user);
         return "";
-    }
-
-    //TODO change this to an html that shows all recipes
-    @RequestMapping(path="enter")
-    public @ResponseBody String enter() {
-        return "Hello";
     }
 }

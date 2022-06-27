@@ -9,7 +9,6 @@ public class Ingredient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    private String type;
 
     public Integer getId() {
         return id;
@@ -26,14 +25,4 @@ public class Ingredient {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-
 }

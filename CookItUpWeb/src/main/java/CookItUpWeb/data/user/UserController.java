@@ -6,7 +6,6 @@ import CookItUpWeb.data.recipe.RecipeController;
 import CookItUpWeb.data.recipe.RecipeRepository;
 import CookItUpWeb.data.recipe.ingredient.Ingredient;
 import CookItUpWeb.data.recipe.ingredient.IngredientRepository;
-import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -114,11 +113,11 @@ public class UserController {
             if(newIng == null){
                 //res = "Error: ingredient not found";
             } else{
-                User us = optional.get();
-                List<Ingredient> fridge = us.getFridge();
+                User user = optional.get();
+                List<Ingredient> fridge = user.getFridge();
                 fridge.add(newIng);
                 res = newIng;
-                userRepository.save(us);
+                userRepository.save(user);
             }
 
         }else{
@@ -137,6 +136,7 @@ public class UserController {
             for (Ingredient ing : user.getFridge()) {
                 if (ing.getId() == idIng) {
                     fridge.remove(ing);
+                    userRepository.save(user);
                     return "";
                 }
             }

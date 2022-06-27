@@ -3,300 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <title>CookItUp! View a Recipe</title>
+    <style>
+        body {
+            background-color: pink
+        }
+
+        header {
+            text-align: center
+        }
+    </style>
 </head>
 <body>
-    <script src="..\..\header.js"></script>
-    <nav>
-        <article id = "article">
-            <section id = "recipe">
-                <h2 id = "recipe_name">View a Recipe</h2>
-                <h3>Ingredients</h3>
-                <ul id = "ingredients"></ul>
-                <h3>Steps</h3>
-                <ol id = "steps"></ol>
-                <p>Recipe done by: <a id="author"></a></p>
-                <p>Number of likes: <t id="likes"></t></p>
-                <p>Number of dislikes: <t id="dislikes"></t></p>
-                <form id="modify" hidden action="modify.html">
-                    <input type="submit" value="Modify"/>
-                </form>
-                <form id="delete" hidden action="delete">
-                    <input type="submit" value="Delete"/>
-                </form>
-                <form id="delete_admin" hidden action="delete_admin">
-                    <input type="submit" value="Delete"/>
-                </form>
-            </section>
-            <section id = "photos_section">
-                <h3>Photos of user's versions of this recipe</h3>
-                <div id = "photos"></div>
-                <form id = "photo_form" hidden>
-                    <label for="photo">Add a photo</label>
-                    <input type="file" id="photo" />
-                    <button type="button" onclick="addPhotoFetch()">Submit</button>
-                </form>
-                <p id="photo_error" name ="error"></p>
-            </section>
-            <section id = "comments_section">
-                <h3>Comments</h3>
-                <div id = "comments"></div>
-                <form id = "comment_form" hidden>
-                    <label for="comment">Add a comment</label>
-                    <input type="text" id="comment"/>
-                    <button type="button" onclick="addCommentFetch()">Submit</button>
-                </form>
-                <p id="comment_error" name="error"></p>
-            </section>
-            <section id = "questions_section">
-                <h3>Questions</h3>
-                <div id = "questions"></div>
-                <form action = "add_question" id = "question_form" hidden>
-                    <label for="question">Add a question</label>
-                    <input type="text" id="question"/>
-                    <button type="button" onclick="addQuestionFetch()">Submit</button>
-                </form>
-                <p id="question_error" name="error"></p>
-            </section>
-        </article>
-    </nav>
-    <script src="..\..\footer.js"></script>
-    <script>
-        /*
-        TODO TASK 8: Allow to add a review if registered user
-        /recipe/{id}/add_review
-        */
-        let id_user = -1;
-        let user_name;
-        let url = "/user/current";
-        fetch(url).then( response => {
-            return response.json();
-        }).then( json => {
-            id_user = json.id;
-            user_name = json.name;
-            document.getElementById("photo_form").hidden = false;
-            document.getElementById("comment_form").hidden = false;
-            document.getElementById("question_form").hidden = false;
-        }).catch( error => {
-            url = "/admin/current";
-            fetch(url).then(response => {
-                return response.json();
-            }).then(json => {
-                document.getElementById("delete_admin").hidden = false;
-            }).catch(error => {
-                console.log("Actions restricted to unregistered user");
-            });
-        });
+<script src="\header.js"></script>
+<nav>
+    <article id="article">
+        <section id="recipe">
+            <h2 id="recipe_name">View a Recipe</h2>
+            <h3>Ingredients</h3>
+            <ul id="ingredients"></ul>
+            <h3>Steps</h3>
+            <ol id="steps"></ol>
+            <p>Recipe done by: <a id="author"></a></p>
+            <p>
+                <button id="like" hidden onclick="addReview(true)">Like</button>
+                <t id="likes"></t>
+                likes
+            </p>
+            <p>
+                <button id="dislike" hidden onclick="addReview(false)">Dislike</button>
+                <t id="dislikes"></t>
+                dislikes
+            </p>
+            <p id="review_message" name="error"></p>
+            <form id="modify" hidden action="modify">
+                <input type="submit" value="Modify"/>
+            </form>
+            <br/>
+            <form id="delete" hidden>
+                <button type="button" onclick="deleteRecipe()">Delete</button>
+            </form>
+            <p id="delete_error" name="error"></p>
+            <form id="delete_admin" hidden action="delete_admin">
+                <input type="submit" value="Delete"/>
+            </form>
+        </section>
+        <section id="photos_section">
+            <h3>User Photos</h3>
+            <div id="photos"></div>
+            <form id="photo_form" hidden>
+                <label for="photo">Add a photo</label>
+                <input type="file" id="photo"/>
+                <button type="button" onclick="addPhotoFetch()">Upload</button>
+            </form>
+            <p id="photo_error" name="error"></p>
+        </section>
+        <section id="comments_section">
+            <h3>Comments</h3>
+            <div id="comments"></div>
+            <form id="comment_form" hidden>
+                <label for="comment">Add a comment</label>
+                <input type="text" id="comment"/>
+                <button type="button" onclick="addCommentFetch()">Submit</button>
+            </form>
+            <p id="comment_error" name="error"></p>
+        </section>
+        <section id="questions_section">
+            <h3>Questions</h3>
+            <div id="questions"></div>
+            <form action="add_question" id="question_form" hidden>
+                <label for="question">Add a question</label>
+                <input type="text" id="question"/>
+                <button type="button" onclick="addQuestionFetch()">Submit</button>
+            </form>
+            <p id="question_error" name="error"></p>
+        </section>
+    </article>
+</nav>
+<script src="\footer.js"></script>
+<script>
 
+    let id_user = -1;
+    let user_name;
+    let url = "/user/current";
+    fetch(url).then(response => {
+        return response.json();
+    }).then(json => {
+        id_user = json.id;
+        user_name = json.name;
+        document.getElementById("photo_form").hidden = false;
+        document.getElementById("comment_form").hidden = false;
+        document.getElementById("question_form").hidden = false;
+        document.getElementById("like").hidden = false;
+        document.getElementById("dislike").hidden = false;
 
         url = "get";
-        fetch(url).then( response => {
-            const jsonPromise = response.json();
-            jsonPromise.then( json => {
-                let name = json["name"];
-                let recipe_name = document.getElementById("recipe_name");
-                recipe_name.innerText = name;
-                document.title = "CookItUp! " + name;
+        fetch(url).then(response => {
+            return response.json();
+        }).then(json => {
+            let name = json["name"];
+            let recipe_name = document.getElementById("recipe_name");
+            recipe_name.innerText = name;
+            document.title = "CookItUp! " + name;
+            if (json["author"]["id"] == id_user) {
+                document.getElementById("modify").hidden = false;
+                document.getElementById("delete").hidden = false;
+            }
 
-                if (json["author"]["id"] == id_user) {
-                    document.getElementById("modify").hidden = false;
-                    document.getElementById("delete").hidden = false;
-                }
+            //Ingredients
+            let ingredientsList = document.getElementById("ingredients");
+            let ingredients = json["ingredients"];
+            for (let i = 0; i < ingredients.length; i++) {
+                let li = document.createElement("li");
+                li.textContent = ingredients[i].name;
+                ingredientsList.appendChild(li);
+            }
 
-                //Ingredients
-                let ingredientsList = document.getElementById("ingredients");
-                let ingredients = json["ingredients"];
-                for(let i = 0; i < ingredients.length; i++) {
-                    let li = document.createElement("li");
-                    li.textContent = ingredients[i].name;
-                    ingredientsList.appendChild(li);
-                }
+            //Steps
+            let stepsList = document.getElementById("steps");
+            let steps = json["steps"];
+            for (let i = 0; i < steps.length; i++) {
+                let li = document.createElement("li");
+                //title
+                let stepTitle = document.createElement("strong");
+                stepTitle.textContent = steps[i].title;
+                li.appendChild(stepTitle);
 
-                //Steps
-                let stepsList = document.getElementById("steps");
-                let steps = json["steps"];
-                for(let i = 0; i < steps.length; i++) {
-                    let li = document.createElement("li");
-                    //title
-                    let stepTitle = document.createElement("strong");
-                    stepTitle.textContent = steps[i].title;
-                    li.appendChild(stepTitle);
+                li.appendChild(document.createElement("br"));
 
+                //minutes
+                let minutes = document.createElement("small");
+                minutes.textContent = steps[i]["numberOfMinutes"] + " minutes";
+                li.appendChild(minutes);
+
+                //description
+                if (steps[i]["description"] != "") {
                     li.appendChild(document.createElement("br"));
-
-                    //minutes
-                    let minutes = document.createElement("small");
-                    minutes.textContent = steps[i]["numberOfMinutes"]+" minutes";
-                    li.appendChild(minutes);
-
-                    //description
-                    if (steps[i]["description"] != "") {
-                        li.appendChild(document.createElement("br"));
-                        li.appendChild(document.createTextNode(steps[i]["description"]));
-                    }
-
-                    stepsList.appendChild(li);
+                    li.appendChild(document.createTextNode(steps[i]["description"]));
                 }
-                let author = document.getElementById("author");
-                console.log(json);
-                console.log(json["author"]["name"]);
-                author.textContent = json["author"]["name"];
-                author.href = "/user/"+json["author"]["id"]+"/profile.html";
-            });
+
+                stepsList.appendChild(li);
+            }
+            let author = document.getElementById("author");
+            author.textContent = json["author"]["name"];
+            author.href = "/user/" + json["author"]["id"] + "/profile";
+
+        }).catch(error => {
+            document.getElementById("recipe").hidden = true;
+            document.getElementById("photos_section").hidden = true;
+            document.getElementById("comments_section").hidden = true;
+            document.getElementById("questions_section").hidden = true;
+
+            let article = document.getElementById("article");
+            article.appendChild(document.createTextNode("The recipe was not found"));
         });
 
-        //Reviews
-        url = "num_likes";
-        fetch(url).then (response => {
-            return response.text();
-        }).then( text => {
-            document.getElementById("likes").textContent = text;
-        });
-
-        url = "num_dislikes";
-        fetch(url).then (response => {
-            return response.text();
-        }).then( text => {
-            document.getElementById("dislikes").textContent = text;
-        });
-
-        //Comments
-        let comments = document.getElementById("comments");
-        url = "comments";
-        fetch(url).then (response => {
+    }).catch(error => {
+        url = "/admin/current";
+        fetch(url).then(response => {
             return response.json();
-        }).then( json => {
-            for (let i=0; i<json.length; i++) {
-                let comment = json[i];
-                addComment(comment["author"]["name"], comment["text"]);
+        }).then(json => {
+            document.getElementById("delete_admin").hidden = false;
+        }).catch(error => {
+            console.log("Actions restricted to unregistered user");
+        });
+    });
+
+    //Reviews
+    url = "num_likes";
+    fetch(url).then(response => {
+        return response.text();
+    }).then(text => {
+        document.getElementById("likes").textContent = text;
+    });
+
+    url = "num_dislikes";
+    fetch(url).then(response => {
+        return response.text();
+    }).then(text => {
+        document.getElementById("dislikes").textContent = text;
+    });
+
+    //Comments
+    let comments = document.getElementById("comments");
+    url = "comments";
+    fetch(url).then(response => {
+        return response.json();
+    }).then(json => {
+        for (let i = 0; i < json.length; i++) {
+            let comment = json[i];
+            addComment(comment["author"]["name"], comment["text"]);
+        }
+    });
+
+    function addComment(author, text) {
+        let comment = document.createElement("p");
+        comment.textContent = author + ": " + text;
+        comments.appendChild(comment);
+    }
+
+    function addCommentFetch() {
+        let comment_error = document.getElementById("comment_error");
+        let text = document.getElementById("comment").value;
+        url = "add_comment?text=" + text;
+        fetch(url).then(response => {
+            return response.text();
+        }).then(responseText => {
+            hideErrors();
+            if (responseText == "") {
+                addComment(user_name, text);
+            } else {
+                comment_error.textContent = responseText;
+                comment_error.hidden = false;
             }
         });
+    }
 
-        function addComment(author, text) {
-            let comment = document.createElement("p");
-            comment.textContent = author + ": " + text;
-            comments.appendChild(comment);
+    //Questions
+    let questions = document.getElementById("questions");
+    url = "questions";
+    fetch(url).then(response => {
+        return response.json();
+    }).then(json => {
+        console.log(json);
+        for (let i = 0; i < json.length; i++) {
+            let question = json[i];
+            addQuestion(question["author"]["name"], question["text"]);
         }
+    });
 
-        function addCommentFetch() {
-            let comment_error = document.getElementById("comment_error");
-            let text = document.getElementById("comment").value;
-            url = "add_comment?text=" + text;
-            fetch(url).then (response => {
-                return response.text();
-            }).then( responseText => {
-                hideErrors();
-                if (responseText == "") {
-                    addComment(user_name, text);
-                }
-                else {
-                    comment_error.textContent = responseText;
-                    comment_error.hidden = false;
-                }
-            });
-        }
+    function addQuestion(author, text) {
+        let question = document.createElement("p");
+        question.textContent = author + ": " + text;
+        questions.appendChild(question);
+    }
 
-        //Questions
-        let questions = document.getElementById("questions");
-        url = "questions";
-        fetch(url).then (response => {
-            return response.json();
-        }).then( json => {
-            console.log(json);
-            for (let i=0; i<json.length; i++) {
-                let question = json[i];
-                addQuestion(question["author"]["name"], question["text"]);
+    function addQuestionFetch() {
+        let question_error = document.getElementById("question_error");
+        let text = document.getElementById("question").value;
+        url = "add_question?text=" + text;
+        fetch(url).then(response => {
+            return response.text();
+        }).then(responseText => {
+            hideErrors();
+            if (responseText == "") {
+                addQuestion(user_name, text);
+            } else {
+                question_error.textContent = responseText;
+                question_error.hidden = false;
             }
         });
+    }
 
-        function addQuestion(author, text) {
-            let question = document.createElement("p");
-            question.textContent = author + ": " + text;
-            questions.appendChild(question);
+    // Photos
+    let photos = document.getElementById("photos");
+    url = "all_recipe_photos";
+    fetch(url).then(response => {
+        return response.json();
+    }).then(json => {
+        console.log(json);
+        for (let i = 0; i < json.length; i++) {
+            let photo = json[i];
+            addPhoto("recipe_photos/user" + photo["author"]["id"]
+                + "." + photo["type"]);
+        }
+    });
+
+    function addPhoto(src) {
+        let photo = document.createElement("img");
+        photo.src = src;
+        photo.height = 200;
+        photos.appendChild(photo);
+    }
+
+    function addPhotoFetch() {
+        let photo_error = document.getElementById("photo_error");
+        let photo = document.getElementById("photo");
+
+        const input = document.querySelector('input[type="file"]');
+        console.log(input);
+
+        const data = new FormData();
+        data.append('image', input.files[0]);
+
+        url = "upload_recipe_photo";
+        fetch(url, {
+            method: 'POST',
+            body: data,
+        }).then(response => {
+            return response.text();
+        }).then(responseText => {
+            hideErrors();
+            console.log("here");
+            console.log(input.files[0])
+            if (responseText == "" || responseText == "You have replaced the photo") {
+                window.location.reload();
+            }
+            photo_error.textContent = responseText;
+            photo_error.hidden = false;
+        });
+    }
+
+    // Review
+    function addReview(like) {
+        let url;
+        if (like) {
+            url = "like";
+        } else {
+            url = "dislike";
         }
 
-        function addQuestionFetch() {
-            let question_error = document.getElementById("question_error");
-            let text = document.getElementById("question").value;
-            url = "add_question?text=" + text;
+        fetch(url).then(response => {
+            return response.text();
+        }).then(text => {
+            hideErrors();
+            document.getElementById("review_message").textContent = text;
+
+            //Update likes and dislikes
+            url = "num_likes";
             fetch(url).then(response => {
                 return response.text();
-            }).then(responseText => {
-                hideErrors();
-                if (responseText == "") {
-                    addQuestion(user_name, text);
-                } else {
-                    question_error.textContent = responseText;
-                    question_error.hidden = false;
-                }
+            }).then(text => {
+                document.getElementById("likes").textContent = text;
             });
-        }
 
-        // Photos
-        let photos = document.getElementById("photos");
-        url = "all_recipe_photos";
-        fetch(url).then (response => {
-            return response.json();
-        }).then( json => {
-            console.log(json);
-            for (let i=0; i<json.length; i++) {
-                let photo = json[i];
-                addPhoto("recipe_photos/user" + photo["author"]["id"]
-                    + "." + photo["type"]);
+            url = "num_dislikes";
+            fetch(url).then(response => {
+                return response.text();
+            }).then(text => {
+                document.getElementById("dislikes").textContent = text;
+            });
+        })
+    }
+
+    function deleteRecipe() {
+        let url = "delete";
+        fetch(url).then(response => {
+            return response.text();
+        }).then(text => {
+            hideErrors();
+            if (text == "") {
+                window.location.replace("/home");
+            } else {
+                let error = document.getElementById("delete_error");
+                error.textContent = text;
+                error.hidden = false;
             }
         });
+    }
 
-        function addPhoto(src) {
-            let photo = document.createElement("img");
-            photo.src = src;
-            photo.height = 200;
-            photos.appendChild(photo);
+    // Errors
+    function hideErrors() {
+        let errors = document.getElementsByName("error");
+        for (let i = 0; i < errors.length; i++) {
+            errors[i].hidden = true;
         }
-
-        function addPhotoFetch() {
-            let photo_error = document.getElementById("photo_error");
-            let photo = document.getElementById("photo");
-
-            const input = document.querySelector('input[type="file"]');
-            console.log(input);
-
-            const data = new FormData();
-            data.append('image', input.files[0]);
-
-            url = "upload_recipe_photo";
-            fetch(url, {
-                method: 'POST',
-                body: data,
-            }).then(response => {
-                return response.text();
-            }).then(responseText => {
-                hideErrors();
-                console.log("here");
-                /*
-                console.log(input.childNodes);
-                console.log(input.attributes);
-                console.log(input.namespaceURI);
-                console.log(input.prototype);
-                console.log(input.innerHTML);
-                console.log(input.outerHTML);
-                console.log(input.baseURI);
-                 */
-                console.log(input.files[0])
-                if (responseText == "") {
-                    //addPhoto(input.src);
-                } else {
-                    photo_error.textContent = responseText;
-                    photo_error.hidden = false;
-                }
-            });
-        }
-
-        // Errors
-        function hideErrors() {
-            let errors = document.getElementsByName("error");
-            for(let i = 0; i < errors.length; i++) {
-                errors[i].hidden = true;
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
