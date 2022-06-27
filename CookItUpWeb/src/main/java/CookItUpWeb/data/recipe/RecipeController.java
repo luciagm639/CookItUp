@@ -4,15 +4,12 @@ import CookItUpWeb.auxiliary.CopyFolder;
 import CookItUpWeb.data.administrator.Administrator;
 import CookItUpWeb.data.recipe.comment.Comment;
 import CookItUpWeb.data.recipe.comment.CommentRepository;
-import CookItUpWeb.data.recipe.ingredient.Ingredient;
-import CookItUpWeb.data.recipe.ingredient.IngredientRepository;
 import CookItUpWeb.data.recipe.photo.RecipePhoto;
 import CookItUpWeb.data.recipe.photo.RecipePhotoRepository;
 import CookItUpWeb.data.recipe.question.Question;
 import CookItUpWeb.data.recipe.question.QuestionRepository;
 import CookItUpWeb.data.recipe.review.Review;
 import CookItUpWeb.data.recipe.review.ReviewRepository;
-import CookItUpWeb.data.recipe.step.Step;
 import CookItUpWeb.data.recipe.step.StepRepository;
 import CookItUpWeb.data.user.User;
 import CookItUpWeb.data.user.UserRepository;
@@ -52,7 +49,7 @@ public class RecipeController {
     private final int RECIPE_CREATION_CHIPS = 10;
     private final int MAX_SPEND_CHIPS = 10;
 
-    public static SortedSet<Recipe> fromIterableToSortedSet(Collection<Recipe> iter) {
+    public static SortedSet<Recipe> fromCollectionToSortedSet(Collection<Recipe> iter) {
         SortedSet<Recipe> res = new TreeSet<>();
         for (Recipe r : iter) {
             res.add(r);
@@ -63,7 +60,7 @@ public class RecipeController {
     @RequestMapping(path = "all")
     public @ResponseBody
     SortedSet<Recipe> allRecipes() {
-        return fromIterableToSortedSet((Collection<Recipe>) recipeRepository.findAll());
+        return fromCollectionToSortedSet((Collection<Recipe>) recipeRepository.findAll());
     }
 
     @RequestMapping(path = "{id}/get")
@@ -211,7 +208,7 @@ public class RecipeController {
                 list.add(r);
             }
         }
-        return fromIterableToSortedSet((Collection<Recipe>) list);
+        return fromCollectionToSortedSet((Collection<Recipe>) list);
     }
 
     //TODO check

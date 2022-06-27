@@ -41,7 +41,7 @@ public class UserController {
                     list.add(recipe);
             }
         }
-        return RecipeController.fromIterableToSortedSet((Collection<Recipe>) list);
+        return RecipeController.fromCollectionToSortedSet(list);
     }
 
     @RequestMapping(path="{id}/get")
