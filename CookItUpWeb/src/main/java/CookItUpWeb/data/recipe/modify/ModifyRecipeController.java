@@ -48,8 +48,6 @@ public class ModifyRecipeController {
         return ingredient;
     }
 
-    //TODO check
-    //TODO return empty message if everything went okay and error message otherwise
     @RequestMapping(path="{id}/delete_ingredient")
     public @ResponseBody
     Recipe deleteIngredient(HttpSession session, @PathVariable int id, @RequestParam int idIng) {
@@ -96,7 +94,6 @@ public class ModifyRecipeController {
         return step;
     }
 
-    //TODO check
     @RequestMapping(path="{id}/delete_step")
     public @ResponseBody
     Recipe deleteStep(HttpSession session, @PathVariable int id, @RequestParam int idStep) {
